@@ -1,8 +1,11 @@
+import InputText from "../../components/inputText"
+
 const LoginPage = () => {
   return (
-    <div>
-      <h1>Login Page</h1>
-      {/* 로그인 폼 */}
+    <div className="h-full">
+      <div>
+        <InputText />
+      </div>
     </div>
   );
 };
