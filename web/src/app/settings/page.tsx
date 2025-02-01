@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div>
-ㄴㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㄹ
+      settings 화면
     </div>
   );
 }

@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div>
-ㄴㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㄹ
+      qna 화면
     </div>
   );
 }

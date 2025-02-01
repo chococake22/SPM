@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div>
-ㄴㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㄹ
+      talk 화면
     </div>
   );
 }
