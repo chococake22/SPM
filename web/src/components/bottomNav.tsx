@@ -2,8 +2,8 @@ import Link from 'next/link';
 
 const bottomNav = () => {
   return (
-    <div className="h-[6vh] border-t-2">
-      <div className="h-full flex items-center justify-center">
+    <div className="border-t-2">
+      <div className="flex items-center justify-center">
         <nav className="flex justify-evenly items-center w-full">
           <Link href="/">Home</Link>
           <Link href="/shop">Shop</Link>

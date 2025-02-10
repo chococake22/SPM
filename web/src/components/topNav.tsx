@@ -1,4 +1,4 @@
-import LinkButton from '../components/linkButton';
+import LinkButton from './linkButton';
 
 const topNav = () => {
   return (

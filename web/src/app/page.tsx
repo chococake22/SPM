@@ -1,7 +1,21 @@
-export default function Home() {
+
+import ItemBox from '../components/ItemBox';
+
+const Home = () => {
+
+  const data = [
+    { item: 'apple', userId: 'test1' },
+    { item: 'tree', userId: 'test2' },
+    { item: 'banana', userId: 'test3' },
+  ];
+
   return (
-    <div>
-ㄴㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㄹ
+    <div className="mt-5">
+      {data.map((entry, index) => (
+        <ItemBox key={index} entry={entry} />
+      ))}
     </div>
   );
 }
+
+export default Home;

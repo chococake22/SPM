@@ -1,6 +1,4 @@
-import { ChevronDownIcon } from '@heroicons/react/16/solid';
-
-export default function inputText() {
+const inputText = () => {
   return (
     <div className="flex w-full h-full">
       <div className="flex border-2">
@@ -17,3 +15,6 @@ export default function inputText() {
     </div>
   );
 }
+
+
+export default inputText;
