@@ -1,8 +1,8 @@
 "use client"
 
 import "./global.css";
-import BottomNav from "../components/bottomNav"
-import TopNav from '../components/topNav';
+import BottomNav from "../components/BottomNav"
+import TopNav from '../components/TopNav';
 import { usePathname } from 'next/navigation';
 
 export default function RootLayout({
@@ -23,12 +23,14 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className="flex flex-col">
+      <body className="flex flex-col min-h-screen">
         <TopNav />
-        <main className="w-full ">
-          {/* 메인 콘텐츠는 가능한 공간을 채웁니다. */}
-          {children}
-        </main>
+        <div>
+
+            {/* 메인 콘텐츠는 가능한 공간을 채웁니다. */}
+            {children}
+
+        </div>
         <BottomNav />
       </body>
     </html>

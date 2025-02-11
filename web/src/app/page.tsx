@@ -10,7 +10,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 mb-10">
       {data.map((entry, index) => (
         <ItemBox key={index} entry={entry} />
       ))}
