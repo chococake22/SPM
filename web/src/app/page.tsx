@@ -11,7 +11,8 @@ const Home = () => {
       heartCnt: '12',
       commentCnt: '3',
       itemName: '사과 10개',
-      description: '겁나 달달한 사과임',
+      description: '겁나 달달한 사과임asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdsdfasdfasdfasdfasdfasdasdfasdasdf',
+      
     },
     {
       imageInfo: 'tree',
