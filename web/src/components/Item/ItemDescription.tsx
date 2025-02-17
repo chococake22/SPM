@@ -20,13 +20,13 @@ const ItemDescription: React.FC<ItemDescriptionProps> = ({
   return (
     <div className="w-full max-h-[200px] border-2 border-green-700">
       <span className="ml-2">{itemName}</span>
-      <div className="ml-2 line-clamp-4">
+      <div className="ml-2 line-clamp-7">
         <p
           className={`whitespace-normal break-words ${showFullText ? '' : 'line-clamp-1'}`}
         >
           {description}
         </p>
-        <button className="text-blue-500" onClick={toggleText}>
+        <button className="text-blue-500 text-xs" onClick={toggleText}>
           {showFullText ? '간략히' : '더보기'}
         </button>
       </div>

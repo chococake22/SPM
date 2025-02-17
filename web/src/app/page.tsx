@@ -1,46 +1,33 @@
+"use client"
 
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import ItemBox from '../components/Item/ItemBox';
 
 const Home = () => {
+  const [list, setList] = useState([]);
 
-  const data = [
-    {
-      imageInfo: 'apple',
-      userId: 'test1',
-      profileImg: 'userimg1',
-      heartCnt: '12',
-      commentCnt: '3',
-      itemName: '사과 10개',
-      description: '겁나 달달한 사과임asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdsdfasdfasdfasdfasdfasdasdfasdasdf',
-      
-    },
-    {
-      imageInfo: 'tree',
-      userId: 'test2',
-      profileImg: 'userimg2',
-      heartCnt: '5',
-      commentCnt: '2',
-      itemName: '나무 1세트',
-      description: '아주 튼튼한 나무임',
-    },
-    {
-      imageInfo: 'banana',
-      userId: 'test3',
-      profileImg: 'userimg3',
-      heartCnt: '7',
-      commentCnt: '1',
-      itemName: '바나나 한송이',
-      description: '달달하고 맛남',
-    },
-  ];
+  // 데이터 요청
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3002/items'); // 데이터를 요청하는 엔드포인트
+        setList(response.data); // 받아온 데이터를 상태에 저장
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData(); // 컴포넌트가 마운트되면 데이터 요청 실행
+  }, []);
 
   return (
-    <div className="mt-5 mb-10">
-      {data.map((entry, index) => (
+    <div className="mt-10 mb-10">
+      {list.map((entry, index) => (
         <ItemBox key={index} entry={entry} />
       ))}
     </div>
   );
-}
+};
 
 export default Home;

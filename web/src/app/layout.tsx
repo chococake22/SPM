@@ -25,12 +25,10 @@ export default function RootLayout({
     <html lang="en">
       <body className="flex flex-col min-h-screen">
         <TopNav />
-        <div>
-
-            {/* 메인 콘텐츠는 가능한 공간을 채웁니다. */}
-            {children}
-
-        </div>
+        <section>
+          {/* 메인 콘텐츠는 가능한 공간을 채웁니다. */}
+          {children}
+        </section>
         <BottomNav />
       </body>
     </html>
