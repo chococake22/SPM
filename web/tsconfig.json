@@ -1,12 +1,16 @@
 {
   "compilerOptions": {
+    "baseUrl": "./", // 기본 경로 설정
+    "paths": {
+      "@/*": ["src/*"] // "@/lib/axios"는 "src/lib/axios"로 매핑
+    },
     "target": "es5",
     "lib": [
       "dom",
       "es2015"
     ],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "esnext", // 모듈 시스템
+    "moduleResolution": "node", // 모듈 해석 방식
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

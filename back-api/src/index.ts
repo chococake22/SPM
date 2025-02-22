@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';  // CORS 미들웨어 임포트
+import axios from "../../web/src/lib/axios";
 
 const app = express();
 
@@ -23,7 +24,17 @@ app.get('/test', async (req: Request, res: Response) => {
   res.json(data);
 });
 
+app.get('/getItemList', async (req: Request, res: Response) => {
+  try {
+    const response = await axios.get('http://localhost:3002/items');
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ message: 'Error fetching users' });
+  }
+});
+
 // port 번호
-const port: number = 3010;
+const port: number = 3001;
 
 app.listen(port, () => console.log(`Server On!!! Port: ${port}`));
