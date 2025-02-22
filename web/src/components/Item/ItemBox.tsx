@@ -11,6 +11,7 @@ interface Entry {
   commentCnt: string;
   itemName: string;
   description: string;
+  itemImg: string;
 }
 
 interface ItemBoxProps {
@@ -22,12 +23,23 @@ const itemBox: React.FC<ItemBoxProps> = ({ entry }) => {
     <div className="pt-3">
       <div className="flex justify-center w-full h-full">
         <div className="w-[80%] h-[600px] border-2 border-black">
-          <ItemUserProfile
-            userId={entry.userId}
-            profileImg={entry.profileImg}
-          />
-          <ItemPhoto imageInfo={entry.imageInfo} />
-          <ItemValues heartCnt={entry.heartCnt} commentCnt={entry.commentCnt} />
+          <div className="w-full h-[10%] border-2 border-black">
+            <ItemUserProfile
+              userId={entry.userId}
+              profileImg={entry.profileImg}
+            />
+          </div>
+          <div>
+            <ItemPhoto imageInfo={entry.itemImg} />
+          </div>
+
+          <div className=' h-[10%]'>
+            <ItemValues
+              heartCnt={entry.heartCnt}
+              commentCnt={entry.commentCnt}
+            />
+          </div>
+
           <ItemDescription
             itemName={entry.itemName}
             description={entry.description}

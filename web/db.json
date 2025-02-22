@@ -2,8 +2,9 @@
   "items": [
     {
       "imageInfo": "apple",
-      "userId": "test1",
+      "userId": "user11",
       "profileImg": "/pngwing.com.png",
+      "itemImg": "/apple.png",
       "heartCnt": 12,
       "commentCnt": 3,
       "itemName": "사과 10개",
@@ -11,8 +12,9 @@
     },
     {
       "imageInfo": "tree",
-      "userId": "test2",
+      "userId": "user22",
       "profileImg": "/pngwing.com.png",
+      "itemImg": "/trees.png",
       "heartCnt": 5,
       "commentCnt": 2,
       "itemName": "나무 1세트",
@@ -20,8 +22,9 @@
     },
     {
       "imageInfo": "banana",
-      "userId": "test3",
+      "userId": "user33s",
       "profileImg": "/pngwing.com.png",
+      "itemImg": "/banana.png",
       "heartCnt": 7,
       "commentCnt": 1,
       "itemName": "바나나 한송이",

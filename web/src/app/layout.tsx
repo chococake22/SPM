@@ -16,7 +16,9 @@ export default function RootLayout({
   if(pathname === '/login') {
     return (
       <html lang="en">
-        <body className="flex flex-col min-h-screen">{children}</body>
+        <body className="w-full h-screen flex justify-center items-center">
+          <div className="w-full h-full">{children}</div>
+        </body>
       </html>
     );
   }
@@ -24,12 +26,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen">
-        <TopNav />
-        <section>
+        <header>
+          <TopNav />
+        </header>
+
+        <main>
           {/* 메인 콘텐츠는 가능한 공간을 채웁니다. */}
           {children}
-        </section>
-        <BottomNav />
+        </main>
+        <footer>
+          <BottomNav />
+        </footer>
       </body>
     </html>
   );
