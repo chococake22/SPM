@@ -1,4 +1,4 @@
-import api from 'axios';
+import api from '@/lib/axios';
 import { ItemListResponse } from '@/types/item/type';
 
 const itemService = {
