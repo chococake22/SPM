@@ -4,7 +4,7 @@ import { ItemListResponse } from '@/types/item/type';
 const itemService = {
   async getItems(data: null): Promise<ItemListResponse[]> {
     try {
-      const response = await api.post<ItemListResponse[]>('/getItemList', data);
+      const response = await api.post<ItemListResponse[]>('/api/getItemList', data);
       return response.data;
     } catch (error) {
       if (error instanceof Error) {

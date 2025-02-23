@@ -26,7 +26,6 @@ app.get('/test', async (req: Request, res: Response) => {
 
 app.post('/getItemList', async (req: Request, res: Response) => {
   try {
-    console.log('??SDFASDFS');
     const response = await axios.get('http://localhost:3002/items');
     res.json(response.data);
   } catch (error) {
