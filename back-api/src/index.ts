@@ -2,8 +2,13 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';  // CORS 미들웨어 임포트
 import axios from "../../web/src/lib/axios";
 import shop from "../src/apis/shop/shop"
+import dotenv from 'dotenv';
 
 const app = express();
+
+dotenv.config();
+
+const apiUrl = process.env.DB_HOST || 'http://localhost:3002';
 
 app.use(
   cors({
@@ -24,17 +29,6 @@ app.get('/test', async (req: Request, res: Response) => {
   };
   res.json(data);
 });
-
-// app.post('/getItemList', async (req: Request, res: Response) => {
-//   try {
-//     console.log("TESt")
-//     const response = await axios.get('http://localhost:3002/items');
-//     res.json(response.data);
-//   } catch (error) {
-//     console.error('Error fetching users:', error);
-//     res.status(500).json({ message: 'Error fetching users' });
-//   }
-// });
 
 app.use("/api", shop)
 
