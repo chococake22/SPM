@@ -33,5 +33,11 @@
       "itemName": "바나나 한송이",
       "description": "달달하고 맛남"
     }
+  ],
+  "users": [
+    {
+      "userId": "user1",
+      "userPw": "1234"
+    }
   ]
 }
