@@ -6,9 +6,7 @@ const apiUrl = process.env.DB_HOST || 'http://localhost:3002';
 
 const router = Router();
 
-router.post('/login', async (req: Request, res: Response): Promise<void> => {
-  console.log(req.body);
-  
+router.post('/login', async (req: Request, res: Response): Promise<void> => {  
   const { userId, userPw } = req.body; 
 
   try {
@@ -22,7 +20,13 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
     if (userIdDb && userPwDb) {
       const [accessToken, refreshToken] = getTokenSet(userId, userIdDb);
-      res.json({ accessToken, refreshToken });
+      res.json({
+        userId,
+        data: {
+          accessToken,
+          refreshToken,
+        },
+      });
     } else {
       res.status(404);
     }
