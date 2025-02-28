@@ -5,12 +5,14 @@ import InputText from "@/components/InputText";
 import api from '@/lib/axios';
 import { userService } from '@/services/user.service';
 import { LoginForm, LoginResponse } from '@/types/user/type';
+import { useRouter } from 'next/navigation';
 
 
 const LoginPage = () => {
   const [list, setList] = useState([]);
   const [userInfo, setUserInfo] = useState<LoginResponse | null>();
   const [data, setData] = useState<LoginForm>({userId: '', userPw: ''});
+  const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -21,11 +23,15 @@ const LoginPage = () => {
   };
 
 
+  const handleSignup = () => {
+    router.push('/signup')
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     try {
       const response = await userService.login(data);
       setUserInfo(response);
-      console.log(response)
+      console.log(response);
       alert(response.userId);
     } catch (error) {
       console.error(error);
@@ -38,11 +44,12 @@ const LoginPage = () => {
         <div className="flex justify-center mb-4">
           <span className="text-xl">Login</span>
         </div>
-        <form onSubmit={handleSubmit} method='POST'>
+        <form onSubmit={handleSubmit} method="POST">
           <div>
             <InputText
               placeholder="User ID"
               name="userId"
+              type="text"
               onChange={handleInputChange}
             />
           </div>
@@ -50,6 +57,7 @@ const LoginPage = () => {
             <InputText
               placeholder="Password"
               name="userPw"
+              type="password"
               onChange={handleInputChange}
             />
           </div>
@@ -63,6 +71,7 @@ const LoginPage = () => {
             <button
               type="button"
               className="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+              onClick={handleSignup}
             >
               Sign Up
             </button>

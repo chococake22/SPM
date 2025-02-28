@@ -13,7 +13,7 @@ export default function RootLayout({
 
   const pathname = usePathname();
 
-  if(pathname === '/login') {
+  if (pathname === '/login' || pathname === '/signup') {
     return (
       <html lang="en">
         <body className="w-full h-screen flex justify-center items-center">
