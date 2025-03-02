@@ -29,7 +29,15 @@ const SignUpPage = () => {
   };
 
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
+
+    e.preventDefault(); // 폼 제출시 페이지가 새로고침되지 않도록 하기
+
+    if(data.userPw !== data.userPwChk) {
+      alert("두 비밀번호가 다릅니다.")
+      return;
+    }
+
     if(confirm("제출하시겠습니까?")) {
       try {
         const response = await userService.signup(data);
@@ -71,6 +79,7 @@ const SignUpPage = () => {
               type="email"
               value={data.userId}
               onChange={handleInputChange}
+              regExp="^[^\s@]+@[^\s@]+\.[^\s@]+$"
             />
           </div>
           <div className="mt-3">
@@ -80,6 +89,7 @@ const SignUpPage = () => {
               type="password"
               value={data.userPw}
               onChange={handleInputChange}
+              regExp="^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$"
             />
           </div>
           <div className="mt-3">
@@ -89,6 +99,7 @@ const SignUpPage = () => {
               type="password"
               value={data.userPwChk || ''}
               onChange={handleInputChange}
+              regExp="^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$"
             />
           </div>
           <div className="mt-3">

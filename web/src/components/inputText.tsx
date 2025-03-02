@@ -4,9 +4,32 @@ interface InputTextProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void | null;
   value?: string;
   type: string;
+  regExp?: string;
 }
 
-const inputText: React.FC<InputTextProps> = ({ placeholder, name, onChange, value, type }) => {
+const inputText: React.FC<InputTextProps> = ({ 
+  placeholder, 
+  name, 
+  onChange, 
+  value, 
+  type, 
+  regExp }) => {
+
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    // regExp가 존재하는 경우에만 검증을 수행
+    if (regExp && !new RegExp(regExp).test(e.target.value)) {
+      let message = '';
+      if (name === 'userPw' || name === 'userPwChk') {
+        message = '비밀번호가 형식에 맞지 않습니다.';
+        alert(message);
+      } else if (name === 'userId') {
+        message = '아이디가 이메일 형식에 맞지 않습니다.';
+        alert(message);
+      }
+    }
+  };
+
   return (
     <div className="flex w-full h-full">
       <div className="flex border-2">
@@ -18,6 +41,7 @@ const inputText: React.FC<InputTextProps> = ({ placeholder, name, onChange, valu
             placeholder={placeholder}
             onChange={onChange}
             value={value}
+            onBlur={handleBlur}
             className="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
           />
         </div>

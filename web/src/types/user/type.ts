@@ -1,7 +1,13 @@
-export interface SignupForm {
+export interface SignupRequest {
   userId: string;
   userPw: string;
-  userPwChk: string;
+  username: string;
+  phone: string;
+}
+
+export interface SignupReponse {
+  userId: string;
+  userPw: string;
   username: string;
   phone: string;
 }

@@ -47,10 +47,11 @@ const LoginPage = () => {
         <form onSubmit={handleSubmit} method="POST">
           <div>
             <InputText
-              placeholder="User ID"
+              placeholder="User ID(Email)"
               name="userId"
               type="text"
               onChange={handleInputChange}
+              regExp="^[^\s@]+@[^\s@]+\.[^\s@]+$"
             />
           </div>
           <div className="mt-3">
@@ -59,6 +60,7 @@ const LoginPage = () => {
               name="userPw"
               type="password"
               onChange={handleInputChange}
+              regExp="^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$"
             />
           </div>
           <div className="flex justify-evenly mt-5">
