@@ -3,24 +3,26 @@ import api from '../../../../web/src/lib/axios'; // Axios 인스턴스 가져오
 import getTokenSet from '../../utils/jwt';
 import bcrypt from 'bcrypt';
 
-
 const apiUrl = process.env.DB_HOST || 'http://localhost:3002';
 
 const router = Router();
 
 router.post('/login', async (req: Request, res: Response): Promise<void> => {
   const { userId, userPw } = req.body;
-
   try {
     const response = await api.get(`${apiUrl}/users`); // /items로 요청 (baseURL 자동 적용)
+
+    console.log(response.data)
+
     const userIdDb = response.data.find(
       (item: { userId: string }) => item.userId === userId
     );
-    const userPwDb = response.data.find(
-      (item: { userPw: string }) => item.userPw === userPw
-    );
 
-    if (userIdDb && userPwDb) {
+    // bcrypt.compare는 비동기 함수이므로
+    // await를 사용하여 비교 결과를 기다려야 함.
+    const isValid = await bcrypt.compare(userPw, userIdDb.hashedPw);
+
+    if (userIdDb && isValid) {
       const [accessToken, refreshToken] = getTokenSet(userId, userIdDb);
       res.json({
         userId,
@@ -52,8 +54,6 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
       username,
       phone,
     });
-
-    console.log(response.data)
 
     res.status(200);
   } catch (error) {

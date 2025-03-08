@@ -36,11 +36,6 @@
   ],
   "users": [
     {
-      "userId": "user1",
-      "userPw": "1234",
-      "id": "8f71"
-    },
-    {
       "id": "5842",
       "userId": "apple12@test.com",
       "hashedPw": "$2b$10$xjhuMfUTeoGZcm60C5XO8OFYKm1CI5z0bJsKHtMs.9Iq4lBRYA1xq",
@@ -52,6 +47,13 @@
       "userId": "apple1@test.com",
       "hashedPw": "$2b$10$Gccd0nKbLkV5tFtCvidNFOtnMzWjYZNbHyBX/hjYW0p0/nW8XnYTm",
       "username": "애플2",
+      "phone": "01012341234"
+    },
+    {
+      "id": "ed2f",
+      "userId": "apple21@test.com",
+      "hashedPw": "$2b$10$qwtPrDwKEmpTqp4oChAVmubiwv7fzKsNK9tBZjU15ulkZQeciD7p.",
+      "username": "애플21",
       "phone": "01012341234"
     }
   ]

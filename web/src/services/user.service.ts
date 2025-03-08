@@ -13,12 +13,9 @@ export const userService = {
       return response.data;
     } catch (error) {
       if (error instanceof Error) {
-        alert('비밀번호가 틀립니다.');
-        return {} as LoginResponse;
-      } else {
         alert('(오류발생)다시 시도해주세요.');
         return {} as LoginResponse;
-      }
+      } 
     }
   },
   async signup(data: SignupRequest): Promise<SignupResponse> {

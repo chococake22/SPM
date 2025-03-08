@@ -2,8 +2,6 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
 
-  console.log(request.nextUrl.pathname)
-
   // 인증이 되지 않은 경우에 로그인 페이지로 이동
   // 인증 기준은 토큰
 

@@ -23,6 +23,11 @@ const LoginPage = () => {
   };
 
 
+  useEffect(() => {
+    console.log(data)
+  }, [data])
+
+
   const handleSignup = () => {
     router.push('/signup')
   };
@@ -31,7 +36,6 @@ const LoginPage = () => {
     try {
       const response = await userService.login(data);
       setUserInfo(response);
-      console.log(response);
       alert(response.userId);
     } catch (error) {
       console.error(error);
@@ -51,7 +55,6 @@ const LoginPage = () => {
               name="userId"
               type="text"
               onChange={handleInputChange}
-              regExp="^[^\s@]+@[^\s@]+\.[^\s@]+$"
             />
           </div>
           <div className="mt-3">
@@ -60,7 +63,6 @@ const LoginPage = () => {
               name="userPw"
               type="password"
               onChange={handleInputChange}
-              regExp="^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$"
             />
           </div>
           <div className="flex justify-evenly mt-5">
