@@ -9,34 +9,51 @@ const router = Router();
 
 router.post('/login', async (req: Request, res: Response): Promise<void> => {
   const { userId, userPw } = req.body;
+
+
+  console.log("req: " + userId + ", " + userPw)
+
   try {
-    const response = await api.get(`${apiUrl}/users`); // /items로 요청 (baseURL 자동 적용)
+    // 데이터를 가져옴
+    const response = await api.get(`${apiUrl}/users`, {params: {userId}}); // /items로 요청 (baseURL 자동 적용)
+    
 
-    console.log(response.data)
+    // 해당 ID가 있는지 먼저 확인.
+    if (response.data[0]) {
+      const userDb = response.data[0];
 
-    const userIdDb = response.data.find(
-      (item: { userId: string }) => item.userId === userId
-    );
+      const isValid = await bcrypt.compare(userPw, userDb.hashedPw);
 
-    // bcrypt.compare는 비동기 함수이므로
-    // await를 사용하여 비교 결과를 기다려야 함.
-    const isValid = await bcrypt.compare(userPw, userIdDb.hashedPw);
+      // bcrypt.compare는 비동기 함수이므로
+      // await를 사용하여 비교 결과를 기다려야 함.
 
-    if (userIdDb && isValid) {
-      const [accessToken, refreshToken] = getTokenSet(userId, userIdDb);
-      res.json({
-        userId,
-        data: {
-          accessToken,
-          refreshToken,
-        },
-      });
+      console.log("isValid: " + isValid)
+
+      if (isValid) {
+        const [accessToken, refreshToken] = getTokenSet(userId, userPw);
+        res.json({
+          userId,
+          data: {
+            accessToken,
+            refreshToken,
+          },
+        });
+        return;
+      } 
+
+      console.log("비밀번호 틀림요");
+      
+      res.status(404).json({ message: '비밀번호가 틀렸습니다.' });
+      return;
+      
     } else {
-      res.status(404);
+      res.status(404).json({ message: '존재하지 않는 아이디입니다.' });
+      return;
     }
   } catch (error) {
     console.error('Error fetching items:', error);
     res.status(500).json({ message: 'Error fetching items' });
+    return;
   }
 });
 
