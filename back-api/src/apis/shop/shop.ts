@@ -1,13 +1,13 @@
 import express, { Router, Request, Response } from 'express';
 import api from '../../../../web/src/lib/axios'; // Axios 인스턴스 가져오기
 
-const apiUrl = process.env.DB_HOST || 'http://localhost:3002';
+const dbUrl = process.env.DB_URL || 'http://localhost:3002';
 
 const router = Router();
 
 router.post('/getItemList', async (req: Request, res: Response) => {
   try {
-    const response = await api.get(`${apiUrl}/items`); // /items로 요청 (baseURL 자동 적용)
+    const response = await api.get(`${dbUrl}/items`); // /items로 요청 (baseURL 자동 적용)
     res.json(response.data);
   } catch (error) {
     console.error('Error fetching items:', error);

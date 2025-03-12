@@ -8,35 +8,41 @@ import { LoginForm, LoginResponse } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
 
 
+
 const LoginPage = () => {
-  const [list, setList] = useState([]);
   const [userInfo, setUserInfo] = useState<LoginResponse | null>();
-  const [data, setData] = useState<LoginForm>({userId: '', userPw: ''});
   const router = useRouter();
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value, // name 속성을 키로 사용하여 값 업데이트
-    }));
-  };
-
-
-  useEffect(() => {
-    console.log(data)
-  }, [data])
-
 
   const handleSignup = () => {
     router.push('/signup')
   };
 
-  const handleSubmit = async (event: FormEvent) => {
+  // 로그인 제출
+  const handleLogin = async (e: FormEvent) => {
+    // 자동으로 새로고침되어서 한번 더 요청이 나가는 것을 방지한다.
+    e.preventDefault();
+
+    // FormData를 이용해서 name에 정의된 값을 가져온다.
+    const formData = new FormData(e.target);
+    const userId = formData.get('userId');
+    const userPw = formData.get('userPw');
+
+    if(userId === '' && userPw === '') {
+      alert("로그인 정보를 입력하세요.")
+      return;
+    }
+
+    const params = {
+      userId: userId,
+      userPw: userPw
+    }
+
     try {
-      const response = await userService.login(data);
+      const response = await userService.login(params);
+      if(response.data) {
+        router.push("/");
+      }
       setUserInfo(response);
-      alert(response.userId);
     } catch (error) {
       console.error(error);
     }
@@ -48,22 +54,12 @@ const LoginPage = () => {
         <div className="flex justify-center mb-4">
           <span className="text-xl">Login</span>
         </div>
-        <form onSubmit={handleSubmit} method="POST">
+        <form onSubmit={handleLogin} method="POST">
           <div>
-            <InputText
-              placeholder="User ID(Email)"
-              name="userId"
-              type="text"
-              onChange={handleInputChange}
-            />
+            <InputText placeholder="User ID(Email)" name="userId" type="text" />
           </div>
           <div className="mt-3">
-            <InputText
-              placeholder="Password"
-              name="userPw"
-              type="password"
-              onChange={handleInputChange}
-            />
+            <InputText placeholder="Password" name="userPw" type="password" />
           </div>
           <div className="flex justify-evenly mt-5">
             <button

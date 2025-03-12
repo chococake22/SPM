@@ -12,14 +12,6 @@ export interface SignupReponse {
   phone: string;
 }
 
-// export interface SignupForm {
-//   userId: string;
-//   userPw: string;
-//   userPwChk: string;
-//   username: string;
-//   phone: string;
-// }
-
 export interface LoginForm {
   userId: string;
   userPw: string;
@@ -28,6 +20,8 @@ export interface LoginForm {
 export interface LoginResponse {
   userId: string;
   data: tokenSet;
+  status?: number;
+  redirectUrl: string;
 }
 
 export type tokenSet = {

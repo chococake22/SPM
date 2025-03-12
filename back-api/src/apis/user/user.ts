@@ -1,9 +1,11 @@
-import express, { Router, Request, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import api from '../../../../web/src/lib/axios'; // Axios 인스턴스 가져오기
 import getTokenSet from '../../utils/jwt';
 import bcrypt from 'bcrypt';
+import {serialize} from 'cookie';
 
-const apiUrl = process.env.DB_HOST || 'http://localhost:3002';
+const dbUrl = process.env.DB_HOST || 'http://localhost:3002';
+const webUrl = process.env.WEB_URL || 'http://localhost:3000';
 
 const router = Router();
 
@@ -15,7 +17,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
   try {
     // 데이터를 가져옴
-    const response = await api.get(`${apiUrl}/users`, {params: {userId}}); // /items로 요청 (baseURL 자동 적용)
+    const response = await api.get(`${dbUrl}/users`, { params: { userId } }); // /items로 요청 (baseURL 자동 적용)
     
 
     // 해당 ID가 있는지 먼저 확인.
@@ -31,6 +33,20 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
       if (isValid) {
         const [accessToken, refreshToken] = getTokenSet(userId, userPw);
+
+        // access token을 httpOnly로 쿠키에 담아서 저장.
+        res.cookie('accessToken', accessToken, {
+          httpOnly:true,
+          secure:false,
+          sameSite: 'strict'
+        })
+
+        res.cookie('refreshToken', refreshToken, {
+          httpOnly: true,
+          secure: false,
+          sameSite: 'strict',
+        });
+
         res.json({
           userId,
           data: {
@@ -40,8 +56,6 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
         });
         return;
       } 
-
-      console.log("비밀번호 틀림요");
       
       res.status(404).json({ message: '비밀번호가 틀렸습니다.' });
       return;
@@ -65,7 +79,7 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
     const saltRounds = 10;
     const hashedPw = await bcrypt.hash(userPw, saltRounds);
 
-    const response = await api.post(`${apiUrl}/users`, {
+    const response = await api.post(`${dbUrl}/users`, {
       userId,
       hashedPw,
       username,

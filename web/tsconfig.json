@@ -18,6 +18,8 @@
     "types": [
       "node"
     ],
+    "noUnusedLocals": false,  // '사용되지 않는 변수' 경고 끄기
+    "noUnusedParameters": false,
     "allowJs": true,
     "noEmit": true,
     "incremental": true,

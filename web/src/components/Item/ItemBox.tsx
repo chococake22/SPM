@@ -22,7 +22,7 @@ const itemBox: React.FC<ItemBoxProps> = ({ entry }) => {
   return (
     <div className="pt-3">
       <div className="flex justify-center w-full h-full">
-        <div className="w-[80%] h-[600px] border-2 border-black">
+        <div className="w-[80%] h-[90%] border-2 border-black">
           <div className="w-full h-[10%] border-2 border-black">
             <ItemUserProfile
               userId={entry.userId}
