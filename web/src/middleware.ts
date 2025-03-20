@@ -1,17 +1,19 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
+  // 로그 확인용
+  console.log('pathname: ' + request.nextUrl.pathname);
 
-  // console.log('pathname: ' + request.nextUrl.pathname);
-  // 인증이 되지 않은 경우에 로그인 페이지로 이동
-  // 인증 기준은 토큰
+  // accessToken이 쿠키에 있는지 확인
+  const accessToken = request.cookies.get('accessToken');
 
-  // 임시로 지정.
-  if (request.nextUrl.pathname === '/profile') {
-    return NextResponse.redirect(new URL('/login', request.url));
+  if (!accessToken) {
+    // 로그인 페이지가 아닌 다른 페이지에서 인증이 안되었을 경우 리다이렉트
+    if (request.nextUrl.pathname !== '/login') {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
   }
 }
-
 
 // 미들웨어가 적용되는 기준
 export const config = {

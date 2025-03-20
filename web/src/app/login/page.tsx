@@ -54,7 +54,7 @@ const LoginPage = () => {
         <div className="flex justify-center mb-4">
           <span className="text-xl">Login</span>
         </div>
-        <form onSubmit={handleLogin} method="POST">
+        <form id='loginForm' onSubmit={handleLogin} method="POST">
           <div>
             <InputText placeholder="User ID(Email)" name="userId" type="text" />
           </div>
