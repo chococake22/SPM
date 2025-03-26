@@ -4,6 +4,8 @@ import {
   LoginResponse,
   SignupRequest,
   SignupResponse,
+  LogoutRequest,
+  LogoutResponse,
 } from '@/types/user/type';
 import { AxiosError } from 'axios';
 
@@ -13,7 +15,6 @@ export const userService = {
       const response = await api.post<LoginResponse>('/api/login', data);
       return response.data;
     } catch (error) {
-
       console.log('Error object:', error);
       console.log(error instanceof AxiosError);
 
@@ -36,8 +37,6 @@ export const userService = {
         alert('(오류 발생) 다시 시도해 주세요.');
         return {} as LoginResponse;
       }
-
-      
     }
   },
   async signup(data: SignupRequest): Promise<SignupResponse> {
@@ -51,6 +50,20 @@ export const userService = {
       } else {
         alert('(오류발생)다시 시도해주세요.');
         return {} as SignupResponse;
+      }
+    }
+  },
+  async logout(): Promise<LogoutResponse> {
+    try {
+      const response = await api.post<LogoutRequest>('/api/logout');
+      return response.data;
+    } catch (error) {
+      if (error instanceof Error) {
+        alert('에러 발생');
+        return {} as LogoutResponse;
+      } else {
+        alert('(오류발생)다시 시도해주세요.');
+        return {} as LogoutResponse;
       }
     }
   },

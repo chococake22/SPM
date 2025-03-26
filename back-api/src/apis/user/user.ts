@@ -2,10 +2,8 @@ import { Router, Request, Response } from 'express';
 import api from '../../../../web/src/lib/axios'; // Axios 인스턴스 가져오기
 import getTokenSet from '../../utils/jwt';
 import bcrypt from 'bcrypt';
-import {serialize} from 'cookie';
 
 const dbUrl = process.env.DB_HOST || 'http://localhost:3002';
-const webUrl = process.env.WEB_URL || 'http://localhost:3000';
 
 const router = Router();
 
@@ -36,15 +34,15 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
         // access token을 httpOnly로 쿠키에 담아서 저장.
         res.cookie('accessToken', accessToken, {
-          httpOnly:true,
-          secure:false,
-          sameSite: 'strict'
-        })
+          httpOnly: true,
+          secure: false,
+          sameSite: 'lax',
+        });
 
         res.cookie('refreshToken', refreshToken, {
           httpOnly: true,
           secure: false,
-          sameSite: 'strict',
+          sameSite: 'lax',
         });
 
         res.json({
@@ -74,6 +72,27 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
 router.post('/signup', async (req: Request, res: Response): Promise<void> => {  
   const { userId, userPw, username, phone } = req.body; 
+
+  try {
+    const saltRounds = 10;
+    const hashedPw = await bcrypt.hash(userPw, saltRounds);
+
+    const response = await api.post(`${dbUrl}/users`, {
+      userId,
+      hashedPw,
+      username,
+      phone,
+    });
+
+    res.status(200);
+  } catch (error) {
+    console.error('Error fetching items:', error);
+    res.status(500).json({ message: 'Error fetching items' });
+  }
+});
+
+router.post('/logout', async (req: Request, res: Response): Promise<void> => {
+  const { userId, userPw, username, phone } = req.body;
 
   try {
     const saltRounds = 10;
