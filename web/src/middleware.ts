@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
 
   if (!accessToken) {
     // 로그인 페이지가 아닌 다른 페이지에서 인증이 안되었을 경우 리다이렉트
-    if (request.nextUrl.pathname !== '/login') {
+    if (request.nextUrl.pathname !== '/login' && request.nextUrl.pathname !== '/signup') {
       return NextResponse.redirect(new URL('/login', request.url));
     }
   }

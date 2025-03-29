@@ -19,7 +19,7 @@
       "itemImg": "/trees.png",
       "heartCnt": 5,
       "commentCnt": 2,
-      "itemName": "나무 1세트",
+      "itemName": "나무 1세트1111111111",
       "description": "아주 튼튼한 나무임"
     },
     {
@@ -30,8 +30,74 @@
       "itemImg": "/banana.png",
       "heartCnt": 7,
       "commentCnt": 1,
-      "itemName": "바나나 한송이",
+      "itemName": "바나나 한송이222222222222222",
       "description": "달달하고 맛남"
+    },
+    {
+      "id": "4",
+      "imageInfo": "banana",
+      "userId": "user33s",
+      "profileImg": "/pngwing.com.png",
+      "itemImg": "/banana.png",
+      "heartCnt": 7,
+      "commentCnt": 1,
+      "itemName": "바나나 한송이333333333333",
+      "description": "달달하고 맛남"
+    },
+    {
+      "id": "5",
+      "imageInfo": "banana",
+      "userId": "user33s",
+      "profileImg": "/pngwing.com.png",
+      "itemImg": "/banana.png",
+      "heartCnt": 7,
+      "commentCnt": 1,
+      "itemName": "바나나 한송이4444444444444",
+      "description": "달달하고 맛남"
+    },
+    {
+      "id": "6",
+      "imageInfo": "banana",
+      "userId": "user33s",
+      "profileImg": "/pngwing.com.png",
+      "itemImg": "/banana.png",
+      "heartCnt": 7,
+      "commentCnt": 1,
+      "itemName": "바나나 한송이55555555555555",
+      "description": "달달하고 맛남"
+    },
+    {
+      "id": "7",
+      "imageInfo": "banana",
+      "userId": "user33s",
+      "profileImg": "/pngwing.com.png",
+      "itemImg": "/banana.png",
+      "heartCnt": 7,
+      "commentCnt": 1,
+      "itemName": "바나나 한송이66666666666",
+      "description": "달달하고 맛남"
+    },
+    {
+      "id": "8",
+      "imageInfo": "tree",
+      "userId": "user22",
+      "profileImg": "/pngwing.com.png",
+      "itemImg": "/trees.png",
+      "heartCnt": 5,
+      "commentCnt": 2,
+      "itemName": "나무 1세트777777777777777777",
+      "description": "아주 튼튼한 나무임"
+    },
+    {
+      "id": "9",
+      "imageInfo": "tree",
+      "userId": "user22",
+      "profileImg": "/pngwing.com.png",
+      "itemImg": "/trees.png",
+      "heartCnt": 5,
+      "commentCnt": 2,
+      "itemName": "나무 1세트8888888888888888888",
+      "description": "아주 튼튼한 나무임"
     }
   ],
   "users": [

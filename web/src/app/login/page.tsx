@@ -14,7 +14,7 @@ const LoginPage = () => {
   const router = useRouter();
 
   const handleSignup = () => {
-    router.push('/signup')
+    router.push('/signup');
   };
 
   // 로그인 제출

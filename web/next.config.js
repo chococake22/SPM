@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   future: {
     strictPostcssConfiguration: true, // PostCSS 설정을 더 엄격하게 적용
   },

@@ -10,7 +10,6 @@ const router = Router();
 router.post('/login', async (req: Request, res: Response): Promise<void> => {
   const { userId, userPw } = req.body;
 
-
   console.log("req: " + userId + ", " + userPw)
 
   try {
@@ -92,20 +91,13 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
 });
 
 router.post('/logout', async (req: Request, res: Response): Promise<void> => {
-  const { userId, userPw, username, phone } = req.body;
-
   try {
-    const saltRounds = 10;
-    const hashedPw = await bcrypt.hash(userPw, saltRounds);
 
-    const response = await api.post(`${dbUrl}/users`, {
-      userId,
-      hashedPw,
-      username,
-      phone,
-    });
+    // 토큰 삭제
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
 
-    res.status(200);
+    res.status(200).json({ message: 'Logout successful' });
   } catch (error) {
     console.error('Error fetching items:', error);
     res.status(500).json({ message: 'Error fetching items' });

@@ -1,14 +1,18 @@
 "use client"
 
 import { userService } from '@/services/user.service';
+import { useRouter } from 'next/navigation';
 
 export default function Mypage() {
+  const router = useRouter();
 
   const handleLogout = async () => {
     if (confirm('로그아웃 하시겠습니까?')) {
       try {
         const response = await userService.logout();
-        alert(response.userId);
+        alert(response.message);
+        // 로그아웃을 하고 나면 뒤로 갈 수 없어야 해서 replace 사용
+        router.replace('/login');
       } catch (error) {
         console.error(error);
       }

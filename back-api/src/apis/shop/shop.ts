@@ -7,7 +7,14 @@ const router = Router();
 
 router.post('/getItemList', async (req: Request, res: Response) => {
   try {
-    const response = await api.get(`${dbUrl}/items`); // /items로 요청 (baseURL 자동 적용)
+    const { offset, limit } = req.body;
+
+    console.log("offset: " + offset)
+    console.log('limit: ' + limit);
+
+    // 4개만 가져오도록
+    const response = await api.get(`${dbUrl}/items?_start=${offset}&_limit=${limit}`); // /items로 요청 (baseURL 자동 적용)
+
     res.json(response.data);
   } catch (error) {
     console.error('Error fetching items:', error);
