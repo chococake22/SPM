@@ -19,9 +19,11 @@ export interface LoginForm {
 
 export interface LoginResponse {
   userId: string;
-  data: tokenSet;
+  data?: tokenSet;
   status?: number;
-  redirectUrl: string;
+  redirectUrl?: string;
+  username?: string;
+  phone?: string;
 }
 
 export interface LogoutRequest {
@@ -42,3 +44,10 @@ export type tokenSet = {
   accessToken: string;
   refreshToken: string;
 };
+
+export interface UserInfo {
+  userId: string;
+  username?: string;
+  phone?: string;
+
+}

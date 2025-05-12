@@ -4,6 +4,8 @@ import "./global.css";
 import BottomNav from "../components/BottomNav"
 import TopNav from '../components/TopNav';
 import { usePathname } from 'next/navigation';
+import { createContext } from "react";
+import { UserProvider } from "@/lib/UserContext";
 
 export default function RootLayout({
   children,
@@ -17,7 +19,9 @@ export default function RootLayout({
     return (
       <html lang="en">
         <body className="w-full h-screen flex justify-center items-center">
-          <div className="w-full h-full">{children}</div>
+          <UserProvider>
+            <div className="w-full h-full">{children}</div>
+          </UserProvider>
         </body>
       </html>
     );
@@ -26,17 +30,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen">
-        <header>
-          <TopNav />
-        </header>
+        <UserProvider>
+          <header>
+            <TopNav />
+          </header>
 
-        <main>
-          {/* 메인 콘텐츠는 가능한 공간을 채웁니다. */}
-          {children}
-        </main>
-        <footer>
-          <BottomNav />
-        </footer>
+          <main>
+            {/* 메인 콘텐츠는 가능한 공간을 채웁니다. */}
+            {children}
+          </main>
+          <footer>
+            <BottomNav />
+          </footer>
+        </UserProvider>
       </body>
     </html>
   );

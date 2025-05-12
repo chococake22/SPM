@@ -16,7 +16,6 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     // 데이터를 가져옴
     const response = await api.get(`${dbUrl}/users`, { params: { userId } }); // /items로 요청 (baseURL 자동 적용)
     
-
     // 해당 ID가 있는지 먼저 확인.
     if (response.data[0]) {
       const userDb = response.data[0];
@@ -101,6 +100,32 @@ router.post('/logout', async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     console.error('Error fetching items:', error);
     res.status(500).json({ message: 'Error fetching items' });
+  }
+});
+
+router.get('/user', async (req: Request, res: Response): Promise<void> => {
+  const { userId, userPw } = req.body;
+
+  console.log('user: ' + userId + ', ' + userPw);
+
+  try {
+    // 데이터를 가져옴
+    const response = await api.get(`${dbUrl}/users`, { params: { userId } }); // /items로 요청 (baseURL 자동 적용)
+
+    // 해당 ID가 있는지 먼저 확인.
+    if (response.data[0]) {
+      const userDb = response.data[0];
+
+      console.log(userDb)
+      res.json({
+        userDb,
+      });
+
+    } 
+  } catch (error) {
+    console.error('Error fetching items:', error);
+    res.status(500).json({ message: 'Error fetching items' });
+    return;
   }
 });
 
