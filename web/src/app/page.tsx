@@ -5,14 +5,18 @@ import ItemBox from '../components/Item/ItemBox';
 import itemService from '@/services/item.service';
 import { ItemListResponse } from '@/types/item/type';
 import { flushSync } from 'react-dom';
+import { useRef } from 'react';
 
-const ITEMS_PER_PAGE = 4;
+
+
+const ITEMS_PER_PAGE = 3;
 
 const Home = () => {
   const [itemList, setItemList] = useState<ItemListResponse[]>([]);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [check, setCheck] = useState<boolean>(false);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const getItems = async (pageNumber: number) => {
     try {
@@ -60,12 +64,38 @@ const Home = () => {
     console.log('Component rendered');
   }, [sortedItemList]);
 
+  useEffect(() => {
+    if (!hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMoreItems(); // 스크롤로 인해 하단 요소가 보이면 다음 페이지 로드
+        }
+      },
+      {
+        threshold: 1.0,
+      }
+    );
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => {
+      if (loadMoreRef.current) {
+        observer.unobserve(loadMoreRef.current);
+      }
+    };
+  }, [loadMoreRef, hasMore]);
+
+
   return (
     <div className="mt-10 mb-10">
       {sortedItemList.map((entry, index) => (
         <ItemBox key={index} entry={entry} />
       ))}
-      <div>페이지 불러오기</div>
+      {hasMore && <div ref={loadMoreRef} className="h-10" />}
     </div>
   );
 };

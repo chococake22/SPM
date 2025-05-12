@@ -6,6 +6,7 @@ import {
   SignupResponse,
   LogoutRequest,
   LogoutResponse,
+  UserInfo
 } from '@/types/user/type';
 import { AxiosError } from 'axios';
 
@@ -56,6 +57,22 @@ export const userService = {
   async logout(): Promise<LogoutResponse> {
     try {
       const response = await api.post<LogoutRequest>('/api/logout');
+      return response.data;
+    } catch (error) {
+      if (error instanceof Error) {
+        alert('에러 발생');
+        return {} as LogoutResponse;
+      } else {
+        alert('(오류발생)다시 시도해주세요.');
+        return {} as LogoutResponse;
+      }
+    }
+  },
+
+  async user(): Promise<UserInfo> {
+    try {
+      const response = await api.get<UserInfo>('/api/user');
+      console.log(response)
       return response.data;
     } catch (error) {
       if (error instanceof Error) {
