@@ -15,12 +15,10 @@ const Home = () => {
   const [itemList, setItemList] = useState<ItemListResponse[]>([]);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
-  const [check, setCheck] = useState<boolean>(false);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const getItems = async (pageNumber: number) => {
     try {
-
       const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
       const response = await itemService.getItems(offset, ITEMS_PER_PAGE);
 
@@ -34,31 +32,35 @@ const Home = () => {
         if(pageNumber === 1) {
           setItemList(response);
         } else {
+          // 기존꺼에 새로운 가져온 데이터를 추가해서 배열을 만들었음.
           setItemList((prevItems) => [...prevItems, ...response]);
         }
-        
-        setCheck(true)  
       })
     } catch(error) {
       console.error("Error fetching data:", error)
     }
   }
 
+  // page를 추가해서 데이터를 가져온다.
+  // 그 다음의 4개 데이터를 가져옴.
+  // page가 변하면 getItems 실행
   const loadMoreItems = () => {
     setPage((prevPage) => prevPage + 1)
   }
 
+  // 데이터를 가져와서 정렬하기.
   const sortedItemList = useMemo(() => {
     console.log('Re-sorting item list');
-    console.log(itemList)
-    console.log(check);
+    // itemList를 가져와서 sorting
     return [...itemList].sort((a, b) => a.itemName.localeCompare(b.itemName));
-  }, [itemList])
+  }, [itemList]);
+
+  
 
   // 데이터 요청
   useEffect(() => {
     getItems(page); // 컴포넌트가 마운트되면 데이터 요청 실행
-  }, [page]);
+  }, [page]);       // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
 
   useEffect(() => {
     console.log('Component rendered');

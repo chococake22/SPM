@@ -2,12 +2,9 @@
 
 import { useUser } from '@/lib/UserContext';
 import { userService } from '@/services/user.service';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import InputText from '@/components/InputText';
 
 export default function Mypage() {
-  const router = useRouter();
   const { user, setUser } = useUser();
 
   useEffect(() => {
