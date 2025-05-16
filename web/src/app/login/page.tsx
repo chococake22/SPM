@@ -2,7 +2,6 @@
 
 import { FormEvent, useEffect, useState } from 'react';
 import InputText from "@/components/InputText";
-import api from '@/lib/axios';
 import { userService } from '@/services/user.service';
 import { LoginForm, LoginResponse } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
