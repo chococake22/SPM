@@ -1,17 +1,24 @@
 "use client"
 
-import { useUser } from '@/lib/UserContext';
+import { useUserInfo } from '@/lib/UserContext';
 import { userService } from '@/services/user.service';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { userContext } from '@/lib/UserContext';
+import { createContext } from 'react';
 
 export default function Mypage() {
-  const { user, setUser } = useUser();
+  const { user, setUser } = useUserInfo();
 
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await userService.user();
-        setUser(response.userDb);
+        const param = {
+          userId: user.userId,
+        };
+
+        const response = await userService.user(param);
+        console.log(response);
+        // setUser(response.userDb);
       } catch (error) {
         console.log(error);
       }

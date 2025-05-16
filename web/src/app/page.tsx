@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import ItemBox from '../components/Item/ItemBox';
 import itemService from '@/services/item.service';
 import { ItemListResponse } from '@/types/item/type';
@@ -17,7 +17,8 @@ const Home = () => {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  const getItems = async (pageNumber: number) => {
+  // 맨 처음 렌더링이 될 때에는 함수가 실행되지는 않고 정의만 된다.
+  const getItems = useCallback(async (pageNumber: number) => {
     try {
       const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
       const response = await itemService.getItems(offset, ITEMS_PER_PAGE);
@@ -29,38 +30,42 @@ const Home = () => {
       }
 
       flushSync(() => {
-        if(pageNumber === 1) {
+        if (pageNumber === 1) {
           setItemList(response);
         } else {
           // 기존꺼에 새로운 가져온 데이터를 추가해서 배열을 만들었음.
+          // 여기서 참조를 했음. 이전의 것인 prevItems를 그대로 복사하고 거기에 response를 더했기 때문에 아예 새로 만들어진 것이라고 봄.
+          // 그래서 아래 ItemList를 dependency로 하고 있는 useMemo가 동작을 하고 있는 것임.
           setItemList((prevItems) => [...prevItems, ...response]);
         }
-      })
-    } catch(error) {
-      console.error("Error fetching data:", error)
+      });
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
-  }
+  }, []);
 
   // page를 추가해서 데이터를 가져온다.
   // 그 다음의 4개 데이터를 가져옴.
   // page가 변하면 getItems 실행
-  const loadMoreItems = () => {
-    setPage((prevPage) => prevPage + 1)
-  }
+  // 맨 처음 렌더링이 될 때에는 함수가 실행되지는 않고 정의만 된다.
+  const loadMoreItems = useCallback(() => {
+    console.log('loadMOreItems');
+    setPage((prevPage) => prevPage + 1);
+  }, []);
 
   // 데이터를 가져와서 정렬하기.
   const sortedItemList = useMemo(() => {
-    console.log('Re-sorting item list');
+    console.log('다시 가져옴');
     // itemList를 가져와서 sorting
     return [...itemList].sort((a, b) => a.itemName.localeCompare(b.itemName));
   }, [itemList]);
 
-  
-
   // 데이터 요청
+  // 처음 렌더링되면 page가 useState로 초기화되니까 바로 된다.
   useEffect(() => {
+    console.log('getItems');
     getItems(page); // 컴포넌트가 마운트되면 데이터 요청 실행
-  }, [page]);       // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
+  }, [page, getItems]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
 
   useEffect(() => {
     console.log('Component rendered');
@@ -80,17 +85,18 @@ const Home = () => {
       }
     );
 
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
+    const currentRef = loadMoreRef.current;
+
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (loadMoreRef.current) {
-        observer.unobserve(loadMoreRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
-  }, [loadMoreRef, hasMore]);
-
+  }, [loadMoreItems, hasMore]);
 
   return (
     <div className="mt-10 mb-10">

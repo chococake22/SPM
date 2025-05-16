@@ -4,7 +4,6 @@ import "./global.css";
 import BottomNav from "../components/BottomNav"
 import TopNav from '../components/TopNav';
 import { usePathname } from 'next/navigation';
-import { createContext } from "react";
 import { UserProvider } from "@/lib/UserContext";
 
 export default function RootLayout({

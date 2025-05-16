@@ -1,20 +1,24 @@
 'use client';
 
-import { useUser } from '@/lib/UserContext';
+import { useUserInfo } from '@/lib/UserContext';
 import { userService } from '@/services/user.service';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import InputText from '@/components/InputText';
+import { UserInfoResponse } from '@/types/user/type';
 
 export default function Mypage() {
   const router = useRouter();
-  const { user, setUser } = useUser();
+  const { user, setUser } = useUserInfo();
+  const [ userInfo, setUserInfo ] = useState<UserInfoResponse>();
 
   const handleLogout = async () => {
     if (confirm('로그아웃 하시겠습니까?')) {
       try {
         const response = await userService.logout();
         alert(response.message);
+        // 로컬 스토리지에서 사용자 정보 삭제
+        localStorage.removeItem('userInfo');
         // 로그아웃을 하고 나면 뒤로 갈 수 없어야 해서 replace 사용
         router.replace('/login');
       } catch (error) {
@@ -23,27 +27,38 @@ export default function Mypage() {
     }
   };
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await userService.user();
-        setUser(response.userDb);
-      } catch (error) {
-        console.log(error);
-      }
+  const getUser = async () => {
+    if(!user) return;
+    try {
+      const param = {
+        userId: user.userId,
+      };
+
+    const response = await userService.user(param);
+
+    const data = {
+      userId: response.userDb.userId,
+      username: response.userDb.username,
+      phone: response.userDb.phone,
     };
+
+    console.log(data);
+    setUserInfo(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
     getUser();
-  }, [setUser]);
+  }, []);
 
-  if (!user) {
-    return (
-      <div className="flex w-screen h-screen justify-center items-center">
-        <div>Loading...</div> {/* 로딩 상태 표시 */}
-      </div>
-    );
-  }
 
-  return (
+  return !userInfo ? (
+    <div className="flex w-screen h-screen justify-center items-center">
+      <div>Loading...</div>
+    </div>
+  ) : (
     <div className="flex w-screen h-screen justify-center items-center">
       <div className="flex flex-col w-[40%] h-[30%] justify-around">
         <div>
@@ -51,7 +66,7 @@ export default function Mypage() {
             placeholder="User ID(Email)"
             name="userId"
             type="text"
-            defaultValue={user?.userId}
+            defaultValue={userInfo.userId}
           />
         </div>
         <div>
@@ -59,7 +74,7 @@ export default function Mypage() {
             placeholder="User Name"
             name="username"
             type="text"
-            defaultValue={user?.username}
+            defaultValue={userInfo.username}
           />
         </div>
         <div>
@@ -67,7 +82,7 @@ export default function Mypage() {
             placeholder="Phone"
             name="phone"
             type="text"
-            defaultValue={user?.phone}
+            defaultValue={userInfo.phone}
           />
         </div>
         <button
@@ -80,4 +95,5 @@ export default function Mypage() {
       </div>
     </div>
   );
+
 }

@@ -10,7 +10,7 @@ const router = Router();
 router.post('/login', async (req: Request, res: Response): Promise<void> => {
   const { userId, userPw } = req.body;
 
-  console.log("req: " + userId + ", " + userPw)
+  console.log("post, '/login': " + userId + ', ' + userPw);
 
   try {
     // 데이터를 가져옴
@@ -104,9 +104,9 @@ router.post('/logout', async (req: Request, res: Response): Promise<void> => {
 });
 
 router.get('/user', async (req: Request, res: Response): Promise<void> => {
-  const { userId, userPw } = req.body;
+  const { userId } = req.query as { userId: string }; // ✅ query에서 추출
 
-  console.log('user: ' + userId + ', ' + userPw);
+  console.log("GET '/user':", userId);
 
   try {
     // 데이터를 가져옴
@@ -116,12 +116,13 @@ router.get('/user', async (req: Request, res: Response): Promise<void> => {
     if (response.data[0]) {
       const userDb = response.data[0];
 
-      console.log(userDb)
+      console.log('========= userDb ===========');
+      console.log(userDb);
+      console.log('========= // userDb ===========');
       res.json({
         userDb,
       });
-
-    } 
+    }
   } catch (error) {
     console.error('Error fetching items:', error);
     res.status(500).json({ message: 'Error fetching items' });

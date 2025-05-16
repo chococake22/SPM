@@ -45,9 +45,12 @@ export type tokenSet = {
   refreshToken: string;
 };
 
-export interface UserInfo {
+export interface UserInfoRequest {
   userId: string;
-  username?: string;
-  phone?: string;
+}
 
+export interface UserInfoResponse {
+  userId: string;
+  username: string;
+  phone: string;
 }

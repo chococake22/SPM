@@ -121,6 +121,13 @@
       "hashedPw": "$2b$10$qwtPrDwKEmpTqp4oChAVmubiwv7fzKsNK9tBZjU15ulkZQeciD7p.",
       "username": "애플21",
       "phone": "01012341234"
+    },
+    {
+      "id": "081a",
+      "userId": "test12@test.com",
+      "hashedPw": "$2b$10$JkrFbfk82mFbqDsefCCm3er.h/WLQWJ5apEwiaZTXdEum6XIU4nFK",
+      "username": "test12",
+      "phone": "01012341234"
     }
   ]
 }

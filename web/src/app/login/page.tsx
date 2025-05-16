@@ -5,12 +5,11 @@ import InputText from "@/components/InputText";
 import { userService } from '@/services/user.service';
 import { LoginForm, LoginResponse } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
-import {useUser} from '@/lib/UserContext';
+import { useUserInfo} from '@/lib/UserContext';
 
 
 const LoginPage = () => {
-  // const [userInfo, setUserInfo] = useState<LoginResponse | null>();
-  const {setUser} = useUser();
+  const { setUser } = useUserInfo();
   const router = useRouter();
 
   const handleSignup = () => {
@@ -39,12 +38,12 @@ const LoginPage = () => {
 
     try {
       const response = await userService.login(params);
+      console.log("login")
       console.log(response)
-      if(response.data) {
+      if(response.userId) {
         setUser(response)
         router.push("/");
       }
-      // setUserInfo(response);
     } catch (error) {
       console.error(error);
     }

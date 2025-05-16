@@ -6,7 +6,8 @@ import {
   SignupResponse,
   LogoutRequest,
   LogoutResponse,
-  UserInfo
+  UserInfoRequest,
+  UserInfoResponse,
 } from '@/types/user/type';
 import { AxiosError } from 'axios';
 
@@ -69,10 +70,13 @@ export const userService = {
     }
   },
 
-  async user(): Promise<UserInfo> {
+  async user(data: UserInfoRequest): Promise<UserInfoResponse> {
+    console.log(data);
     try {
-      const response = await api.get<UserInfo>('/api/user');
-      console.log(response)
+      const response = await api.get<UserInfoResponse>('/api/user', {
+        params: data,
+      });
+      console.log(response.data)
       return response.data;
     } catch (error) {
       if (error instanceof Error) {
