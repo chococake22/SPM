@@ -49,6 +49,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     </UserContext.Provider>
   );
 };
+
 /**
  *  전역에서 UserContext를 어디서든 사용할 수 있도록 커스텀 훅을 정의했음.
  *  useContext를 이용해서 하위 컴포넌트 어디에서든디 user 정보에 접근이 가능함

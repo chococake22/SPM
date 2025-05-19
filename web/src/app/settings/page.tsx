@@ -34,8 +34,10 @@ export default function Mypage() {
         userId: user.userId,
       };
 
+    // user 정보 가져오는 api 호출
     const response = await userService.user(param);
 
+    // 필요한 데이터만 UserInfo에 가져다가 사용함.
     const data = {
       userId: response.userDb.userId,
       username: response.userDb.username,
@@ -50,8 +52,14 @@ export default function Mypage() {
   };
 
   useEffect(() => {
-    getUser();
-  }, []);
+    // localstorage에 user 정보가 없거나 이미 불러왔으면 return
+    if(!user || userInfo) {
+      return;
+    } else {
+      console.log('???');
+      getUser();
+    }
+  }, [user]);
 
 
   return !userInfo ? (
