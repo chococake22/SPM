@@ -19,6 +19,16 @@ export default function Mypage() {
   const { user, setUser } = useUserInfo();
   const [activeTab, setActiveTab] = useState(0);
   const [tabData, setTabData] = useState<{index: number; img: string}[]>([]);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const openModal = (img: string) => {
+    setSelectedImage(img);
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
+  };
+
 
   const tab1 = [
     { index: 1, img: '/trees.png' },
@@ -159,13 +169,33 @@ export default function Mypage() {
                   <div
                     key={item.index}
                     className="w-1/3 h-1/3 border-2"
+                    onClick={() => openModal(item.img)}
                   >
                     {/* <div> */}
-                    <img src={`/testImages/${item.img}`} className='w-full h-full' />
+                    <img
+                      src={`/testImages/${item.img}`}
+                      className="w-full h-full"
+                    />
                     {/* </div> */}
                   </div>
                 ))}
               </div>
+              {selectedImage && (
+                <div
+                  className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
+                  onClick={closeModal}
+                >
+                  <div className="bg-white rounded-lg p-4 max-w-[90%] max-h-[90%] relative">
+                    <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">
+                      &times;
+                    </button>
+                    <img
+                      src={`/testImages/${selectedImage}`}
+                      className="max-w-full max-h-[80vh] object-contain"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
