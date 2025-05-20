@@ -2,9 +2,11 @@
 
 import { useUserInfo } from '@/lib/UserContext';
 import { userService } from '@/services/user.service';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useMemo, useCallback } from 'react';
 import { userContext } from '@/lib/UserContext';
 import { createContext } from 'react';
+import itemService from '@/services/item.service';
+import { flushSync } from 'react-dom';
 
 interface Tab {
   label: string;
@@ -18,8 +20,11 @@ interface TabsProps {
 export default function Mypage() {
   const { user, setUser } = useUserInfo();
   const [activeTab, setActiveTab] = useState(0);
-  const [tabData, setTabData] = useState<{index: number; img: string}[]>([]);
+  const [tabData, setTabData] = useState<{ index: number; img: string }[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [itemList, setItemList] = useState<ItemListResponse[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
   const openModal = (img: string) => {
     setSelectedImage(img);
@@ -28,7 +33,6 @@ export default function Mypage() {
   const closeModal = () => {
     setSelectedImage(null);
   };
-
 
   const tab1 = [
     { index: 1, img: '/trees.png' },
@@ -72,8 +76,69 @@ export default function Mypage() {
     { label: 'Tab 3', content: 'tab3' },
   ];
 
+  const ITEMS_PER_PAGE = 9;
+  // 맨 처음 렌더링이 될 때에는 함수가 실행되지는 않고 정의만 된다.
+  const getUserItems = useCallback(async (pageNumber: number) => {
+
+    console.log('callback - getUserItems');
+    console.log(user)
+    if(!user) {
+      return;
+    }
+
+    console.log(user)
+
+    try {
+      const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
+      const response = await itemService.getUserItems(user.username, offset, ITEMS_PER_PAGE);
+
+      console.log(response)
+
+      // 전체 개수 < 해당 페이지 수
+      // 페이지가 더 없음.
+      if (response.length < ITEMS_PER_PAGE) {
+        setHasMore(false);
+      }
+
+      flushSync(() => {
+        if (pageNumber === 1) {
+          setItemList(response);
+        } else {
+          // 기존꺼에 새로운 가져온 데이터를 추가해서 배열을 만들었음.
+          // 여기서 참조를 했음. 이전의 것인 prevItems를 그대로 복사하고 거기에 response를 더했기 때문에 아예 새로 만들어진 것이라고 봄.
+          // 그래서 아래 ItemList를 dependency로 하고 있는 useMemo가 동작을 하고 있는 것임.
+          setItemList((prevItems) => [...prevItems, ...response]);
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }, []);
+
+  const sortedItemList = useMemo(() => {
+    console.log('다시 가져옴');
+    console.log(itemList);
+    // itemList를 가져와서 sorting
+    // id는 number 타입이므로 연산을 통해 오름차순으로 정렬함.
+    return [...itemList].sort((a, b) => a.id - b.id);
+  }, [itemList]);
+
+  // 데이터 요청
+  // 처음 렌더링되면 page가 useState로 초기화되니까 바로 된다.
   useEffect(() => {
-    switch(tabs[activeTab].content) {
+    console.log('useEffect - getUserItems');
+    if(user) {
+      console.log('user 있음');
+      getUserItems(page); // 컴포넌트가 마운트되면 데이터 요청 실행
+    }
+  }, [user, page, getUserItems]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
+
+  useEffect(() => {
+    console.log('Component rendered');
+  }, [sortedItemList]);
+
+  useEffect(() => {
+    switch (tabs[activeTab].content) {
       case 'tab1':
         setTabData(tab1);
         break;
@@ -84,29 +149,11 @@ export default function Mypage() {
         setTabData(tab3);
         break;
       default:
-          setTabData([])
+        setTabData([]);
     }
-  }, [activeTab])
+  }, [activeTab]);
 
-  useEffect(() => {
-    const getUser = async () => {
-      if (!user) return;
-      try {
-        const param = {
-          userId: user.userId,
-        };
-
-        const response = await userService.user(param);
-        console.log(response);
-        // setUser(response.userDb);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUser();
-  }, [setUser]);
-
-  if (!user) {
+  if (user === null) {
     return (
       <div className="flex w-screen h-screen justify-center items-center">
         <div>Loading...</div> {/* 로딩 상태 표시 */}
@@ -165,15 +212,15 @@ export default function Mypage() {
             </div>
             <div className="w-full h-full">
               <div className="flex flex-wrap w-full h-full">
-                {tabData.map((item, index) => (
+                {sortedItemList.map((item, index) => (
                   <div
                     key={item.index}
                     className="w-1/3 h-1/3 border-2"
-                    onClick={() => openModal(item.img)}
+                    onClick={() => openModal(item.itemImg)}
                   >
                     {/* <div> */}
                     <img
-                      src={`/testImages/${item.img}`}
+                      src={`/testImages/${item.itemImg}`}
                       className="w-full h-full"
                     />
                     {/* </div> */}

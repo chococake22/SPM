@@ -45,6 +45,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
         res.json({
           userId,
+          username: userDb.username,
           data: {
             accessToken,
             refreshToken,
@@ -115,12 +116,17 @@ router.get('/user', async (req: Request, res: Response): Promise<void> => {
     // 해당 ID가 있는지 먼저 확인.
     if (response.data[0]) {
       const userDb = response.data[0];
+      const data = {
+        userId: userDb.userId,
+        username: userDb.username,
+        phone: userDb.phone
+      }
 
       console.log('========= userDb ===========');
       console.log(userDb);
       console.log('========= // userDb ===========');
       res.json({
-        userDb,
+        data,
       });
     }
   } catch (error) {

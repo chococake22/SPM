@@ -1,9 +1,9 @@
 {
   "items": [
     {
-      "id": "1",
+      "id": 1,
       "imageInfo": "apple",
-      "userId": "user11",
+      "username": "user11",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/apple.png",
       "heartCnt": 12,
@@ -12,9 +12,9 @@
       "description": "겁나 달달한 사과임asdfaasdffasdsdfasdfasdfasdfasdfasdasdfasdasdf"
     },
     {
-      "id": "2",
+      "id": 2,
       "imageInfo": "tree",
-      "userId": "user22",
+      "username": "user22",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/trees.png",
       "heartCnt": 5,
@@ -23,9 +23,9 @@
       "description": "아주 튼튼한 나무임"
     },
     {
-      "id": "3",
+      "id": 3,
       "imageInfo": "banana",
-      "userId": "user33s",
+      "username": "user33s",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/banana.png",
       "heartCnt": 7,
@@ -34,70 +34,103 @@
       "description": "달달하고 맛남"
     },
     {
-      "id": "4",
+      "id": 4,
       "imageInfo": "banana",
-      "userId": "user33s",
+      "username": "user33s",
       "profileImg": "/pngwing.com.png",
-      "itemImg": "/banana.png",
+      "itemImg": "/poket1.jpeg",
       "heartCnt": 7,
       "commentCnt": 1,
       "itemName": "바나나 한송이333333333333",
       "description": "달달하고 맛남"
     },
     {
-      "id": "5",
+      "id": 5,
       "imageInfo": "banana",
-      "userId": "user33s",
+      "username": "user33s",
       "profileImg": "/pngwing.com.png",
-      "itemImg": "/banana.png",
+      "itemImg": "/poket2.jpeg",
       "heartCnt": 7,
       "commentCnt": 1,
       "itemName": "바나나 한송이4444444444444",
       "description": "달달하고 맛남"
     },
     {
-      "id": "6",
+      "id": 6,
       "imageInfo": "banana",
-      "userId": "user33s",
+      "username": "user33s",
       "profileImg": "/pngwing.com.png",
-      "itemImg": "/banana.png",
+      "itemImg": "/poket3.jpeg",
       "heartCnt": 7,
       "commentCnt": 1,
       "itemName": "바나나 한송이55555555555555",
       "description": "달달하고 맛남"
     },
     {
-      "id": "7",
+      "id": 7,
       "imageInfo": "banana",
       "userId": "user33s",
       "profileImg": "/pngwing.com.png",
-      "itemImg": "/banana.png",
+      "itemImg": "/poket4.jpeg",
       "heartCnt": 7,
       "commentCnt": 1,
       "itemName": "바나나 한송이66666666666",
       "description": "달달하고 맛남"
     },
     {
-      "id": "8",
+      "id": 8,
       "imageInfo": "tree",
-      "userId": "user22",
+      "username": "user22",
       "profileImg": "/pngwing.com.png",
-      "itemImg": "/trees.png",
+      "itemImg": "/poket5.jpeg",
       "heartCnt": 5,
       "commentCnt": 2,
       "itemName": "나무 1세트777777777777777777",
       "description": "아주 튼튼한 나무임"
     },
     {
-      "id": "9",
+      "id": 9,
       "imageInfo": "tree",
-      "userId": "user22",
+      "username": "user22",
       "profileImg": "/pngwing.com.png",
-      "itemImg": "/trees.png",
+      "itemImg": "/poket6.jpeg",
       "heartCnt": 5,
       "commentCnt": 2,
       "itemName": "나무 1세트8888888888888888888",
       "description": "아주 튼튼한 나무임"
+    },
+    {
+      "id": 10,
+      "imageInfo": "tree",
+      "username": "test12",
+      "profileImg": "/pngwing.com.png",
+      "itemImg": "/poket7.jpeg",
+      "heartCnt": 5,
+      "commentCnt": 2,
+      "itemName": "포켓몬7",
+      "description": "이거는 포켓몬7"
+    },
+    {
+      "id": 11,
+      "imageInfo": "tree",
+      "username": "test12",
+      "profileImg": "/pngwing.com.png",
+      "itemImg": "/poket8.jpeg",
+      "heartCnt": 5,
+      "commentCnt": 2,
+      "itemName": "포켓몬8",
+      "description": "이거는 포켓몬8"
+    },
+    {
+      "id": 12,
+      "imageInfo": "tree",
+      "username": "test12",
+      "profileImg": "/pngwing.com.png",
+      "itemImg": "/poket9.jpeg",
+      "heartCnt": 5,
+      "commentCnt": 2,
+      "itemName": "포켓몬9",
+      "description": "이거는 포켓몬9"
     }
   ],
   "users": [

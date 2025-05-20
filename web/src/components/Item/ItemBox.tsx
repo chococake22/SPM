@@ -5,7 +5,7 @@ import ItemDescription from './ItemDescription';
 
 interface Entry {
   imageInfo: string;
-  userId: string;
+  username: string;
   profileImg: string;
   heartCnt: string;
   commentCnt: string;
@@ -16,34 +16,36 @@ interface Entry {
 
 interface ItemBoxProps {
   entry: Entry;
+  onClick?: (() => void);
 }
 
 const itemBox: React.FC<ItemBoxProps> = ({ entry }) => {
   return (
-    <div className="pt-3">
-      <div className="flex justify-center w-full h-full">
-        <div className="w-[80%] h-[90%] border-2 border-black">
-          <div className="w-full h-[10%] border-2 border-black">
+    <div className="flex items-center justify-center w-full h-full border-y-2">
+      <div className="flex justify-center items-center w-full h-full">
+        <div className="w-full h-[500px]">
+          <div className="h-[10%]">
             <ItemUserProfile
-              userId={entry.userId}
+              userId={entry.username}
               profileImg={entry.profileImg}
             />
           </div>
-          <div>
+          <div className="h-[60%]">
             <ItemPhoto imageInfo={entry.itemImg} />
           </div>
 
-          <div className=' h-[10%]'>
+          <div className="h-[10%]">
             <ItemValues
               heartCnt={entry.heartCnt}
               commentCnt={entry.commentCnt}
             />
           </div>
-
-          <ItemDescription
-            itemName={entry.itemName}
-            description={entry.description}
-          />
+          <div className="h-[10%]">
+            <ItemDescription
+              itemName={entry.itemName}
+              description={entry.description}
+            />
+          </div>
         </div>
       </div>
     </div>

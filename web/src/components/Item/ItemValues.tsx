@@ -7,7 +7,7 @@ interface itemValuesProps {
 
 const itemValues: React.FC<itemValuesProps> = ({ heartCnt, commentCnt }) => {
   return (
-    <div className="flex items-center w-full h-full border-2 border-blue-400">
+    <div className="flex items-center w-full h-full">
       <div className="flex ml-1">
         <span className="ml-1">
           <Image src="/icons/heart.svg" alt="heart" width={30} height={30} />

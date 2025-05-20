@@ -18,7 +18,7 @@ const ItemDescription: React.FC<ItemDescriptionProps> = ({
   };
 
   return (
-    <div className="w-full max-h-[200px] border-2 border-green-700">
+    <div className="w-full max-h-[200px]">
       <span className="ml-2">{itemName}</span>
       <div className="ml-2 line-clamp-7">
         <p

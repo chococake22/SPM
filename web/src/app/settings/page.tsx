@@ -39,9 +39,9 @@ export default function Mypage() {
 
     // 필요한 데이터만 UserInfo에 가져다가 사용함.
     const data = {
-      userId: response.userDb.userId,
-      username: response.userDb.username,
-      phone: response.userDb.phone,
+      userId: response.data.userId,
+      username: response.data.username,
+      phone: response.data.phone,
     };
 
     console.log(data);
@@ -56,7 +56,6 @@ export default function Mypage() {
     if(!user || userInfo) {
       return;
     } else {
-      console.log('???');
       getUser();
     }
   }, [user]);
@@ -68,7 +67,7 @@ export default function Mypage() {
     </div>
   ) : (
     <div className="flex w-screen h-screen justify-center items-center">
-      <div className="flex flex-col w-[40%] h-[30%] justify-around">
+      <div className="flex flex-col w-[50%] h-[30%] justify-around">
         <div>
           <InputText
             placeholder="User ID(Email)"

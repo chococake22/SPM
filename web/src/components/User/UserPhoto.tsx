@@ -4,16 +4,15 @@ interface UserImageProps {
   imageInfo: string;
 }
 
-const UserImage: React.FC<UserImageProps> = ({ imageInfo }) => {
+const UserPhoto: React.FC<UserImageProps> = ({ imageInfo }) => {
   return (
     <Image
       src={imageInfo}
       alt="Home"
-      className="w-6 h-6 mr-1"
-      width={5}
-      height={5}
+      width={40}
+      height={40}
     />
   );
 };
 
-export default UserImage;
+export default UserPhoto;

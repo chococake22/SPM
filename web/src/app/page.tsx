@@ -6,8 +6,11 @@ import itemService from '@/services/item.service';
 import { ItemListResponse } from '@/types/item/type';
 import { flushSync } from 'react-dom';
 import { useRef } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
-
+import { Mousewheel } from 'swiper/modules';
 
 const ITEMS_PER_PAGE = 3;
 
@@ -16,6 +19,7 @@ const Home = () => {
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
 
   // 맨 처음 렌더링이 될 때에는 함수가 실행되지는 않고 정의만 된다.
   const getItems = useCallback(async (pageNumber: number) => {
@@ -56,8 +60,10 @@ const Home = () => {
   // 데이터를 가져와서 정렬하기.
   const sortedItemList = useMemo(() => {
     console.log('다시 가져옴');
+    console.log(itemList);
     // itemList를 가져와서 sorting
-    return [...itemList].sort((a, b) => a.itemName.localeCompare(b.itemName));
+    // id는 number 타입이므로 연산을 통해 오름차순으로 정렬함.
+    return [...itemList].sort((a, b) => a.id - b.id);
   }, [itemList]);
 
   // 데이터 요청
@@ -66,10 +72,6 @@ const Home = () => {
     console.log('getItems');
     getItems(page); // 컴포넌트가 마운트되면 데이터 요청 실행
   }, [page, getItems]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
-
-  useEffect(() => {
-    console.log('Component rendered');
-  }, [sortedItemList]);
 
   useEffect(() => {
     if (!hasMore) return;
@@ -98,14 +100,49 @@ const Home = () => {
     };
   }, [loadMoreItems, hasMore]);
 
+  
+
   return (
-    <div className="mt-10 mb-10">
+    <div className="mt-11 mb-11 flex flex-col space-y-10">
       {sortedItemList.map((entry, index) => (
-        <ItemBox key={index} entry={entry} />
+        <ItemBox
+          key={index}
+          entry={entry}
+        />
       ))}
       {hasMore && <div ref={loadMoreRef} className="h-10" />}
     </div>
   );
+
+  /**
+   * swiper 기능 적용시 필요함, 현재는 미사용
+   */
+  // return (
+  //   <Swiper
+  //     direction="vertical"
+  //     slidesPerView={1}
+  //     spaceBetween={0}
+  //     mousewheel={true}
+  //     className="w-full h-screen"
+  //     modules={[Mousewheel]}
+  //   >
+  //     {sortedItemList.map((entry, index) => (
+  //       <SwiperSlide key={index}>
+  //         <ItemBox entry={entry} />
+  //       </SwiperSlide>
+  //     ))}
+  //     {hasMore && (
+  //       <SwiperSlide>
+  //         <div
+  //           ref={loadMoreRef}
+  //           className="w-full h-screen flex items-center justify-center"
+  //         >
+  //           <p>Loading more...</p>
+  //         </div>
+  //       </SwiperSlide>
+  //     )}
+  //   </Swiper>
+  // );
 };
 
 export default Home;
