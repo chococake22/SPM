@@ -46,6 +46,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
         res.json({
           userId,
           username: userDb.username,
+          profileImg: userDb.profileImg,
           data: {
             accessToken,
             refreshToken,
@@ -119,7 +120,8 @@ router.get('/user', async (req: Request, res: Response): Promise<void> => {
       const data = {
         userId: userDb.userId,
         username: userDb.username,
-        phone: userDb.phone
+        phone: userDb.phone,
+        profileImg: userDb.profileImg
       }
 
       console.log('========= userDb ===========');

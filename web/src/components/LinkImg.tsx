@@ -5,7 +5,7 @@ interface LinkImgProps {
   menu: string;
 }
 
-const linkButton: React.FC<LinkImgProps> = ({ menu }) => {
+const LinkButton: React.FC<LinkImgProps> = ({ menu }) => {
   const divClassName =
     menu === '/'
       ? 'w-[55%]'
@@ -27,4 +27,4 @@ const linkButton: React.FC<LinkImgProps> = ({ menu }) => {
   );
 };
 
-export default linkButton;
+export default LinkButton;

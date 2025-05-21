@@ -3,7 +3,7 @@
     {
       "id": 1,
       "imageInfo": "apple",
-      "username": "user11",
+      "username": "애플1",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/apple.png",
       "heartCnt": 12,
@@ -14,7 +14,7 @@
     {
       "id": 2,
       "imageInfo": "tree",
-      "username": "user22",
+      "username": "애플1",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/trees.png",
       "heartCnt": 5,
@@ -25,7 +25,7 @@
     {
       "id": 3,
       "imageInfo": "banana",
-      "username": "user33s",
+      "username": "애플1",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/banana.png",
       "heartCnt": 7,
@@ -36,7 +36,7 @@
     {
       "id": 4,
       "imageInfo": "banana",
-      "username": "user33s",
+      "username": "애플1",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/poket1.jpeg",
       "heartCnt": 7,
@@ -47,7 +47,7 @@
     {
       "id": 5,
       "imageInfo": "banana",
-      "username": "user33s",
+      "username": "애플1",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/poket2.jpeg",
       "heartCnt": 7,
@@ -58,7 +58,7 @@
     {
       "id": 6,
       "imageInfo": "banana",
-      "username": "user33s",
+      "username": "애플1",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/poket3.jpeg",
       "heartCnt": 7,
@@ -69,7 +69,7 @@
     {
       "id": 7,
       "imageInfo": "banana",
-      "userId": "user33s",
+      "username": "user33s",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/poket4.jpeg",
       "heartCnt": 7,
@@ -139,28 +139,32 @@
       "userId": "apple12@test.com",
       "hashedPw": "$2b$10$xjhuMfUTeoGZcm60C5XO8OFYKm1CI5z0bJsKHtMs.9Iq4lBRYA1xq",
       "username": "애플1",
-      "phone": "sdfsdfsd"
+      "phone": "sdfsdfsd",
+      "profileImg": "/pngwing.com.png"
     },
     {
       "id": "91a3",
       "userId": "apple1@test.com",
       "hashedPw": "$2b$10$Gccd0nKbLkV5tFtCvidNFOtnMzWjYZNbHyBX/hjYW0p0/nW8XnYTm",
       "username": "애플2",
-      "phone": "01012341234"
+      "phone": "01012341234",
+      "profileImg": "/pngwing.com.png"
     },
     {
       "id": "ed2f",
       "userId": "apple21@test.com",
       "hashedPw": "$2b$10$qwtPrDwKEmpTqp4oChAVmubiwv7fzKsNK9tBZjU15ulkZQeciD7p.",
       "username": "애플21",
-      "phone": "01012341234"
+      "phone": "01012341234",
+      "profileImg": "/pngwing.com.png"
     },
     {
       "id": "081a",
       "userId": "test12@test.com",
       "hashedPw": "$2b$10$JkrFbfk82mFbqDsefCCm3er.h/WLQWJ5apEwiaZTXdEum6XIU4nFK",
       "username": "test12",
-      "phone": "01012341234"
+      "phone": "01012341234",
+      "profileImg": "/pngwing.com.png"
     }
   ]
 }

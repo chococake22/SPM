@@ -3,14 +3,18 @@
 import { useUserInfo } from '@/lib/UserContext';
 import { userService } from '@/services/user.service';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import InputText from '@/components/InputText';
+import TestModal, { ModalRef } from '@/components/TestModal';
 import { UserInfoResponse } from '@/types/user/type';
 
-export default function Mypage() {
+export default function Settings() {
   const router = useRouter();
   const { user, setUser } = useUserInfo();
   const [ userInfo, setUserInfo ] = useState<UserInfoResponse>();
+  const [ isClicked, setIsClicked] = useState<boolean>(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const modalRef = useRef<ModalRef>(null);
 
   const handleLogout = async () => {
     if (confirm('로그아웃 하시겠습니까?')) {
@@ -27,6 +31,22 @@ export default function Mypage() {
     }
   };
 
+  const changeModal = () => {
+    if(isClicked) {
+      setIsClicked(false)
+    } else {
+      setIsClicked(true)
+    }
+  };
+
+  const inputGogo = () => {
+    inputRef.current.focus();
+  }
+
+  // const closeModal = () => {
+  //   setIsClicked(false)
+  // }
+
   const getUser = async () => {
     if(!user) return;
     try {
@@ -36,6 +56,7 @@ export default function Mypage() {
 
     // user 정보 가져오는 api 호출
     const response = await userService.user(param);
+    console.log(response)
 
     // 필요한 데이터만 UserInfo에 가져다가 사용함.
     const data = {
@@ -59,6 +80,11 @@ export default function Mypage() {
       getUser();
     }
   }, [user]);
+
+
+  const gogoModal = () => {
+    modalRef.current?.open()
+  };
 
 
   return !userInfo ? (
@@ -99,6 +125,23 @@ export default function Mypage() {
         >
           Logout
         </button>
+        <button
+          type="button"
+          className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          onClick={changeModal}
+        >
+          useRef로 내부 DOM 접근하기
+        </button>
+        <button
+          type="button"
+          className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+          onClick={gogoModal}
+        >
+          useRef로 자식 컴포넌트의 DOM 접근하기
+        </button>
+
+        {isClicked && <input ref={inputRef} className="border-2"></input>}
+        <TestModal ref={modalRef} />
       </div>
     </div>
   );

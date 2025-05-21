@@ -2,7 +2,7 @@
 
 import { useUserInfo } from '@/lib/UserContext';
 import { userService } from '@/services/user.service';
-import { useContext, useEffect, useState, useMemo, useCallback } from 'react';
+import { useContext, useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { userContext } from '@/lib/UserContext';
 import { createContext } from 'react';
 import itemService from '@/services/item.service';
@@ -25,6 +25,8 @@ export default function Mypage() {
   const [itemList, setItemList] = useState<ItemListResponse[]>([]);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [isTest, setIsTest] = useState<boolean>(false);
+  const [num, setNum] = useState(0);
 
   const openModal = (img: string) => {
     setSelectedImage(img);
@@ -34,65 +36,37 @@ export default function Mypage() {
     setSelectedImage(null);
   };
 
-  const tab1 = [
-    { index: 1, img: '/trees.png' },
-    { index: 2, img: 'test2' },
-    { index: 3, img: 'test3' },
-    { index: 4, img: 'test4' },
-    { index: 5, img: 'test5' },
-    { index: 6, img: 'test6' },
-    { index: 7, img: 'test7' },
-    { index: 8, img: 'test8' },
-    { index: 9, img: 'test9' },
-  ];
-
-  const tab2 = [
-    { index: 1, img: 'test11' },
-    { index: 2, img: 'test12' },
-    { index: 3, img: 'test13' },
-    { index: 4, img: 'test14' },
-    { index: 5, img: 'test15' },
-    { index: 6, img: 'test16' },
-    { index: 7, img: 'test17' },
-    { index: 8, img: 'test18' },
-    { index: 9, img: 'test19' },
-  ];
-
-  const tab3 = [
-    { index: 1, img: 'test21' },
-    { index: 2, img: 'test22' },
-    { index: 3, img: 'test23' },
-    { index: 4, img: 'test24' },
-    { index: 5, img: 'test25' },
-    { index: 6, img: 'test26' },
-    { index: 7, img: 'test27' },
-    { index: 8, img: 'test28' },
-    { index: 9, img: 'test29' },
-  ];
-
   const tabs = [
-    { label: 'Tab 1', content: 'tab1' },
-    { label: 'Tab 2', content: 'tab2' },
-    { label: 'Tab 3', content: 'tab3' },
+    { label: '내 사진', content: 'tab1' },
+    { label: '랜덤보기', content: 'tab2' },
+    { label: '제목 없음', content: 'tab3' },
   ];
 
+  // 페이지당 사진 개수
   const ITEMS_PER_PAGE = 9;
-  // 맨 처음 렌더링이 될 때에는 함수가 실행되지는 않고 정의만 된다.
-  const getUserItems = useCallback(async (pageNumber: number) => {
 
+  /**
+   * useCallback을 사용하고 두 번째 인자로 빈 배열을 넣음
+   * 그럴 경우 컴포넌트가 처음 렌더링이 될 때 한 번만 함수를 만들고 이후에는 그걸 재사용함
+   * 그래서 isTest는 맨 처음에 선언된 false이고, user도 처음엔 값이 없기 때문에 null이 되는 것임.
+   */
+  const getUserItems = useCallback(async (pageNumber: number) => {
     console.log('callback - getUserItems');
-    console.log(user)
-    if(!user) {
+    console.log(isTest);
+    console.log(user);
+    if (!user) {
       return;
     }
 
-    console.log(user)
-
     try {
       const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
-      const response = await itemService.getUserItems(user.username, offset, ITEMS_PER_PAGE);
+      const response = await itemService.getUserItems(
+        user.username,
+        offset,
+        ITEMS_PER_PAGE
+      );
 
-      console.log(response)
+      console.log(response);
 
       // 전체 개수 < 해당 페이지 수
       // 페이지가 더 없음.
@@ -113,7 +87,7 @@ export default function Mypage() {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
-  }, []);
+  }, [user, page]);
 
   const sortedItemList = useMemo(() => {
     console.log('다시 가져옴');
@@ -127,31 +101,17 @@ export default function Mypage() {
   // 처음 렌더링되면 page가 useState로 초기화되니까 바로 된다.
   useEffect(() => {
     console.log('useEffect - getUserItems');
-    if(user) {
+    if (user) {
       console.log('user 있음');
+      console.log(user);
+      setIsTest(true);
       getUserItems(page); // 컴포넌트가 마운트되면 데이터 요청 실행
     }
-  }, [user, page, getUserItems]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
+  }, [user, page]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
 
   useEffect(() => {
     console.log('Component rendered');
   }, [sortedItemList]);
-
-  useEffect(() => {
-    switch (tabs[activeTab].content) {
-      case 'tab1':
-        setTabData(tab1);
-        break;
-      case 'tab2':
-        setTabData(tab2);
-        break;
-      case 'tab3':
-        setTabData(tab3);
-        break;
-      default:
-        setTabData([]);
-    }
-  }, [activeTab]);
 
   if (user === null) {
     return (
@@ -167,7 +127,12 @@ export default function Mypage() {
         <div className="flex flex-col w-full h-full">
           <div className="flex w-full h-[20%] mt-9">
             <div className="flex border-2 w-[32%] justify-center items-center">
-              <div className="w-[80%] h-[80%] rounded-full border-2"></div>
+              <div className="w-[80%] h-[80%] rounded-full overflow-hidden">
+                <img
+                  src={`${user.profileImg}`}
+                  className="w-full h-full object-contain"
+                />
+              </div>
             </div>
             <div className="flex border-2 w-[70%] justify-around items-center">
               <div className="border-2">
@@ -211,11 +176,11 @@ export default function Mypage() {
               </nav>
             </div>
             <div className="w-full h-full">
-              <div className="flex flex-wrap w-full h-full">
+              <div className="grid grid-cols-3">
                 {sortedItemList.map((item, index) => (
                   <div
-                    key={item.index}
-                    className="w-1/3 h-1/3 border-2"
+                    key={index}
+                    className="w-full h-[200px] border-2 box-border border-2"
                     onClick={() => openModal(item.itemImg)}
                   >
                     {/* <div> */}
