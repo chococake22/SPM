@@ -1,4 +1,4 @@
-import UserPhoto from '../User/UserPhoto';
+import UserPhoto from '../user/UserPhoto';
 
 interface ItemUserProfileProps {
   profileImg: string;

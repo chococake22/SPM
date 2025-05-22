@@ -6,6 +6,7 @@ import { userService } from '@/services/user.service';
 import { LoginForm, LoginResponse } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
 import { useUserInfo} from '@/lib/UserContext';
+import Button from '../../components/common/Button';
 
 
 const LoginPage = () => {
@@ -55,7 +56,7 @@ const LoginPage = () => {
         <div className="flex justify-center mb-4">
           <span className="text-xl">Login</span>
         </div>
-        <form id='loginForm' onSubmit={handleLogin} method="POST">
+        <form id="loginForm" onSubmit={handleLogin} method="POST">
           <div>
             <InputText placeholder="User ID(Email)" name="userId" type="text" />
           </div>
@@ -63,19 +64,8 @@ const LoginPage = () => {
             <InputText placeholder="Password" name="userPw" type="password" />
           </div>
           <div className="flex justify-evenly mt-5">
-            <button
-              type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Login
-            </button>
-            <button
-              type="button"
-              className="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-              onClick={handleSignup}
-            >
-              Sign Up
-            </button>
+            <Button buttonName="Login" type="submit"></Button>
+            <Button buttonName="SignUp" onClick={handleSignup}></Button>
           </div>
         </form>
       </div>

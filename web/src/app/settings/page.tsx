@@ -7,6 +7,7 @@ import { useEffect, useState, useRef } from 'react';
 import InputText from '@/components/InputText';
 import TestModal, { ModalRef } from '@/components/TestModal';
 import { UserInfoResponse } from '@/types/user/type';
+import Button from '../../components/common/Button';
 
 export default function Settings() {
   const router = useRouter();
@@ -56,7 +57,6 @@ export default function Settings() {
 
     // user 정보 가져오는 api 호출
     const response = await userService.user(param);
-    console.log(response)
 
     // 필요한 데이터만 UserInfo에 가져다가 사용함.
     const data = {
@@ -101,16 +101,12 @@ export default function Settings() {
             type="text"
             defaultValue={userInfo.userId}
           />
-        </div>
-        <div>
           <InputText
             placeholder="User Name"
             name="username"
             type="text"
             defaultValue={userInfo.username}
           />
-        </div>
-        <div>
           <InputText
             placeholder="Phone"
             name="phone"
@@ -118,27 +114,9 @@ export default function Settings() {
             defaultValue={userInfo.phone}
           />
         </div>
-        <button
-          type="button"
-          className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-        <button
-          type="button"
-          className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-          onClick={changeModal}
-        >
-          useRef로 내부 DOM 접근하기
-        </button>
-        <button
-          type="button"
-          className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-          onClick={gogoModal}
-        >
-          useRef로 자식 컴포넌트의 DOM 접근하기
-        </button>
+        <Button buttonName="Logout" onClick={handleLogout}></Button>
+        <Button buttonName="InnerDOM" onClick={changeModal}></Button>
+        <Button buttonName="ChildDOM" onClick={gogoModal}></Button>
 
         {isClicked && <input ref={inputRef} className="border-2"></input>}
         <TestModal ref={modalRef} />

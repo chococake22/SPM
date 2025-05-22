@@ -6,6 +6,7 @@ import api from '@/lib/axios';
 import { userService } from '@/services/user.service';
 import { LoginForm, LoginResponse } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
+import Button from '../../components/common/Button';
 
 
 const SignUpPage = () => {
@@ -72,7 +73,7 @@ const SignUpPage = () => {
           <span className="text-xl">Sign Up</span>
         </div>
         <form onSubmit={handleSubmit} method="POST">
-          <div>
+          <div className="grid gap-6 mb-6">
             <InputText
               placeholder="User ID(Email)"
               name="userId"
@@ -81,8 +82,6 @@ const SignUpPage = () => {
               onChange={handleInputChange}
               regExp="^[^\s@]+@[^\s@]+\.[^\s@]+$"
             />
-          </div>
-          <div className="mt-3">
             <InputText
               placeholder="Password"
               name="userPw"
@@ -91,8 +90,6 @@ const SignUpPage = () => {
               onChange={handleInputChange}
               regExp="^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$"
             />
-          </div>
-          <div className="mt-3">
             <InputText
               placeholder="Password Check"
               name="userPwChk"
@@ -101,8 +98,6 @@ const SignUpPage = () => {
               onChange={handleInputChange}
               regExp="^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$"
             />
-          </div>
-          <div className="mt-3">
             <InputText
               placeholder="User Name"
               name="username"
@@ -110,8 +105,6 @@ const SignUpPage = () => {
               value={data.username}
               onChange={handleInputChange}
             />
-          </div>
-          <div className="mt-3">
             <InputText
               placeholder="Phone Number"
               name="phone"
@@ -119,30 +112,18 @@ const SignUpPage = () => {
               value={data.phone || ''}
               onChange={handleInputChange}
             />
-          </div>
-          <div className="flex justify-evenly mt-5">
-            <button
-              type="button"
-              className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-              onClick={handleReset}
-            >
-              Reset
-            </button>
-            <button
-              type="button"
-              className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-900"
-              onClick={handleLoginPage}
-            >
-              Back
-            </button>
-          </div>
-          <div className="flex justify-evenly mt-5">
-            <button
-              type="submit"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Submit
-            </button>
+            <div className="flex justify-evenly mt-5">
+              <Button buttonName="Reset" onClick={handleReset}></Button>
+              <Button buttonName="Back" onClick={handleLoginPage}></Button>
+            </div>
+            <div className="flex justify-evenly mt-5">
+              <button
+                type="submit"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </form>
       </div>

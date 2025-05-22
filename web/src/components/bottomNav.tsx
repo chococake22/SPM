@@ -15,7 +15,6 @@ const bottomNav = () => {
               height={5}
             />
           </Link>
-
           <Link href="/shop" className="flex items-center">
             <Image
               src="/icons/shop.svg"
@@ -25,21 +24,10 @@ const bottomNav = () => {
               height={5}
             />
           </Link>
-
           <Link href="/talk" className="flex items-center">
             <Image
               src="/icons/talk.svg"
               alt="Talk"
-              className="w-6 h-6 mr-1"
-              width={5}
-              height={5}
-            />
-          </Link>
-
-          <Link href="/qna" className="flex items-center">
-            <Image
-              src="/icons/qna.svg"
-              alt="QnA"
               className="w-6 h-6 mr-1"
               width={5}
               height={5}

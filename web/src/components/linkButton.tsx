@@ -5,7 +5,7 @@ interface LinkButtonProps {
   menu: string;
 }
 
-const linkButton: React.FC<LinkButtonProps> = ({ menu }) => {
+const LinkButton: React.FC<LinkButtonProps> = ({ menu }) => {
 
   const divClassName =
     menu === '/'
@@ -28,4 +28,4 @@ const linkButton: React.FC<LinkButtonProps> = ({ menu }) => {
   );
 };
 
-export default linkButton;
+export default LinkButton;

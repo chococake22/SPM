@@ -26,7 +26,7 @@ export default function Mypage() {
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isTest, setIsTest] = useState<boolean>(false);
-  const [num, setNum] = useState(0);
+  const [num, setNum] = useState<number>(0);
 
   const openModal = (img: string) => {
     setSelectedImage(img);
@@ -50,44 +50,58 @@ export default function Mypage() {
    * 그럴 경우 컴포넌트가 처음 렌더링이 될 때 한 번만 함수를 만들고 이후에는 그걸 재사용함
    * 그래서 isTest는 맨 처음에 선언된 false이고, user도 처음엔 값이 없기 때문에 null이 되는 것임.
    */
-  const getUserItems = useCallback(async (pageNumber: number) => {
-    console.log('callback - getUserItems');
-    console.log(isTest);
-    console.log(user);
-    if (!user) {
-      return;
-    }
-
-    try {
-      const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
-      const response = await itemService.getUserItems(
-        user.username,
-        offset,
-        ITEMS_PER_PAGE
-      );
-
-      console.log(response);
-
-      // 전체 개수 < 해당 페이지 수
-      // 페이지가 더 없음.
-      if (response.length < ITEMS_PER_PAGE) {
-        setHasMore(false);
+  const getUserItems = useCallback(
+    async (pageNumber: number) => {
+      console.log('callback - getUserItems');
+      console.log(isTest);
+      console.log(user);
+      if (!user) {
+        return;
       }
 
-      flushSync(() => {
-        if (pageNumber === 1) {
-          setItemList(response);
-        } else {
-          // 기존꺼에 새로운 가져온 데이터를 추가해서 배열을 만들었음.
-          // 여기서 참조를 했음. 이전의 것인 prevItems를 그대로 복사하고 거기에 response를 더했기 때문에 아예 새로 만들어진 것이라고 봄.
-          // 그래서 아래 ItemList를 dependency로 하고 있는 useMemo가 동작을 하고 있는 것임.
-          setItemList((prevItems) => [...prevItems, ...response]);
+      try {
+        const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
+        const response = await itemService.getUserItems(
+          user.username,
+          offset,
+          ITEMS_PER_PAGE
+        );
+
+        console.log(response);
+
+        // 전체 개수 < 해당 페이지 수
+        // 페이지가 더 없음.
+        if (response.length < ITEMS_PER_PAGE) {
+          setHasMore(false);
         }
-      });
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }, [user, page]);
+
+        flushSync(() => {
+          if (pageNumber === 1) {
+            setItemList(response);
+          } else {
+            // 기존꺼에 새로운 가져온 데이터를 추가해서 배열을 만들었음.
+            // 여기서 참조를 했음. 이전의 것인 prevItems를 그대로 복사하고 거기에 response를 더했기 때문에 아예 새로 만들어진 것이라고 봄.
+            // 그래서 아래 ItemList를 dependency로 하고 있는 useMemo가 동작을 하고 있는 것임.
+            setItemList((prevItems) => [...prevItems, ...response]);
+          }
+        });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
+    [user, page, num]
+  );
+
+    const prevRef = useRef<typeof getUserItems | null>(null);
+
+    useEffect(() => {
+      if (prevRef.current !== getUserItems) {
+        console.log('🆕 getUserItems 함수가 새로 만들어졌습니다.');
+      } else {
+        console.log('✅ getUserItems 함수는 이전과 동일합니다.');
+      }
+      prevRef.current = getUserItems;
+    }, [getUserItems]);
 
   const sortedItemList = useMemo(() => {
     console.log('다시 가져옴');
