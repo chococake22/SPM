@@ -353,6 +353,22 @@
       "username": "no123",
       "phone": "01012341234",
       "address": "주소 nonono"
+    },
+    {
+      "id": "e5c6",
+      "userId": "no3@test.com",
+      "hashedPw": "$2b$10$IgJOZ9urOKA38EdLl9MjvOkFqdxXrN6ZXhAQGWsGdtVtDaE7wTuJS",
+      "username": "no123",
+      "phone": "01012341234",
+      "address": "서울시 서울구 서울동 111-1"
+    },
+    {
+      "id": "6966",
+      "userId": "oi1@test.com",
+      "hashedPw": "$2b$10$RBzZ8tPNW8GhCwg2tjZt8ufyTWqmmHeo/7UfQg3F3mo7d0lR8WhMK",
+      "username": "오아이1",
+      "phone": "01012341234",
+      "address": "서울시 어쩌구 저쩌구 11"
     }
   ]
 }

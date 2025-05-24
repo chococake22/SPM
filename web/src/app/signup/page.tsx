@@ -1,18 +1,15 @@
 "use client"
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import InputText from "@/components/InputText";
-import api from '@/lib/axios';
 import { userService } from '@/services/user.service';
-import { LoginForm, LoginResponse, SignupRequest } from '@/types/user/type';
+import { SignupRequest } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
 import Button from '../../components/common/Button';
 
-
 const SignUpPage = () => {
-  const [list, setList] = useState([]);
-  const [userInfo, setUserInfo] = useState<LoginResponse | null>();
   const router = useRouter();
+  const [isCheckUserId, setIsCheckUserId] = useState<boolean>(false);
   const [data, setData] = useState<SignupRequest>({
     userId: '',
     userPw: '',
@@ -30,20 +27,29 @@ const SignUpPage = () => {
     }));
   };
 
-
   const handleSubmit = async (e: FormEvent) => {
-
     e.preventDefault(); // 폼 제출시 페이지가 새로고침되지 않도록 하기
 
-    if(data.userPw !== data.userPwChk) {
-      alert("두 비밀번호가 다릅니다.")
+    // 이메일 형식 및 중복 체크
+    if(!isCheckUserId) {
+      alert("아이디 중복 체크를 해주세요.")
       return;
     }
 
-    if(confirm("제출하시겠습니까?")) {
+    if (
+      !isValidPwd(data.userPw) ||
+      !isValidPwd(data.userPwChk) ||
+      data.userPw !== data.userPwChk
+    ) {
+      alert(
+        '두 비밀번호가 일치하지 않거나 형식이 맞지 않습니다. (영문 소문자, 숫자, 특수문자 조합으로 최소 8자 이상)'
+      );
+      return;
+    }
+
+    if(confirm("가입하시겠습니까?")) {
       try {
         const response = await userService.signup(data);
-        console.log('완료: ' + response.status);
         if(response.status === 200) {
           alert("가입이 완료되었습니다.")
           router.push('/login');
@@ -64,12 +70,51 @@ const SignUpPage = () => {
         phone: '',
         address: ''
       });
+      setIsCheckUserId(false)
     }
   };
 
   const handleLoginPage = () => {
     router.push('/login');
   };
+
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPwd = (pwd: string): boolean => {
+    const pwdRegex = /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$/;
+    return pwdRegex.test(pwd);
+  };
+
+  const handleCheckUserIdExist = async () => {
+    if (!data.userId) {
+      alert('아이디를 입력하세요.');
+      return;
+    }
+
+    if (!isValidEmail(data.userId)) {
+      alert('이메일 형식이 올바르지 않습니다.');
+      return;
+    }
+
+    try {
+      const response = await userService.checkUserIdExist(data.userId);
+      console.log(response.result)
+      
+      if(response.result) {
+        alert('사용할 수 있는 아이디입니다.');
+        setIsCheckUserId(true);
+      } else {
+        alert("이미 존재하는 아이디입니다.")
+        setIsCheckUserId(false);
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <div className="flex justify-center items-center w-full h-full">
@@ -78,7 +123,7 @@ const SignUpPage = () => {
           <span className="text-xl">Sign Up</span>
         </div>
         <form onSubmit={handleSubmit} method="POST">
-          <div className="grid gap-6 mb-6">
+          <div className="grid gap-3 mb-6">
             <InputText
               placeholder="User ID(Email)"
               name="userId"
@@ -87,6 +132,12 @@ const SignUpPage = () => {
               onChange={handleInputChange}
               regExp="^[^\s@]+@[^\s@]+\.[^\s@]+$"
             />
+            <div>
+              <Button
+                buttonName="중복 체크"
+                onClick={handleCheckUserIdExist}
+              ></Button>
+            </div>
             <InputText
               placeholder="Password"
               name="userPw"

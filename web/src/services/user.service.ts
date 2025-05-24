@@ -77,7 +77,26 @@ export const userService = {
       const response = await api.get<UserInfoResponse>('/api/user', {
         params: data,
       });
-      console.log(response.data)
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      if (error instanceof Error) {
+        alert('에러 발생');
+        return {} as LogoutResponse;
+      } else {
+        alert('(오류발생)다시 시도해주세요.');
+        return {} as LogoutResponse;
+      }
+    }
+  },
+
+  async checkUserIdExist(userId: string): Promise<boolean> {
+    console.log('userId: ' + userId);
+    try {
+      const response = await api.get('/api/user/check', {
+        params: {userId},
+      });
+      console.log(response.data);
       return response.data;
     } catch (error) {
       if (error instanceof Error) {

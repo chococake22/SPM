@@ -141,4 +141,28 @@ router.get('/user', async (req: Request, res: Response): Promise<void> => {
   }
 });
 
+router.get('/user/check', async (req: Request, res: Response): Promise<void> => {
+  const { userId } = req.query as { userId: string }; // ✅ query에서 추출
+
+  console.log("method: 'GET', url: '/user/check', param:", userId);
+
+  try {
+    // 데이터를 가져옴
+    const response = await api.get(`${dbUrl}/users`, { params: { userId } }); // /items로 요청 (baseURL 자동 적용)
+
+    // 해당 ID가 있는지 먼저 확인.
+    // 존재하면 true, 없으면 false 반환
+    const isExist = response.data[0] ? false : true;
+
+    res.status(200).json({
+      result: isExist,
+    });
+    
+  } catch (error) {
+    console.error('Error fetching items:', error);
+    res.status(500).json({ message: 'Error fetching items' });
+    return;
+  }
+});
+
 export default router;
