@@ -43,8 +43,9 @@ export const userService = {
   },
   async signup(data: SignupRequest): Promise<SignupResponse> {
     try {
-      const response = await api.post<SignupRequest>('/api/signup', data);
-      return response.data;
+      const response = await api.post<SignupResponse>('/api/signup', data);
+      console.log('✅ 응답 받음:', response);
+      return response;
     } catch (error) {
       if (error instanceof Error) {
         alert('에러 발생');

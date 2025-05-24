@@ -1,8 +1,10 @@
 export interface SignupRequest {
   userId: string;
   userPw: string;
+  userPwChk: string;
   username: string;
   phone: string;
+  address: string;
 }
 
 export interface SignupReponse {
@@ -10,6 +12,7 @@ export interface SignupReponse {
   userPw: string;
   username: string;
   phone: string;
+
 }
 
 export interface LoginForm {

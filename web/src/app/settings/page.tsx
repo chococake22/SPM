@@ -63,6 +63,7 @@ export default function Settings() {
       userId: response.data.userId,
       username: response.data.username,
       phone: response.data.phone,
+      address: response.data.address,
     };
 
     console.log(data);
@@ -82,9 +83,15 @@ export default function Settings() {
   }, [user]);
 
 
-  const gogoModal = () => {
-    modalRef.current?.open()
-  };
+  // const gogoModal = () => {
+  //   modalRef.current?.open()
+  // };
+
+  const handleEditUserInfo = () => {
+    if(confirm("회원 정보를 수정하시겠습니까?")) {
+
+    }
+  }
 
 
   return !userInfo ? (
@@ -93,7 +100,10 @@ export default function Settings() {
     </div>
   ) : (
     <div className="flex w-screen h-screen justify-center items-center">
-      <div className="flex flex-col w-[50%] h-[30%] justify-around">
+      <div className="flex flex-col w-[50%] h-[40%] justify-around">
+        <div className="flex justify-center mb-3">
+          <span className="text-3xl">내 정보</span>
+        </div>
         <div>
           <InputText
             placeholder="User ID(Email)"
@@ -113,13 +123,23 @@ export default function Settings() {
             type="text"
             defaultValue={userInfo.phone}
           />
+          <InputText
+            placeholder="Address"
+            name="address"
+            type="text"
+            defaultValue={userInfo.address}
+          />
         </div>
-        <Button buttonName="Logout" onClick={handleLogout}></Button>
-        <Button buttonName="InnerDOM" onClick={changeModal}></Button>
-        <Button buttonName="ChildDOM" onClick={gogoModal}></Button>
+        <div className="flex justify-center mt-10">
+          <Button buttonName="Edit" onClick={handleEditUserInfo}></Button>
+          <Button buttonName="Logout" onClick={handleLogout}></Button>
+        </div>
 
-        {isClicked && <input ref={inputRef} className="border-2"></input>}
-        <TestModal ref={modalRef} />
+        {/* <Button buttonName="InnerDOM" onClick={changeModal}></Button>
+        <Button buttonName="ChildDOM" onClick={gogoModal}></Button> */}
+
+        {/* {isClicked && <input ref={inputRef} className="border-2"></input>}
+        <TestModal ref={modalRef} /> */}
       </div>
     </div>
   );

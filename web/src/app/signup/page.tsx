@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import InputText from "@/components/InputText";
 import api from '@/lib/axios';
 import { userService } from '@/services/user.service';
-import { LoginForm, LoginResponse } from '@/types/user/type';
+import { LoginForm, LoginResponse, SignupRequest } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
 import Button from '../../components/common/Button';
 
@@ -13,12 +13,13 @@ const SignUpPage = () => {
   const [list, setList] = useState([]);
   const [userInfo, setUserInfo] = useState<LoginResponse | null>();
   const router = useRouter();
-  const [data, setData] = useState<SignupForm>({
+  const [data, setData] = useState<SignupRequest>({
     userId: '',
     userPw: '',
     userPwChk: '',
     username: '',
     phone: '',
+    address: ''
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,8 +43,11 @@ const SignUpPage = () => {
     if(confirm("제출하시겠습니까?")) {
       try {
         const response = await userService.signup(data);
-        setUserInfo(response);
-        alert(response.userId);
+        console.log('완료: ' + response.status);
+        if(response.status === 200) {
+          alert("가입이 완료되었습니다.")
+          router.push('/login');
+        }
       } catch (error) {
         console.error(error);
       }
@@ -58,6 +62,7 @@ const SignUpPage = () => {
         userPwChk: '',
         username: '',
         phone: '',
+        address: ''
       });
     }
   };
@@ -110,6 +115,13 @@ const SignUpPage = () => {
               name="phone"
               type="phone"
               value={data.phone || ''}
+              onChange={handleInputChange}
+            />
+            <InputText
+              placeholder="Address"
+              name="address"
+              type="text"
+              value={data.address || ''}
               onChange={handleInputChange}
             />
             <div className="flex justify-evenly mt-5">

@@ -47,6 +47,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
           userId,
           username: userDb.username,
           profileImg: userDb.profileImg,
+          address: userDb.address,
           data: {
             accessToken,
             refreshToken,
@@ -71,7 +72,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
 
 router.post('/signup', async (req: Request, res: Response): Promise<void> => {  
-  const { userId, userPw, username, phone } = req.body; 
+  const { userId, userPw, username, phone, address } = req.body; 
 
   try {
     const saltRounds = 10;
@@ -82,9 +83,10 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
       hashedPw,
       username,
       phone,
+      address
     });
 
-    res.status(200);
+    res.status(200).json({ data: userId });
   } catch (error) {
     console.error('Error fetching items:', error);
     res.status(500).json({ message: 'Error fetching items' });
@@ -121,7 +123,8 @@ router.get('/user', async (req: Request, res: Response): Promise<void> => {
         userId: userDb.userId,
         username: userDb.username,
         phone: userDb.phone,
-        profileImg: userDb.profileImg
+        profileImg: userDb.profileImg,
+        address: userDb.address
       }
 
       console.log('========= userDb ===========');
