@@ -142,10 +142,10 @@ export default function Mypage() {
           <div className="flex w-full h-[20%] mt-9">
             <div className="flex border-2 w-[32%] justify-center items-center">
               <div className="w-[80%] h-[80%] rounded-full overflow-hidden">
-                <img
+                {user.profileImg && <img
                   src={`${user.profileImg}`}
                   className="w-full h-full object-contain"
-                />
+                />}
               </div>
             </div>
             <div className="flex border-2 w-[70%] justify-around items-center">

@@ -94,7 +94,7 @@ export const userService = {
     console.log('userId: ' + userId);
     try {
       const response = await api.get('/api/user/check', {
-        params: {userId},
+        params: { userId },
       });
       console.log(response.data);
       return response.data;
@@ -105,6 +105,26 @@ export const userService = {
       } else {
         alert('(오류발생)다시 시도해주세요.');
         return {} as LogoutResponse;
+      }
+    }
+  },
+
+  async editUserInfo(data: UserInfoRequest): Promise<UserInfoResponse> {
+    console.log('data.userId: ' + data.userId);
+    console.log('data.username: ' + data.username);
+    console.log('data.phone: ' + data.phone);
+    console.log('data.address: ' + data.address);
+    try {
+      const response = await api.post<UserInfoResponse>('/api/user/edit', data);
+      console.log(response);
+      return response;
+    } catch (error) {
+      if (error instanceof Error) {
+        alert('에러 발생');
+        return {} as SignupResponse;
+      } else {
+        alert('(오류발생)다시 시도해주세요.');
+        return {} as SignupResponse;
       }
     }
   },

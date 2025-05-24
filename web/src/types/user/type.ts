@@ -49,11 +49,15 @@ export type tokenSet = {
 };
 
 export interface UserInfoRequest {
-  userId: string;
+  userId?: string;
+  username?: string;
+  phone?: string;
+  address?: string;
 }
 
 export interface UserInfoResponse {
   userId: string;
   username: string;
   phone: string;
+  address: string;
 }

@@ -13,9 +13,12 @@ export default function Settings() {
   const router = useRouter();
   const { user, setUser } = useUserInfo();
   const [ userInfo, setUserInfo ] = useState<UserInfoResponse>();
-  const [ isClicked, setIsClicked] = useState<boolean>(false);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const modalRef = useRef<ModalRef>(null);
+  const [userData, setUserData] = useState({
+    userId: user?.userId,
+    username: user?.username,
+    phone: user?.phone,
+    address: user?.address
+  });
 
   const handleLogout = async () => {
     if (confirm('로그아웃 하시겠습니까?')) {
@@ -32,24 +35,9 @@ export default function Settings() {
     }
   };
 
-  const changeModal = () => {
-    if(isClicked) {
-      setIsClicked(false)
-    } else {
-      setIsClicked(true)
-    }
-  };
-
-  const inputGogo = () => {
-    inputRef.current.focus();
-  }
-
-  // const closeModal = () => {
-  //   setIsClicked(false)
-  // }
-
   const getUser = async () => {
     if(!user) return;
+    
     try {
       const param = {
         userId: user.userId,
@@ -67,7 +55,9 @@ export default function Settings() {
     };
 
     console.log(data);
+    // 로컬 스토리지 정보
     setUserInfo(data);
+    setUserData(data);
     } catch (error) {
       console.log(error);
     }
@@ -82,14 +72,41 @@ export default function Settings() {
     }
   }, [user]);
 
+  // 데이터 변화 감지
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserData(prev => ({...prev, [name]: value})) 
+  }
 
-  // const gogoModal = () => {
-  //   modalRef.current?.open()
-  // };
-
-  const handleEditUserInfo = () => {
+  // 회원 정보 수정
+  const handleEditUserInfo = async () => {
     if(confirm("회원 정보를 수정하시겠습니까?")) {
+      try {
+        const param = {
+          userId: userData.userId,
+          username: userData.username,
+          phone: userData.phone,
+          address: userData.address,
+        };
 
+        // user 정보 가져오는 api 호출
+        const response = await userService.editUserInfo(param);
+
+        if(response.status === 200) {
+          // 필요한 데이터만 UserInfo에 가져다가 사용함.
+          const data = {
+            userId: response.data.userId,
+            username: response.data.username,
+            phone: response.data.phone,
+            address: response.data.address,
+          };
+
+          setUserInfo(data);
+          alert(response.data.message)
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
@@ -110,24 +127,29 @@ export default function Settings() {
             name="userId"
             type="text"
             defaultValue={userInfo.userId}
+            onChange={handleInputChange}
+            readonly={true}
           />
           <InputText
             placeholder="User Name"
             name="username"
             type="text"
             defaultValue={userInfo.username}
+            onChange={handleInputChange}
           />
           <InputText
             placeholder="Phone"
             name="phone"
             type="text"
             defaultValue={userInfo.phone}
+            onChange={handleInputChange}
           />
           <InputText
             placeholder="Address"
             name="address"
             type="text"
             defaultValue={userInfo.address}
+            onChange={handleInputChange}
           />
         </div>
         <div className="flex justify-center mt-10">

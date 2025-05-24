@@ -165,4 +165,46 @@ router.get('/user/check', async (req: Request, res: Response): Promise<void> => 
   }
 });
 
+router.post(
+  '/user/edit',
+  async (req: Request, res: Response): Promise<void> => {
+    const { userId, username, phone, address } = req.body;
+
+    console.log("method: 'POST', url: '/user/edit', param:", req.body);
+
+    try {
+      const dbUser = await api.get(`${dbUrl}/users`, {
+        params: { userId },
+      });
+
+      const userList = dbUser.data;
+
+      if (userList.length === 0) {
+        res
+          .status(404)
+          .json({ message: '해당 사용자가 없습니다.', data: res });
+      }
+
+      const userIdInDb = userList[0].id;
+
+      const updateRes = await api.patch(`${dbUrl}/users/${userIdInDb}`, {
+        userId,
+        username,
+        phone,
+        address,
+      });
+
+      res
+        .status(200)
+        .json({
+          message: '사용자 정보가 변경되었습니다.',
+          data: updateRes.data,
+        });
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      res.status(500).json({ message: 'Error fetching users' });
+    }
+  }
+);
+
 export default router;
