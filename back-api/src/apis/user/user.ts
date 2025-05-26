@@ -170,7 +170,11 @@ router.post(
   async (req: Request, res: Response): Promise<void> => {
     const { userId, username, phone, address } = req.body;
 
-    console.log("method: 'POST', url: '/user/edit', param:", req.body);
+    console.log("method: 'POST', url: '/user/edit'");
+    console.log("userId: " + userId);
+    console.log('username: ' + username);
+    console.log('phone: ' + phone);
+    console.log('address: ' + address);
 
     try {
       const dbUser = await api.get(`${dbUrl}/users`, {

@@ -5,13 +5,15 @@ import { userService } from '@/services/user.service';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import InputText from '@/components/InputText';
-import TestModal, { ModalRef } from '@/components/TestModal';
+import TestModal, { ModalRef } from '@/components/modal/TestModal';
 import { UserInfoResponse } from '@/types/user/type';
 import Button from '../../components/common/Button';
+import Link from 'next/link';
 
 export default function Settings() {
   const router = useRouter();
   const { user, setUser } = useUserInfo();
+  const modalRef = useRef<ModalRef>(null);
   const [ userInfo, setUserInfo ] = useState<UserInfoResponse>();
   const [userData, setUserData] = useState({
     userId: user?.userId,
@@ -110,58 +112,134 @@ export default function Settings() {
     }
   }
 
+  const openChangdPwdModal = () => {
+    modalRef.current.open();
+  };
 
-  return !userInfo ? (
-    <div className="flex w-screen h-screen justify-center items-center">
-      <div>Loading...</div>
-    </div>
-  ) : (
-    <div className="flex w-screen h-screen justify-center items-center">
-      <div className="flex flex-col w-[50%] h-[40%] justify-around">
-        <div className="flex justify-center mb-3">
-          <span className="text-3xl">내 정보</span>
-        </div>
-        <div>
-          <InputText
-            placeholder="User ID(Email)"
-            name="userId"
-            type="text"
-            defaultValue={userInfo.userId}
-            onChange={handleInputChange}
-            readonly={true}
-          />
-          <InputText
-            placeholder="User Name"
-            name="username"
-            type="text"
-            defaultValue={userInfo.username}
-            onChange={handleInputChange}
-          />
-          <InputText
-            placeholder="Phone"
-            name="phone"
-            type="text"
-            defaultValue={userInfo.phone}
-            onChange={handleInputChange}
-          />
-          <InputText
-            placeholder="Address"
-            name="address"
-            type="text"
-            defaultValue={userInfo.address}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="flex justify-center mt-10">
-          <Button buttonName="Edit" onClick={handleEditUserInfo}></Button>
-          <Button buttonName="Logout" onClick={handleLogout}></Button>
-        </div>
 
-        {/* <Button buttonName="InnerDOM" onClick={changeModal}></Button>
-        <Button buttonName="ChildDOM" onClick={gogoModal}></Button> */}
+  return (
+    <div className="max-w-lg mx-auto mt-6 space-y-6">
+      {/* Section 1: 계정 */}
+      <div>
+        <h2 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+          계정
+        </h2>
+        <ul className="bg-white rounded-xl divide-y">
+          <li className="flex items-center justify-between px-4 py-3">
+            <span>아이디(이메일)</span>
+            <span className="text-sm text-gray-500">{user.userId}</span>
+          </li>
+          <li className="flex items-center justify-between px-4 py-3">
+            <span>닉네임</span>
+            <span className="text-sm text-gray-500">{user.username}</span>
+          </li>
+          <li className="flex items-center justify-between px-4 py-3">
+            <Link
+              href="/settings/myinfo"
+              className="flex justify-between items-center w-full"
+            >
+              <span>사용자 정보</span>
+              <svg
+                className="w-4 h-4 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </Link>
+          </li>
+          <li className="flex items-center justify-between px-4 py-3">
+            <Link
+              href="/settings/myinfo"
+              className="flex justify-between items-center w-full"
+            >
+              <span>비밀번호 변경</span>
+              <svg
+                className="w-4 h-4 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </Link>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h2 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+          앱 설정
+        </h2>
+        <ul className="bg-white rounded-xl divide-y">
+          <li className="flex items-center justify-between px-4 py-3">
+            <span>알림</span>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                value=""
+                className="sr-only peer"
+                defaultChecked
+              />
+              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:bg-blue-600"></div>
+            </label>
+          </li>
+          <li className="flex items-center justify-between px-4 py-3">
+            <span>다크 모드</span>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" className="sr-only peer" />
+              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:bg-gray-800"></div>
+            </label>
+          </li>
+        </ul>
+      </div>
 
-        {/* {isClicked && <input ref={inputRef} className="border-2"></input>}
-        <TestModal ref={modalRef} /> */}
+      <div>
+        <h2 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+          보안
+        </h2>
+        <ul className="bg-white rounded-xl divide-y">
+          <li className="flex items-center justify-between px-4 py-3">
+            <span>2단계 인증</span>
+            <span className="text-sm text-gray-500">사용 안함</span>
+          </li>
+          <li className="flex items-center justify-between px-4 py-3">
+            <span>앱 잠금</span>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" className="sr-only peer" />
+              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:bg-green-500"></div>
+            </label>
+          </li>
+        </ul>
+      </div>
+
+      {/* Section 4: 기타 */}
+      <div>
+        <h2 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+          기타
+        </h2>
+        <ul className="bg-white rounded-xl divide-y">
+          <li className="flex items-center justify-between px-4 py-3">
+            <span>버전 정보</span>
+            <span className="text-sm text-gray-500">v1.2.3</span>
+          </li>
+          <li className="flex items-center justify-between px-4 py-3 text-red-600 font-semibold">
+            <span>로그아웃</span>
+          </li>
+          <li className="flex items-center justify-between px-4 py-3 text-red-600 font-semibold">
+            <span>계정 삭제</span>
+          </li>
+        </ul>
       </div>
     </div>
   );

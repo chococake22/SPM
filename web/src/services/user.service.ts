@@ -116,7 +116,6 @@ export const userService = {
     console.log('data.address: ' + data.address);
     try {
       const response = await api.post<UserInfoResponse>('/api/user/edit', data);
-      console.log(response);
       return response;
     } catch (error) {
       if (error instanceof Error) {
