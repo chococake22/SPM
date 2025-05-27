@@ -126,31 +126,16 @@ export default function Settings() {
     </div>
   ) : (
     <div className="flex w-screen h-screen justify-center items-center">
-      <div className="flex flex-col w-[50%] h-[50%] justify-around">
-        <div className="flex justify-center mb-3">
-          <span className="text-3xl">My Info</span>
+      <div className="flex flex-col w-[50%] h-[40%] justify-around">
+        <div className="flex justify-center">
+          <span className="text-3xl">사용자 정보</span>
         </div>
         <div>
-          <InputText
-            placeholder="User ID(Email)"
-            name="userId"
-            type="text"
-            defaultValue={userInfo.userId}
-            onChange={handleInputChange}
-            readonly={true}
-          />
-          <InputText
-            placeholder="User Name"
-            name="username"
-            type="text"
-            defaultValue={userInfo.username}
-            onChange={handleInputChange}
-            readonly={true}
-          />
           <InputText
             placeholder="Phone"
             name="phone"
             type="text"
+            menuName="전화번호"
             defaultValue={userInfo.phone}
             onChange={handleInputChange}
           />
@@ -158,20 +143,15 @@ export default function Settings() {
             placeholder="Address"
             name="address"
             type="text"
+            menuName="주소"
             defaultValue={userInfo.address}
             onChange={handleInputChange}
           />
         </div>
-        <div className="flex justify-center mt-4">
-          <Button
-            buttonName="Change Password"
-            onClick={openChangdPwdModal}
-          ></Button>
-        </div>
-        <div className="flex justify-center mt-10">
-          <Button buttonName="Edit" onClick={handleEditUserInfo}></Button>
-          <Button buttonName="Logout" onClick={handleLogout}></Button>
-          <Button buttonName="Back" onClick={handleBackPage}></Button>
+        <div className="flex justify-center">
+          <Button buttonName="수정" onClick={handleEditUserInfo}></Button>
+          {/* <Button buttonName="Logout" onClick={handleLogout}></Button> */}
+          <Button buttonName="뒤로가기" onClick={handleBackPage}></Button>
         </div>
         <TestModal ref={modalRef} />
       </div>

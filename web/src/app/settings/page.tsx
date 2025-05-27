@@ -156,7 +156,7 @@ export default function Settings() {
           </li>
           <li className="flex items-center justify-between px-4 py-3">
             <Link
-              href="/settings/myinfo"
+              href="/settings/changepwd"
               className="flex justify-between items-center w-full"
             >
               <span>비밀번호 변경</span>
@@ -233,10 +233,13 @@ export default function Settings() {
             <span>버전 정보</span>
             <span className="text-sm text-gray-500">v1.2.3</span>
           </li>
-          <li className="flex items-center justify-between px-4 py-3 text-red-600 font-semibold">
+          <li
+            className="flex items-center justify-between px-4 py-3 text-red-600 font-semibold cursor-pointer"
+            onClick={handleLogout}
+          >
             <span>로그아웃</span>
           </li>
-          <li className="flex items-center justify-between px-4 py-3 text-red-600 font-semibold">
+          <li className="flex items-center justify-between px-4 py-3 text-red-600 font-semibold cursor-pointer">
             <span>계정 삭제</span>
           </li>
         </ul>

@@ -43,12 +43,11 @@ export const userService = {
   },
   async signup(data: SignupRequest): Promise<SignupResponse> {
     try {
-      const response = await api.post<SignupResponse>('/api/signup', data);
-      console.log('✅ 응답 받음:', response);
+      const response = await api.post<SignupResponse>('/api/user/signup', data);
       return response;
     } catch (error) {
       if (error instanceof Error) {
-        alert('에러 발생');
+        alert('signup 에러 발생');
         return {} as SignupResponse;
       } else {
         alert('(오류발생)다시 시도해주세요.');
@@ -58,11 +57,11 @@ export const userService = {
   },
   async logout(): Promise<LogoutResponse> {
     try {
-      const response = await api.post<LogoutRequest>('/api/logout');
+      const response = await api.post<LogoutRequest>('/api/user/logout');
       return response.data;
     } catch (error) {
       if (error instanceof Error) {
-        alert('에러 발생');
+        alert('logout 에러 발생');
         return {} as LogoutResponse;
       } else {
         alert('(오류발생)다시 시도해주세요.');
@@ -72,16 +71,14 @@ export const userService = {
   },
 
   async user(data: UserInfoRequest): Promise<UserInfoResponse> {
-    console.log(data);
     try {
-      const response = await api.get<UserInfoResponse>('/api/user', {
+      const response = await api.get<UserInfoResponse>('/api/user/info', {
         params: data,
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       if (error instanceof Error) {
-        alert('에러 발생');
+        alert('user 에러 발생');
         return {} as LogoutResponse;
       } else {
         alert('(오류발생)다시 시도해주세요.');
@@ -91,16 +88,14 @@ export const userService = {
   },
 
   async checkUserIdExist(userId: string): Promise<boolean> {
-    console.log('userId: ' + userId);
     try {
       const response = await api.get('/api/user/check', {
         params: { userId },
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       if (error instanceof Error) {
-        alert('에러 발생');
+        alert('checkUserIdExist 에러 발생');
         return {} as LogoutResponse;
       } else {
         alert('(오류발생)다시 시도해주세요.');
@@ -110,16 +105,12 @@ export const userService = {
   },
 
   async editUserInfo(data: UserInfoRequest): Promise<UserInfoResponse> {
-    console.log('data.userId: ' + data.userId);
-    console.log('data.username: ' + data.username);
-    console.log('data.phone: ' + data.phone);
-    console.log('data.address: ' + data.address);
     try {
       const response = await api.post<UserInfoResponse>('/api/user/edit', data);
       return response;
     } catch (error) {
       if (error instanceof Error) {
-        alert('에러 발생');
+        alert('editUserInfo 에러 발생');
         return {} as SignupResponse;
       } else {
         alert('(오류발생)다시 시도해주세요.');

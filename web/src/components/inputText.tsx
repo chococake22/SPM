@@ -1,4 +1,5 @@
 interface InputTextProps {
+  id?: string;
   placeholder: string;
   name: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void | null;
@@ -7,9 +8,11 @@ interface InputTextProps {
   regExp?: string;
   defaultValue?: string;
   readonly?: boolean;
+  menuName?: string;
 }
 
 const InputText: React.FC<InputTextProps> = ({
+  id,
   placeholder,
   name,
   onChange,
@@ -17,8 +20,11 @@ const InputText: React.FC<InputTextProps> = ({
   type,
   regExp,
   defaultValue,
-  readonly
+  readonly,
+  menuName
 }) => {
+  
+  // validation
   // const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
   //   // regExp가 존재하는 경우에만 검증을 수행
   //   if (regExp && !new RegExp(regExp).test(e.target.value)) {
@@ -35,11 +41,11 @@ const InputText: React.FC<InputTextProps> = ({
 
   return (
     <div className="mt-3">
-      <label htmlFor="first_name" className="block mb-2 text-sm font-medium">
-        {placeholder}
+      <label htmlFor={name} className="block mb-2 text-sm font-medium">
+        {menuName}
       </label>
       <input
-        id={name}
+        id={id}
         name={name}
         type={type}
         placeholder={placeholder}

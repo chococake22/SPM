@@ -12,6 +12,8 @@ import Button from '../../components/common/Button';
 const LoginPage = () => {
   const { setUser } = useUserInfo();
   const router = useRouter();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
   const handleSignup = () => {
     router.push('/signup');
@@ -39,14 +41,33 @@ const LoginPage = () => {
 
     try {
       const response = await userService.login(params);
-      console.log("login")
-      console.log(response)
       if(response.userId) {
         setUser(response)
         router.push("/");
       }
     } catch (error) {
       console.error(error);
+    }
+  };
+
+
+  const handleLoginTest = async () => {
+    console.log('??????????');
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+
+    if (data.ok) {
+      alert('로그인 성공!');
+      window.location.href = '/dashboard'; // 원하는 페이지로 이동
+    } else {
+      alert('로그인 실패!');
     }
   };
 

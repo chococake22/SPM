@@ -1,29 +1,25 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
+const secretKey = process.env.JWT_SECRET as string;
 
 // 액세스 토큰 발급
-export const getTokenSet = (userId: string, userPw: string) => {
+export const generateAccessToken = (payload: object) => {
+  return jwt.sign(payload, secretKey, { expiresIn: '10s' });
+};
 
-  // 액세스 토큰: 1시간
-    const accessToken = jwt.sign(
-      { userId: userId, userPw: userPw }, process.env.JWT_SECRET as string, {
-        expiresIn: '1h'
-      }
-    );
+// 리프레시 토큰 발급
+export const generateRefreshToken = (payload: object) => {
+  return jwt.sign(payload, secretKey, { expiresIn: '5m' });
+};
 
-    // 리프레시 토큰: 1주일
-    const refreshToken = jwt.sign(
-      { userId: userId, userPw: userPw },
-      process.env.JWT_SECRET as string,
-      {
-        expiresIn: '7d',
-      }
-    );
+// 토큰 검증
+export const verifyToken = (token: string) => {
+  return jwt.verify(token, secretKey);
+};
 
-
-    return [accessToken, refreshToken];
-}
-
-export default getTokenSet;
+// 토큰 디코딩
+export const decodeToken = (token: string) => {
+  return jwt.decode(token);
+};

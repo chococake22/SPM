@@ -37,7 +37,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (user !== null) {
       setUser(user);
-      localStorage.setItem('userInfo', JSON.stringify(user));
+      const userJson = JSON.stringify(user);
+      localStorage.setItem('userInfo', userJson);
     } else {
       localStorage.removeItem('userInfo');
     }

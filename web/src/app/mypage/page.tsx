@@ -67,8 +67,6 @@ export default function Mypage() {
           ITEMS_PER_PAGE
         );
 
-        console.log(response);
-
         // 전체 개수 < 해당 페이지 수
         // 페이지가 더 없음.
         if (response.length < ITEMS_PER_PAGE) {
@@ -117,7 +115,6 @@ export default function Mypage() {
     console.log('useEffect - getUserItems');
     if (user) {
       console.log('user 있음');
-      console.log(user);
       setIsTest(true);
       getUserItems(page); // 컴포넌트가 마운트되면 데이터 요청 실행
     }
