@@ -5,6 +5,7 @@ import BottomNav from "../components/BottomNav"
 import TopNav from '../components/TopNav';
 import { usePathname } from 'next/navigation';
 import { UserProvider } from "@/lib/UserContext";
+import path from "path";
 
 export default function RootLayout({
   children,
@@ -14,7 +15,7 @@ export default function RootLayout({
 
   const pathname = usePathname();
 
-  if (pathname === '/login' || pathname === '/signup') {
+  if (pathname === '/login' || pathname === '/signup' || pathname === '/expired') {
     return (
       <html lang="en">
         <body className="w-full h-screen flex justify-center items-center">

@@ -1,5 +1,7 @@
 import api from '@/lib/axios';
 import { ItemListResponse } from '@/types/item/type';
+import { redirect } from 'next/navigation';
+import { AxiosError } from 'axios';
 
 const itemService = {
   async getItems(offset: number, limit: number): Promise<ItemListResponse[]> {
@@ -15,12 +17,18 @@ const itemService = {
 
       return response.data;
     } catch (error) {
-      if (error instanceof Error) {
-        alert('getItemList 에러');
-        return [];
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || error.message;
+
+        console.log("status: " + status)
+        if (status === 401) {
+          redirect('/expired');
+        } else {
+          alert(`요청 실패: ${message}`);
+        }
       } else {
-        alert('에러2');
-        return [];
+        alert('Unexpected Error!');
       }
     }
   },
@@ -44,8 +52,21 @@ const itemService = {
       );
       return response.data;
     } catch (error) {
-      alert('getUserItemList 에러 발생');
-      return [];
+      if (error instanceof AxiosError) {
+
+        const status = error.response?.status;
+        const message = error.response?.data?.message || error.message;
+
+        console.log('status: ' + status);
+
+        if(status === 401) {
+          redirect('/expired');
+        } else {
+          alert(`요청 실패: ${message}`)
+        }
+      } else {
+        alert('Unexpected Error!')
+      }
     }
   },
 };

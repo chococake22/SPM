@@ -10,6 +10,7 @@ import {
   UserInfoResponse,
 } from '@/types/user/type';
 import { AxiosError } from 'axios';
+import { redirect } from 'next/navigation';
 
 export const userService = {
   async login(data: LoginRequest): Promise<LoginResponse> {
@@ -77,12 +78,17 @@ export const userService = {
       });
       return response.data;
     } catch (error) {
-      if (error instanceof Error) {
-        alert('user 에러 발생');
-        return {} as LogoutResponse;
+    if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || error.message;
+          console.log('status: ' + status);
+        if (status === 401) {
+          redirect('/expired');
+        } else {
+          alert(`요청 실패: ${message}`);
+        }
       } else {
-        alert('(오류발생)다시 시도해주세요.');
-        return {} as LogoutResponse;
+        alert('Unexpected Error!');
       }
     }
   },

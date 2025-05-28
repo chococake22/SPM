@@ -11,7 +11,7 @@ export const generateAccessToken = (payload: object) => {
 
 // 리프레시 토큰 발급
 export const generateRefreshToken = (payload: object) => {
-  return jwt.sign(payload, secretKey, { expiresIn: '5m' });
+  return jwt.sign(payload, secretKey, { expiresIn: '25s' });
 };
 
 // 토큰 검증
