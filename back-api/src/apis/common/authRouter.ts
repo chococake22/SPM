@@ -4,12 +4,16 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+/**
+ * 토큰 검증에 대한 공통 로직
+ * 로그인, 회원가입 제외하고 모든 로직에 적용
+ */
 export function verifyAccessToken(
   req: Request,
   res: Response,
   next: NextFunction
 ): void {
-  const openPaths = ['/api/login', '/api/signup'];
+  const openPaths = ['/api/login', '/api/signup', '/api/check/user'];
 
   if (openPaths.includes(req.path)) {
     return next(); // 인증이 필요 없는 경로는 통과

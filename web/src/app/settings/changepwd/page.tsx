@@ -1,12 +1,12 @@
 'use client';
 
-import { useUserInfo } from '@/lib/UserContext';
+import { useUserInfo } from '@/hook/UserContext';
 import { userService } from '@/services/user.service';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import InputText from '@/components/InputText';
 import TestModal, { ModalRef } from '@/components/modal/TestModal';
-import { UserInfoResponse } from '@/types/user/type';
+import { UserInfoData, UserInfoResponse } from '@/types/user/type';
 import Button from '@/components/common/Button';
 
 
@@ -14,7 +14,7 @@ export default function Settings() {
   const router = useRouter();
   const { user, setUser } = useUserInfo();
   const modalRef = useRef<ModalRef>(null);
-  const [ userInfo, setUserInfo ] = useState<UserInfoResponse>();
+  const [ userInfo, setUserInfo ] = useState<UserInfoData>();
   const [formData, setFormData] = useState({
     nowPwd: '',
     newPwd: '',
@@ -31,6 +31,9 @@ export default function Settings() {
     if (confirm('로그아웃 하시겠습니까?')) {
       try {
         const response = await userService.logout();
+        if(!response) {
+          return <div>데이터가 없습니다.</div>
+        }
         alert(response.message);
         // 로컬 스토리지에서 사용자 정보 삭제
         localStorage.removeItem('userInfo');
@@ -52,6 +55,11 @@ export default function Settings() {
 
     // user 정보 가져오는 api 호출
     const response = await userService.user(param);
+
+
+    if(!response) {
+      return <div>데이터가 없습니다.</div>
+    }
 
     // 필요한 데이터만 UserInfo에 가져다가 사용함.
     const data = {
@@ -112,7 +120,7 @@ export default function Settings() {
   }
 
   const openChangdPwdModal = () => {
-    modalRef.current.open();
+    modalRef.current?.open();
   };
 
   const handleBackPage = () => {

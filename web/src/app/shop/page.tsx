@@ -1,5 +1,7 @@
 "use client"
 
+import useUserInfo2 from '@/hook/useUserInfo';
+
 import {
   useCallback,
   useState,
@@ -17,6 +19,7 @@ function ShopPage() {
 
   const [count, setCount] = useState(0);
   const [text, setText] = useState('');  
+  const { userInfo, deleteUserInfo } = useUserInfo2();
   
   const handleChangeText = (e: ChangeEvent<HTMLInputElement>) => {
     
@@ -27,6 +30,11 @@ function ShopPage() {
     console.log('handleClick is created/re-created');
     setCount((prevCount) => prevCount + 1);
   }, [count]);
+
+  useEffect(() => {
+
+    console.log('userInfo - shop: ' + userInfo.userId);
+  }, [userInfo])
 
 
   // input에 값이 변할 때마다 함수가 새로 생성이 된다.

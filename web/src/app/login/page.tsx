@@ -5,15 +5,16 @@ import InputText from "@/components/InputText";
 import { userService } from '@/services/user.service';
 import { LoginForm, LoginResponse } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
-import { useUserInfo} from '@/lib/UserContext';
+import { useUserInfo} from '@/hook/UserContext';
 import Button from '../../components/common/Button';
-
+import useUserInfo2 from '@/hook/useUserInfo';
 
 const LoginPage = () => {
   const { setUser } = useUserInfo();
   const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { setUserInfo } = useUserInfo2();
 
   const handleSignup = () => {
     router.push('/signup');
@@ -25,7 +26,7 @@ const LoginPage = () => {
     e.preventDefault();
 
     // FormData를 이용해서 name에 정의된 값을 가져온다.
-    const formData = new FormData(e.target);
+    const formData = new FormData(e.target as HTMLFormElement);
     const userId = formData.get('userId');
     const userPw = formData.get('userPw');
 
@@ -42,6 +43,7 @@ const LoginPage = () => {
     try {
       const response = await userService.login(params);
       if(response.userId) {
+        setUserInfo(response);
         setUser(response)
         router.push("/");
       }

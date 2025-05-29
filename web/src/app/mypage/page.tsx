@@ -1,12 +1,13 @@
 "use client"
 
-import { useUserInfo } from '@/lib/UserContext';
+import { useUserInfo } from '@/hook/UserContext';
 import { userService } from '@/services/user.service';
 import { useContext, useEffect, useState, useMemo, useCallback, useRef } from 'react';
-import { userContext } from '@/lib/UserContext';
+import { UserContext } from '@/hook/UserContext';
 import { createContext } from 'react';
 import itemService from '@/services/item.service';
 import { flushSync } from 'react-dom';
+import { ItemListResponse } from '@/types/item/type';
 
 interface Tab {
   label: string;
@@ -66,6 +67,10 @@ export default function Mypage() {
           offset,
           ITEMS_PER_PAGE
         );
+
+        if(!response) {
+          return <div>데이터가 없습니다.</div>
+        }
 
         // 전체 개수 < 해당 페이지 수
         // 페이지가 더 없음.
@@ -139,7 +144,7 @@ export default function Mypage() {
           <div className="flex w-full h-[20%] mt-9">
             <div className="flex border-2 w-[32%] justify-center items-center">
               <div className="w-[80%] h-[80%] rounded-full overflow-hidden">
-                {user.profileImg && <img
+                {user?.profileImg && <img
                   src={`${user.profileImg}`}
                   className="w-full h-full object-contain"
                 />}

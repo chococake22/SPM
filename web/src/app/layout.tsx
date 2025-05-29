@@ -4,7 +4,7 @@ import "./global.css";
 import BottomNav from "../components/BottomNav"
 import TopNav from '../components/TopNav';
 import { usePathname } from 'next/navigation';
-import { UserProvider } from "@/lib/UserContext";
+import { UserProvider } from "@/hook/UserContext";
 import path from "path";
 
 export default function RootLayout({

@@ -7,6 +7,9 @@ import { SignupRequest } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
 import Button from '../../components/common/Button';
 
+
+
+
 const SignUpPage = () => {
   const router = useRouter();
   const [isCheckUserId, setIsCheckUserId] = useState<boolean>(false);
@@ -100,10 +103,8 @@ const SignUpPage = () => {
     }
 
     try {
-      const response = await userService.checkUserIdExist(data.userId);
-      console.log(response.result)
-      
-      if(response.result) {
+      const response = await userService.checkUserIdExist(data.userId);      
+      if(!response?.userId) {
         alert('사용할 수 있는 아이디입니다.');
         setIsCheckUserId(true);
       } else {

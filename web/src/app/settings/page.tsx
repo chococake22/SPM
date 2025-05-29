@@ -1,12 +1,12 @@
 'use client';
 
-import { useUserInfo } from '@/lib/UserContext';
+import { useUserInfo } from '@/hook/UserContext';
 import { userService } from '@/services/user.service';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import InputText from '@/components/InputText';
 import TestModal, { ModalRef } from '@/components/modal/TestModal';
-import { UserInfoResponse } from '@/types/user/type';
+import { UserInfoResponse, UserInfoData } from '@/types/user/type';
 import Button from '../../components/common/Button';
 import Link from 'next/link';
 
@@ -14,7 +14,7 @@ export default function Settings() {
   const router = useRouter();
   const { user, setUser } = useUserInfo();
   const modalRef = useRef<ModalRef>(null);
-  const [ userInfo, setUserInfo ] = useState<UserInfoResponse>();
+  const [userInfo, setUserInfo] = useState<UserInfoData>();
   const [userData, setUserData] = useState({
     userId: user?.userId,
     username: user?.username,
@@ -26,9 +26,13 @@ export default function Settings() {
     if (confirm('로그아웃 하시겠습니까?')) {
       try {
         const response = await userService.logout();
+        if (!response) {
+          return <div>데이터가 없습니다.</div>;
+        }
         alert(response.message);
         // 로컬 스토리지에서 사용자 정보 삭제
         localStorage.removeItem('userInfo');
+        localStorage.removeItem('user-zustand');
         // 로그아웃을 하고 나면 뒤로 갈 수 없어야 해서 replace 사용
         router.replace('/login');
       } catch (error) {
@@ -47,6 +51,10 @@ export default function Settings() {
 
     // user 정보 가져오는 api 호출
     const response = await userService.user(param);
+
+    if (!response) {
+      return <div>데이터가 없습니다</div>;
+    }
 
     // 필요한 데이터만 UserInfo에 가져다가 사용함.
     const data = {
@@ -113,7 +121,7 @@ export default function Settings() {
   }
 
   const openChangdPwdModal = () => {
-    modalRef.current.open();
+    modalRef.current?.open();
   };
 
 
@@ -127,11 +135,11 @@ export default function Settings() {
         <ul className="bg-white rounded-xl divide-y">
           <li className="flex items-center justify-between px-4 py-3">
             <span>아이디(이메일)</span>
-            <span className="text-sm text-gray-500">{user.userId}</span>
+            <span className="text-sm text-gray-500">{user?.userId}</span>
           </li>
           <li className="flex items-center justify-between px-4 py-3">
             <span>닉네임</span>
-            <span className="text-sm text-gray-500">{user.username}</span>
+            <span className="text-sm text-gray-500">{user?.username}</span>
           </li>
           <li className="flex items-center justify-between px-4 py-3">
             <Link
