@@ -24,6 +24,7 @@ const ExpiredPage = () => {
       history.pushState(null, '', location.href);
     };
 
+    // 
     window.addEventListener('popstate', onPopState);
 
     return () => {
@@ -33,8 +34,8 @@ const ExpiredPage = () => {
 
   return (
     <div className="flex flex-col justify-center items-center ">
-      <div>
-        <span>세션이 만료되었습니다</span>
+      <div className='mb-6'>
+        <span className='text-3xl'>세션이 만료되었습니다</span>
       </div>
       <div>
         <Button
