@@ -11,6 +11,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import { Mousewheel } from 'swiper/modules';
+import useUserInfo2 from '@/hook/useUserInfo';
 
 const ITEMS_PER_PAGE = 3;
 
@@ -19,6 +20,11 @@ const Home = () => {
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+    const { userInfo, deleteUserInfo } = useUserInfo2();
+
+      useEffect(() => {
+        console.log('userInfo - /: ' + userInfo.userId);
+      }, [userInfo]);
 
 
   // 맨 처음 렌더링이 될 때에는 함수가 실행되지는 않고 정의만 된다.
@@ -29,6 +35,11 @@ const Home = () => {
 
       // 전체 개수 < 해당 페이지 수
       // 페이지가 더 없음.
+
+      if(!response) {
+        return <div>데이터가 없습니다.</div>
+      }
+
       if (response.length < ITEMS_PER_PAGE) {
         setHasMore(false);
       }

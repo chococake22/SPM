@@ -1,6 +1,6 @@
 import api from '@/lib/axios';
 import {
-  LoginRequest,
+  LoginForm,
   LoginResponse,
   SignupRequest,
   SignupResponse,
@@ -12,7 +12,7 @@ import {
 import { AxiosError } from 'axios';
 
 export const authService = {
-  async getAccessToken(data: LoginRequest): Promise<LoginResponse> {
+  async getAccessToken(data: LoginForm): Promise<LoginResponse> {
     try {
       const response = await api.post<LoginResponse>('/api/login', data);
       return response.data;

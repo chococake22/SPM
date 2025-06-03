@@ -28,8 +28,11 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
       if (isValid) {
         const params = {
-          userId: userId
-        }
+          userId: userDb.userId,
+          username: userDb.username,
+          phone: userDb.phone,
+          address: userDb.address,
+        };
         const accessToken = generateAccessToken(params);
         const refreshToken = generateRefreshToken(params);
 
@@ -47,9 +50,10 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
         });
 
         res.json({
-          userId,
+          userId: userDb.userId,
           username: userDb.username,
           profileImg: userDb.profileImg,
+          phone: userDb.phone,
           address: userDb.address,
         });
         return;
@@ -78,14 +82,17 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
     const hashedPw = await bcrypt.hash(userPw, saltRounds);
 
     const response = await api.post(`${dbUrl}/users`, {
-      userId,
-      hashedPw,
-      username,
-      phone,
-      address
+      userId: userId,
+      userPw: hashedPw,
+      username: username,
+      phone: phone,
+      address: address
     });
 
-    res.status(200).json({ data: userId });
+    const data = response.data;
+    const status = response.status;
+
+    res.status(200).json({ data: data, message: '가입이 완료되었습니다.', status: status });
   } catch (error) {
     console.error('Error fetching items:', error);
     res.status(500).json({ message: 'Error fetching items' });
@@ -140,5 +147,29 @@ router.post('/token', async (req: Request, res: Response): Promise<void> => {
     return;
   }
 });
+
+
+router.get(
+  '/check/user',
+  async (req: Request, res: Response): Promise<void> => {
+    const { userId } = req.query as { userId: string }; // ✅ query에서 추출
+
+    console.log("method: 'GET', url: '/check/user', param:", userId);
+
+    try {
+      // 데이터를 가져옴
+      const response = await api.get(`${dbUrl}/users`, { params: { userId } }); // /items로 요청 (baseURL 자동 적용)
+      const data = response.data[0]
+
+      res.status(200).json({
+        data: data,
+      });
+    } catch (error) {
+      console.error('Error fetching items:', error);
+      res.status(500).json({ message: 'Error fetching items' });
+      return;
+    }
+  }
+);
 
 export default router;

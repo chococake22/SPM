@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { AxiosError } from 'axios';
 
 const itemService = {
-  async getItems(offset: number, limit: number): Promise<ItemListResponse[]> {
+  async getItems(offset: number, limit: number): Promise<ItemListResponse[] | undefined> {
     const params = {
       offset: offset,
       limit: limit,
@@ -34,10 +34,10 @@ const itemService = {
   },
 
   async getUserItems(
-    username: string,
+    username: string | undefined,
     offset: number,
     limit: number
-  ): Promise<ItemListResponse[]> {
+  ): Promise<ItemListResponse[] | undefined> {
     try {
       const response = await api.get<ItemListResponse[]>(
         '/api/item/getUserItemList',

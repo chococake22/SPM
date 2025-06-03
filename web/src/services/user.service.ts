@@ -1,6 +1,5 @@
 import api from '@/lib/axios';
 import {
-  LoginRequest,
   LoginResponse,
   SignupRequest,
   SignupResponse,
@@ -8,12 +7,16 @@ import {
   LogoutResponse,
   UserInfoRequest,
   UserInfoResponse,
+  CheckUserIdResponse,
+  LoginForm,
+  EditUserPwdRequest,
+  EditUserPwdResponse
 } from '@/types/user/type';
 import { AxiosError } from 'axios';
 import { redirect } from 'next/navigation';
 
 export const userService = {
-  async login(data: LoginRequest): Promise<LoginResponse> {
+  async login(data: LoginForm): Promise<LoginResponse> {
     try {
       const response = await api.post<LoginResponse>('/api/login', data);
       return response.data;
@@ -44,8 +47,8 @@ export const userService = {
   },
   async signup(data: SignupRequest): Promise<SignupResponse> {
     try {
-      const response = await api.post<SignupResponse>('/api/user/signup', data);
-      return response;
+      const response = await api.post<SignupResponse>('/api/signup', data);
+      return response.data;
     } catch (error) {
       if (error instanceof Error) {
         alert('signup 에러 발생');
@@ -56,32 +59,15 @@ export const userService = {
       }
     }
   },
-  async logout(): Promise<LogoutResponse> {
+  async logout(): Promise<LogoutResponse | undefined> {
     try {
       const response = await api.post<LogoutRequest>('/api/user/logout');
       return response.data;
     } catch (error) {
-      if (error instanceof Error) {
-        alert('logout 에러 발생');
-        return {} as LogoutResponse;
-      } else {
-        alert('(오류발생)다시 시도해주세요.');
-        return {} as LogoutResponse;
-      }
-    }
-  },
-
-  async user(data: UserInfoRequest): Promise<UserInfoResponse> {
-    try {
-      const response = await api.get<UserInfoResponse>('/api/user/info', {
-        params: data,
-      });
-      return response.data;
-    } catch (error) {
-    if (error instanceof AxiosError) {
+      if (error instanceof AxiosError) {
         const status = error.response?.status;
         const message = error.response?.data?.message || error.message;
-          console.log('status: ' + status);
+        console.log('status: ' + status);
         if (status === 401) {
           redirect('/expired');
         } else {
@@ -93,19 +79,43 @@ export const userService = {
     }
   },
 
-  async checkUserIdExist(userId: string): Promise<boolean> {
+  async user(data: UserInfoRequest): Promise<UserInfoResponse | undefined> {
     try {
-      const response = await api.get('/api/user/check', {
+      const response = await api.get<UserInfoResponse>('/api/user/info', {
+        params: data,
+      });
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || error.message;
+        console.log('status: ' + status);
+        if (status === 401) {
+          redirect('/expired');
+        } else {
+          alert(`요청 실패: ${message}`);
+        }
+      } else {
+        alert('Unexpected Error!');
+      }
+    }
+  },
+
+  async checkUserIdExist(userId: string): Promise<CheckUserIdResponse> {
+    try {
+      const response = await api.get('/api/check/user', {
         params: { userId },
       });
       return response.data;
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof AxiosError) {
+        console.log('status: ' + error.response?.status);
+        console.log('message: ' + error.response?.data.message);
         alert('checkUserIdExist 에러 발생');
-        return {} as LogoutResponse;
+        return {} as CheckUserIdResponse;
       } else {
         alert('(오류발생)다시 시도해주세요.');
-        return {} as LogoutResponse;
+        return {} as CheckUserIdResponse;
       }
     }
   },
@@ -113,14 +123,45 @@ export const userService = {
   async editUserInfo(data: UserInfoRequest): Promise<UserInfoResponse> {
     try {
       const response = await api.post<UserInfoResponse>('/api/user/edit', data);
-      return response;
+      return response.data;
     } catch (error) {
-      if (error instanceof Error) {
-        alert('editUserInfo 에러 발생');
-        return {} as SignupResponse;
+      if (error instanceof AxiosError) {
+        console.log('status: ' + error.response?.status);
+        console.log('message: ' + error.response?.data.message);
+        alert('checkUserIdExist 에러 발생');
+        return {} as UserInfoResponse;
       } else {
         alert('(오류발생)다시 시도해주세요.');
-        return {} as SignupResponse;
+        return {} as UserInfoResponse;
+      }
+    }
+  },
+
+  async editUserPwd(data: EditUserPwdRequest): Promise<EditUserPwdResponse> {
+    try {
+      const response = await api.patch<EditUserPwdResponse>(
+        '/api/user/edit/change-pwd',
+        data
+      );
+      return {
+        success: true,
+        message: '비밀번호가 변경되었습니다.',
+      };
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message = error.response?.data.message;
+        console.log('status: ' + error.response?.status);
+        console.log('message: ' + message);
+        return {
+          success: false,
+          message,
+        };
+
+      } else {
+        return {
+          success: false,
+          message: "(시스템 오류) 다시 시도해주세요",
+        };
       }
     }
   },

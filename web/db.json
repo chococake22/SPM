@@ -137,11 +137,11 @@
     {
       "id": "5842",
       "userId": "apple12@test.com",
-      "hashedPw": "$2b$10$xjhuMfUTeoGZcm60C5XO8OFYKm1CI5z0bJsKHtMs.9Iq4lBRYA1xq",
+      "hashedPw": "$2b$10$lpkkBWlQANKfeDPoxcB4suQ05a64f4Nx5Q2SyU1uCGiLYDolZ.gU6",
       "username": "애플1",
-      "phone": "00000000000",
+      "phone": "123123123",
       "profileImg": "/pngwing.com.png",
-      "address": "ㅎㅎㅎㅎㅎㅎㅎ"
+      "address": "ㅁㄴㅇㄹㅁㄴㄹㅁㄴㅇㄹ"
     },
     {
       "id": "91a3",
@@ -369,6 +369,46 @@
       "username": "오아이1",
       "phone": "01012341234",
       "address": "서울시 어쩌구 저쩌구 11"
+    },
+    {
+      "id": "3624",
+      "userId": "apple2@test.com",
+      "userPw": "$2b$10$b/KBLZuxeYasYGPsbNo8vupYtVD7xaaitlZqAjSFqrRi6NLD2QUBS",
+      "username": "애플2",
+      "phone": "01012341234",
+      "address": "주소소소소"
+    },
+    {
+      "id": "98f7",
+      "userId": "apple33@test.com",
+      "userPw": "$2b$10$Isn6wxCS0xWg6E7KNROA4.ywTYHnyOHXyAG2bLKXNDJVEa6lQY1GG",
+      "username": "애플3",
+      "phone": "01012341234",
+      "address": "7, Nambusunhwan-ro 180-gil, Gwanak-gu, Seoul, Republic of Korea"
+    },
+    {
+      "id": "74e5",
+      "userId": "apple5@test.com",
+      "userPw": "$2b$10$KO4hDHOHCQyMTC7gs5wJKekcJNZVOl9QL8MTYzcNaA9au69on8rl2",
+      "username": "애플5",
+      "phone": "01012341234",
+      "address": "주소는 여기입니다"
+    },
+    {
+      "id": "3fb6",
+      "userId": "apple0@test.com",
+      "userPw": "$2b$10$Qf/Rx40vkXJHv7qit3HI3uV/U5abSx5szrWYvhhTp3tUcj.JEOABu",
+      "username": "애플0",
+      "phone": "01012341234",
+      "address": "주소소소소"
+    },
+    {
+      "id": "4a24",
+      "userId": "apple01@test.com",
+      "userPw": "$2b$10$u1J.Z/5t5n67iGWCLOjsOuP3/ShCPhgVbkehmANie7W6kTlaBq3rG",
+      "username": "애플01",
+      "phone": "01012341234",
+      "address": "서"
     }
   ]
 }

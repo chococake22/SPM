@@ -14,7 +14,7 @@ router.post('/getItemList', async (req: Request, res: Response) => {
     // 4개만 가져오도록
     const response = await api.get(`${dbUrl}/items?_start=${offset}&_limit=${limit}`); // /items로 요청 (baseURL 자동 적용)
 
-    res.json(response.data);
+    res.status(200).json({data: response.data});
   } catch (error) {
     console.error('Error fetching items:', error);
     res.status(500).json({ message: 'Error fetching items' });
@@ -33,7 +33,8 @@ router.get('/getUserItemList', async (req: Request, res: Response) => {
       `${dbUrl}/items?_start=${offset}&_limit=${limit}`, { params: { username }}
     ); // /items로 요청 (baseURL 자동 적용)
 
-    res.json(response.data);
+    res.status(200).json({ data: response.data });
+
   } catch (error) {
     console.error('Error fetching items:', error);
     res.status(500).json({ message: 'Error fetching items' });
