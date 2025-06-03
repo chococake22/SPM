@@ -73,5 +73,22 @@ export interface UserInfoResponse {
 }
 
 export interface CheckUserIdResponse {
+  data: UserIdResponse;
+}
+
+export interface UserIdResponse {
   userId?: string;
+}
+
+
+export interface EditUserPwdRequest {
+  userId?: string;
+  nowPwd: string;
+  newPwd: string;
+  newPwdConfirm: string;
+}
+
+export interface EditUserPwdResponse {
+  success: boolean;
+  message: string;
 }

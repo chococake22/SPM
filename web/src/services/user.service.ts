@@ -9,6 +9,8 @@ import {
   UserInfoResponse,
   CheckUserIdResponse,
   LoginForm,
+  EditUserPwdRequest,
+  EditUserPwdResponse
 } from '@/types/user/type';
 import { AxiosError } from 'axios';
 import { redirect } from 'next/navigation';
@@ -45,7 +47,7 @@ export const userService = {
   },
   async signup(data: SignupRequest): Promise<SignupResponse> {
     try {
-      const response = await api.post<SignupResponse>('/api/user/signup', data);
+      const response = await api.post<SignupResponse>('/api/signup', data);
       return response.data;
     } catch (error) {
       if (error instanceof Error) {
@@ -100,22 +102,20 @@ export const userService = {
   },
 
   async checkUserIdExist(userId: string): Promise<CheckUserIdResponse> {
-    console.log('params : ' + userId);
     try {
       const response = await api.get('/api/check/user', {
         params: { userId },
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log('status: ' + error.response?.status);
         console.log('message: ' + error.response?.data.message);
         alert('checkUserIdExist 에러 발생');
-        return {} as LogoutResponse;
+        return {} as CheckUserIdResponse;
       } else {
         alert('(오류발생)다시 시도해주세요.');
-        return {} as LogoutResponse;
+        return {} as CheckUserIdResponse;
       }
     }
   },
@@ -133,6 +133,35 @@ export const userService = {
       } else {
         alert('(오류발생)다시 시도해주세요.');
         return {} as UserInfoResponse;
+      }
+    }
+  },
+
+  async editUserPwd(data: EditUserPwdRequest): Promise<EditUserPwdResponse> {
+    try {
+      const response = await api.patch<EditUserPwdResponse>(
+        '/api/user/edit/change-pwd',
+        data
+      );
+      return {
+        success: true,
+        message: '비밀번호가 변경되었습니다.',
+      };
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const message = error.response?.data.message;
+        console.log('status: ' + error.response?.status);
+        console.log('message: ' + message);
+        return {
+          success: false,
+          message,
+        };
+
+      } else {
+        return {
+          success: false,
+          message: "(시스템 오류) 다시 시도해주세요",
+        };
       }
     }
   },

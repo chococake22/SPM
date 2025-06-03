@@ -5,7 +5,6 @@ import { userService } from '@/services/user.service';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import InputText from '@/components/InputText';
-import TestModal, { ModalRef } from '@/components/modal/TestModal';
 import { UserInfoData, UserInfoResponse } from '@/types/user/type';
 import Button from '@/components/common/Button';
 
@@ -27,23 +26,11 @@ export default function Settings() {
     address: user?.address
   });
 
-  const handleLogout = async () => {
-    if (confirm('로그아웃 하시겠습니까?')) {
-      try {
-        const response = await userService.logout();
-        if(!response) {
-          return <div>데이터가 없습니다.</div>
-        }
-        alert(response.message);
-        // 로컬 스토리지에서 사용자 정보 삭제
-        localStorage.removeItem('userInfo');
-        // 로그아웃을 하고 나면 뒤로 갈 수 없어야 해서 replace 사용
-        router.replace('/login');
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
+  const checkPwdRegex = (pwd: string): boolean => {
+    const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    return pwdRegex.test(pwd)
+}
+        
 
   const getUser = async () => {
     if(!user) return;
@@ -87,31 +74,38 @@ export default function Settings() {
     }
   }, [user]);
 
-  // 회원 정보 수정
-  const handleEditUserInfo = async () => {
-    if(confirm("회원 정보를 수정하시겠습니까?")) {
+  // 비밀번호 수정
+  const handleEditPwd = async () => {
+    if(confirm("비밀번호를 수정하시겠습니까?")) {
       try {
         const param = {
-          userId: userData.userId,
-          username: userData.username,
-          phone: userData.phone,
-          address: userData.address,
+          userId: user?.userId,
+          nowPwd: formData.nowPwd,
+          newPwd: formData.newPwd,
+          newPwdConfirm: formData.newPwdConfirm,
         };
 
+
+        if (!checkPwdRegex(formData.newPwd) || !checkPwdRegex(formData.newPwdConfirm)) {
+          alert("비밀번호 형식이 잘못되었습니다. (영문 소문자, 대문자, 숫자, 특수문자 조합으로 최소 8자리 이상)")
+          return;
+        }
+
+        if (formData.newPwd !== formData.newPwdConfirm) {
+          alert('두 비밀번호가 다릅니다.');
+          return;
+        }
+
+        console.log(param)
+
         // user 정보 가져오는 api 호출
-        const response = await userService.editUserInfo(param);
+        const response = await userService.editUserPwd(param);
 
-        if(response.status === 200) {
-          // 필요한 데이터만 UserInfo에 가져다가 사용함.
-          const data = {
-            userId: response.data.userId,
-            username: response.data.username,
-            phone: response.data.phone,
-            address: response.data.address,
-          };
-
-          setUserInfo(data);
-          alert(response.data.message)
+        if(response.success) {
+          console.log('response: ' + response.success);
+          alert(response.message)
+        } else {
+          alert(response.message)
         }
       } catch (error) {
         console.log(error);
@@ -183,7 +177,7 @@ export default function Settings() {
             />
           </div>
           <div className="flex justify-center mt-10">
-            <Button buttonName="변경" onClick={handleEditUserInfo}></Button>
+            <Button buttonName="변경" onClick={handleEditPwd}></Button>
             <Button buttonName="뒤로가기" onClick={handleBackPage}></Button>
           </div>
         </form>

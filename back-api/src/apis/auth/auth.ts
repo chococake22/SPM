@@ -17,8 +17,6 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     // 데이터를 가져옴
     const response = await api.get(`${dbUrl}/users`, { params: { userId } }); // /items로 요청 (baseURL 자동 적용)
     
-    console.log(response)
-
     // 해당 ID가 있는지 먼저 확인.
     if (response.data[0]) {
       const userDb = response.data[0];
@@ -91,7 +89,10 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
       address: address
     });
 
-    res.status(200).json({ data: response });
+    const data = response.data;
+    const status = response.status;
+
+    res.status(200).json({ data: data, message: '가입이 완료되었습니다.', status: status });
   } catch (error) {
     console.error('Error fetching items:', error);
     res.status(500).json({ message: 'Error fetching items' });

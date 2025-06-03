@@ -39,6 +39,10 @@ const SignUpPage = () => {
       return;
     }
 
+    console.log(!isValidPwd(data.userPw));
+    console.log(!isValidPwd(data.userPwChk));
+    console.log(data.userPw !== data.userPwChk);
+
     if (
       !isValidPwd(data.userPw) ||
       !isValidPwd(data.userPwChk) ||
@@ -53,7 +57,7 @@ const SignUpPage = () => {
     if(confirm("가입하시겠습니까?")) {
       try {
         const response = await userService.signup(data);
-        if(response.status === 200) {
+        if(response.status === 201) {
           alert("가입이 완료되었습니다.")
           router.push('/login');
         }
@@ -87,7 +91,7 @@ const SignUpPage = () => {
   };
 
   const isValidPwd = (pwd: string): boolean => {
-    const pwdRegex = /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[a-z\d!@#$%^&*]{8,}$/;
+  const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     return pwdRegex.test(pwd);
   };
 
@@ -103,13 +107,14 @@ const SignUpPage = () => {
     }
 
     try {
-      const response = await userService.checkUserIdExist(data.userId);      
-      if(!response?.userId) {
+      const response = await userService.checkUserIdExist(data.userId);
+      // console.log("userId: " + response.data.userId)      
+      if(response.data?.userId) {
+        alert('이미 존재하는 아이디입니다.');
+        setIsCheckUserId(false);
+      } else {
         alert('사용할 수 있는 아이디입니다.');
         setIsCheckUserId(true);
-      } else {
-        alert("이미 존재하는 아이디입니다.")
-        setIsCheckUserId(false);
       }
 
     } catch (error) {

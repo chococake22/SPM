@@ -53,7 +53,7 @@ router.get('/info', async (req: Request, res: Response): Promise<void> => {
 });
 
 router.post(
-  '/user/edit',
+  '/edit',
   async (req: Request, res: Response): Promise<void> => {
     const { userId, username, phone, address } = req.body;
 
@@ -98,66 +98,63 @@ router.post(
   }
 );
 
-// router.patch('/user/change-pwd', async (req: Request, res: Response): Promise<void> => {
-//   const { userId, userPw } = req.body;
+router.patch('/edit/change-pwd', async (req: Request, res: Response): Promise<void> => {
+  const { userId, nowPwd, newPwd, newPwdConfirm } = req.body;
 
-//   console.log("post, '/login': " + userId + ', ' + userPw);
+  console.log("post, '/change-pwd': " + nowPwd + ', ' + newPwd);
 
-//   try {
-//     // 데이터를 가져옴
-//     const response = await api.get(`${dbUrl}/users`, { params: { userId } }); // /items로 요청 (baseURL 자동 적용)
+  try {
+    // 데이터를 가져옴
+    const dbUser = await api.get(`${dbUrl}/users`, { params: { userId } }); 
+    const userList = dbUser.data;
+    const id = userList[0].id;
 
-//     // 해당 ID가 있는지 먼저 확인.
-//     if (response.data[0]) {
-//       const userDb = response.data[0];
+    // 해당 ID가 있는지 먼저 확인.
+    if (id) {
+      const userDb = userList[0];
 
-//       const isValid = await bcrypt.compare(userPw, userDb.hashedPw);
+      const comparePwd = await bcrypt.compare(nowPwd, userDb.hashedPw);
 
-//       // bcrypt.compare는 비동기 함수이므로
-//       // await를 사용하여 비교 결과를 기다려야 함.
+      if (!comparePwd) {
+        res.status(400).json({
+          message: '현재 비밀번호가 틀렸습니다.',
+        });
+        return;
+      }
 
-//       console.log('isValid: ' + isValid);
+      const saltRounds = 10;
+      const newHashedPw = await bcrypt.hash(newPwd, saltRounds);
 
-//       if (isValid) {
-//         const [accessToken, refreshToken] = getTokenSet(userId, userPw);
+      console.log('비교: ' + nowPwd === newPwd);
+      console.log('nowPwd: ' + nowPwd);
+      console.log('newPwd: ' + newPwd);
 
-//         // access token을 httpOnly로 쿠키에 담아서 저장.
-//         res.cookie('accessToken', accessToken, {
-//           httpOnly: true,
-//           secure: false,
-//           sameSite: 'lax',
-//         });
+      if (nowPwd === newPwd) {
+        res.status(400).json({
+          message: '현재와 동일한 비밀번호를 사용할 수 없습니다.',
+        });
+        return;
+      }
 
-//         res.cookie('refreshToken', refreshToken, {
-//           httpOnly: true,
-//           secure: false,
-//           sameSite: 'lax',
-//         });
+      // 비밀번호 변경
+      const updateRes = await api.patch(`${dbUrl}/users/${id}`, {
+        hashedPw: newHashedPw,
+      });
 
-//         res.json({
-//           userId,
-//           username: userDb.username,
-//           profileImg: userDb.profileImg,
-//           address: userDb.address,
-//           data: {
-//             accessToken,
-//             refreshToken,
-//           },
-//         });
-//         return;
-//       }
-
-//       res.status(404).json({ message: '비밀번호가 틀렸습니다.' });
-//       return;
-//     } else {
-//       res.status(404).json({ message: '존재하지 않는 아이디입니다.' });
-//       return;
-//     }
-//   } catch (error) {
-//     console.error('Error fetching items:', error);
-//     res.status(500).json({ message: 'Error fetching items' });
-//     return;
-//   }
-// });
+      res.status(200).json({
+        message: '비밀번호가 변경되었습니다.',
+        data: updateRes.data,
+      });
+      return;
+    } else {
+      res.status(404).json({ message: '존재하지 않는 아이디입니다.' });
+      return;
+    }
+  } catch (error) {
+    console.error('Error fetching items:', error);
+    res.status(500).json({ message: 'Error fetching items' });
+    return;
+  }
+});
 
 export default router;
