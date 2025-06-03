@@ -6,12 +6,12 @@ const secretKey = process.env.JWT_SECRET as string;
 
 // 액세스 토큰 발급
 export const generateAccessToken = (payload: object) => {
-  return jwt.sign(payload, secretKey, { expiresIn: '10s' });
+  return jwt.sign(payload, secretKey, { expiresIn: '20m' });
 };
 
 // 리프레시 토큰 발급
 export const generateRefreshToken = (payload: object) => {
-  return jwt.sign(payload, secretKey, { expiresIn: '10m' });
+  return jwt.sign(payload, secretKey, { expiresIn: '7d' });
 };
 
 // 토큰 검증

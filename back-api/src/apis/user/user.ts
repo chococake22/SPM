@@ -14,7 +14,7 @@ router.post('/logout', async (req: Request, res: Response): Promise<void> => {
     res.clearCookie('refreshToken');
     res.clearCookie('userInfo');
 
-    res.status(200).json({ message: 'Logout successful' });
+    res.status(200).json({ message: '로그아웃이 되었습니다.' });
   } catch (error) {
     console.error('Error fetching items:', error);
     res.status(500).json({ message: 'Error fetching items' });
@@ -113,7 +113,7 @@ router.patch('/edit/change-pwd', async (req: Request, res: Response): Promise<vo
     if (id) {
       const userDb = userList[0];
 
-      const comparePwd = await bcrypt.compare(nowPwd, userDb.hashedPw);
+      const comparePwd = await bcrypt.compare(nowPwd, userDb.userPw);
 
       if (!comparePwd) {
         res.status(400).json({
@@ -138,7 +138,7 @@ router.patch('/edit/change-pwd', async (req: Request, res: Response): Promise<vo
 
       // 비밀번호 변경
       const updateRes = await api.patch(`${dbUrl}/users/${id}`, {
-        hashedPw: newHashedPw,
+        userPw: newHashedPw,
       });
 
       res.status(200).json({

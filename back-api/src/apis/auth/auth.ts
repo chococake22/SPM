@@ -21,7 +21,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     if (response.data[0]) {
       const userDb = response.data[0];
 
-      const isValid = await bcrypt.compare(userPw, userDb.hashedPw);
+      const isValid = await bcrypt.compare(userPw, userDb.userPw);
 
       // bcrypt.compare는 비동기 함수이므로
       // await를 사용하여 비교 결과를 기다려야 함.
