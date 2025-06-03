@@ -20,11 +20,11 @@ const Home = () => {
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-    const { userInfo, deleteUserInfo } = useUserInfo2();
+  const { userInfo, deleteUserInfo } = useUserInfo2();
 
-      useEffect(() => {
-        console.log('userInfo - /: ' + userInfo.userId);
-      }, [userInfo]);
+  useEffect(() => {
+    console.log('userInfo - /: ' + userInfo.userId);
+  }, [userInfo]);
 
 
   // 맨 처음 렌더링이 될 때에는 함수가 실행되지는 않고 정의만 된다.
@@ -46,12 +46,14 @@ const Home = () => {
 
       flushSync(() => {
         if (pageNumber === 1) {
-          setItemList(response);
+          console.log(response.data)
+          setItemList(response.data);
         } else {
           // 기존꺼에 새로운 가져온 데이터를 추가해서 배열을 만들었음.
           // 여기서 참조를 했음. 이전의 것인 prevItems를 그대로 복사하고 거기에 response를 더했기 때문에 아예 새로 만들어진 것이라고 봄.
           // 그래서 아래 ItemList를 dependency로 하고 있는 useMemo가 동작을 하고 있는 것임.
-          setItemList((prevItems) => [...prevItems, ...response]);
+          const items = response.data;
+          setItemList((prevItems) => [...prevItems, ...items]);
         }
       });
     } catch (error) {
@@ -71,7 +73,10 @@ const Home = () => {
   // 데이터를 가져와서 정렬하기.
   const sortedItemList = useMemo(() => {
     console.log('다시 가져옴');
+    console.log(itemList.data)
     console.log(itemList);
+    if (!Array.isArray(itemList)) return [];
+
     // itemList를 가져와서 sorting
     // id는 number 타입이므로 연산을 통해 오름차순으로 정렬함.
     return [...itemList].sort((a, b) => a.id - b.id);
@@ -111,9 +116,12 @@ const Home = () => {
     };
   }, [loadMoreItems, hasMore]);
 
+  if(!itemList) {
+    <div>데이터가 없습니다.</div>
+  }
   
 
-  return (
+  return itemList && (
     <div className="mt-11 mb-11 flex flex-col space-y-10">
       {sortedItemList.map((entry, index) => (
         <ItemBox

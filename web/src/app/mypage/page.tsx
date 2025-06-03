@@ -68,24 +68,24 @@ export default function Mypage() {
           ITEMS_PER_PAGE
         );
 
-        if(!response) {
-          return <div>데이터가 없습니다.</div>
-        }
+
+
 
         // 전체 개수 < 해당 페이지 수
         // 페이지가 더 없음.
         if (response.length < ITEMS_PER_PAGE) {
           setHasMore(false);
-        }
+        };
 
         flushSync(() => {
           if (pageNumber === 1) {
-            setItemList(response);
+            setItemList(response.data);
           } else {
             // 기존꺼에 새로운 가져온 데이터를 추가해서 배열을 만들었음.
             // 여기서 참조를 했음. 이전의 것인 prevItems를 그대로 복사하고 거기에 response를 더했기 때문에 아예 새로 만들어진 것이라고 봄.
             // 그래서 아래 ItemList를 dependency로 하고 있는 useMemo가 동작을 하고 있는 것임.
-            setItemList((prevItems) => [...prevItems, ...response]);
+            const items = response.data;
+            setItemList((prevItems) => [...prevItems, ...items]);
           }
         });
       } catch (error) {
@@ -108,10 +108,12 @@ export default function Mypage() {
 
   const sortedItemList = useMemo(() => {
     console.log('다시 가져옴');
-    console.log(itemList);
-    // itemList를 가져와서 sorting
-    // id는 number 타입이므로 연산을 통해 오름차순으로 정렬함.
-    return [...itemList].sort((a, b) => a.id - b.id);
+    const items = itemList.data;
+    if(items) {
+      // itemList를 가져와서 sorting
+      // id는 number 타입이므로 연산을 통해 오름차순으로 정렬함.
+      return [...items].sort((a, b) => a.id - b.id);
+    }
   }, [itemList]);
 
   // 데이터 요청
@@ -127,15 +129,24 @@ export default function Mypage() {
 
   useEffect(() => {
     console.log('Component rendered');
+    console.log(sortedItemList);
   }, [sortedItemList]);
 
-  if (user === null) {
-    return (
-      <div className="flex w-screen h-screen justify-center items-center">
-        <div>Loading...</div> {/* 로딩 상태 표시 */}
-      </div>
-    );
-  }
+  // if (user === null) {
+  //   return (
+  //     <div className="flex w-screen h-screen justify-center items-center">
+  //       <div>Loading...</div> {/* 로딩 상태 표시 */}
+  //     </div>
+  //   );
+  // }
+
+  // if (itemList.length === 0) {
+  //   return (
+  //     <div className="flex w-screen h-screen justify-center items-center">
+  //       <div>데이터가 없습니다.</div> {/* 로딩 상태 표시 */}
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex flex-col w-screen h-screen justify-center items-center">
@@ -144,10 +155,12 @@ export default function Mypage() {
           <div className="flex w-full h-[20%] mt-9">
             <div className="flex border-2 w-[32%] justify-center items-center">
               <div className="w-[80%] h-[80%] rounded-full overflow-hidden">
-                {user?.profileImg && <img
-                  src={`${user.profileImg}`}
-                  className="w-full h-full object-contain"
-                />}
+                {user?.profileImg && (
+                  <img
+                    src={`${user.profileImg}`}
+                    className="w-full h-full object-contain"
+                  />
+                )}
               </div>
             </div>
             <div className="flex border-2 w-[70%] justify-around items-center">
@@ -193,20 +206,21 @@ export default function Mypage() {
             </div>
             <div className="w-full h-full">
               <div className="grid grid-cols-3">
-                {sortedItemList.map((item, index) => (
-                  <div
-                    key={index}
-                    className="w-full h-[200px] border-2 box-border border-2"
-                    onClick={() => openModal(item.itemImg)}
-                  >
-                    {/* <div> */}
-                    <img
-                      src={`/testImages/${item.itemImg}`}
-                      className="w-full h-full"
-                    />
-                    {/* </div> */}
-                  </div>
-                ))}
+                {itemList.length !== 0 &&
+                  sortedItemList.map((item, index) => (
+                    <div
+                      key={index}
+                      className="w-full h-[200px] border-2 box-border border-2"
+                      onClick={() => openModal(item.itemImg)}
+                    >
+                      {/* <div> */}
+                      <img
+                        src={`/testImages/${item.itemImg}`}
+                        className="w-full h-full"
+                      />
+                      {/* </div> */}
+                    </div>
+                  ))}
               </div>
               {selectedImage && (
                 <div
