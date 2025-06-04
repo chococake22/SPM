@@ -15,6 +15,9 @@ dotenv.config({
 });
 const app = express();
 const allowedOrigins = process.env.WHITE_LIST;
+const JWT_SECRET = process.env.JWT_SECRET;
+
+console.log(JWT_SECRET);
 
 // origin 옵션에 배열 넣으면 정확히 이 리스트만 허용됩니다.
 app.use(
