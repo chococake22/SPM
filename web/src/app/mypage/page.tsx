@@ -7,7 +7,7 @@ import { UserContext } from '@/hook/UserContext';
 import { createContext } from 'react';
 import itemService from '@/services/item.service';
 import { flushSync } from 'react-dom';
-import { ItemListResponse } from '@/types/item/type';
+import { ItemListResponse, Item } from '@/types/item/type';
 
 interface Tab {
   label: string;
@@ -23,7 +23,7 @@ export default function Mypage() {
   const [activeTab, setActiveTab] = useState(0);
   const [tabData, setTabData] = useState<{ index: number; img: string }[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [itemList, setItemList] = useState<ItemListResponse[]>([]);
+  const [itemList, setItemList] = useState<Item[]>([]);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isTest, setIsTest] = useState<boolean>(false);
@@ -68,23 +68,23 @@ export default function Mypage() {
           ITEMS_PER_PAGE
         );
 
-        if (!response) {
+        if (!response?.data) {
           return <div>없습니다</div>
         }
-          if (response.length < ITEMS_PER_PAGE) {
+          if (response.data.length < ITEMS_PER_PAGE) {
             // 전체 개수 < 해당 페이지 수
             // 페이지가 더 없음.
             setHasMore(false);
           };
 
         flushSync(() => {
+          const items = response.data ?? [];
+          if (!items) return; // undefined일 경우 아무 작업도 하지 않음
+
           if (pageNumber === 1) {
-            setItemList(response);
+            console.log(items);
+            setItemList(items);
           } else {
-            // 기존꺼에 새로운 가져온 데이터를 추가해서 배열을 만들었음.
-            // 여기서 참조를 했음. 이전의 것인 prevItems를 그대로 복사하고 거기에 response를 더했기 때문에 아예 새로 만들어진 것이라고 봄.
-            // 그래서 아래 ItemList를 dependency로 하고 있는 useMemo가 동작을 하고 있는 것임.
-            const items = response;
             setItemList((prevItems) => [...prevItems, ...items]);
           }
         });

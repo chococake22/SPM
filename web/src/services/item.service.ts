@@ -4,13 +4,13 @@ import { redirect } from 'next/navigation';
 import { AxiosError } from 'axios';
 
 const itemService = {
-  async getItems(offset: number, limit: number): Promise<ItemListResponse[] | undefined> {
+  async getItems(offset: number, limit: number): Promise<ItemListResponse | undefined> {
     const params = {
       offset: offset,
       limit: limit,
     };
     try {
-      const response = await api.post<ItemListResponse[]>(
+      const response = await api.post<ItemListResponse>(
         '/api/item/getItemList',
         params
       );
@@ -37,9 +37,9 @@ const itemService = {
     username: string | undefined,
     offset: number,
     limit: number
-  ): Promise<ItemListResponse[] | undefined> {
+  ): Promise<ItemListResponse | undefined> {
     try {
-      const response = await api.get<ItemListResponse[]>(
+      const response = await api.get<ItemListResponse>(
         '/api/item/getUserItemList',
         {
           params: {

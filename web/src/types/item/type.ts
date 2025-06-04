@@ -1,4 +1,8 @@
 export interface ItemListResponse {
+  data: Item[]
+}
+
+export interface Item {
   imageInfo: string;
   username: string;
   profileImg: string;

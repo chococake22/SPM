@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import ItemBox from '@/components/item/ItemBox';
 import itemService from '@/services/item.service';
-import { ItemListResponse } from '@/types/item/type';
+import { ItemListResponse, Item } from '@/types/item/type';
 import { flushSync } from 'react-dom';
 import { useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -16,7 +16,7 @@ import useUserInfo2 from '@/hook/UseUserInfo2';
 const ITEMS_PER_PAGE = 3;
 
 const Home = () => {
-  const [itemList, setItemList] = useState<ItemListResponse[]>([]);
+  const [itemList, setItemList] = useState<Item[]>([]);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
@@ -36,23 +36,22 @@ const Home = () => {
       // 전체 개수 < 해당 페이지 수
       // 페이지가 더 없음.
 
-      if(!response) {
+      if(!response?.data) {
         return <div>데이터가 없습니다.</div>
       }
 
-      if (response.length < ITEMS_PER_PAGE) {
+      if (response.data.length < ITEMS_PER_PAGE) {
         setHasMore(false);
       }
 
       flushSync(() => {
+        const items = response.data ?? [];
+        if (!items) return; // undefined일 경우 아무 작업도 하지 않음
+
         if (pageNumber === 1) {
-          console.log(response)
-          setItemList(response);
+          console.log(items);
+          setItemList(items);
         } else {
-          // 기존꺼에 새로운 가져온 데이터를 추가해서 배열을 만들었음.
-          // 여기서 참조를 했음. 이전의 것인 prevItems를 그대로 복사하고 거기에 response를 더했기 때문에 아예 새로 만들어진 것이라고 봄.
-          // 그래서 아래 ItemList를 dependency로 하고 있는 useMemo가 동작을 하고 있는 것임.
-          const items = response;
           setItemList((prevItems) => [...prevItems, ...items]);
         }
       });
