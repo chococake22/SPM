@@ -11,6 +11,9 @@ import { verifyAccessToken } from './apis/common/authRouter';
 dotenv.config();
 const app = express();
 
+console.log('JWT_SECRET:', process.env.JWT_SECRET || 'JWT_SECRET is NOT set');
+
+
 // env로 빼기
 app.use(
   cors({
