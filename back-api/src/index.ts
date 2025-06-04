@@ -11,6 +11,7 @@ import { verifyAccessToken } from './apis/common/authRouter';
 dotenv.config();
 const app = express();
 
+// env로 빼기
 app.use(
   cors({
     origin: [
