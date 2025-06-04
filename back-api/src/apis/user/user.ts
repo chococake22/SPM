@@ -3,7 +3,7 @@ import api from '../../../../web/src/lib/axios'; // Axios 인스턴스 가져오
 import { generateAccessToken, generateRefreshToken } from '../../utils/jwt';
 import bcrypt from 'bcrypt';
 
-const dbUrl = process.env.DB_HOST || 'http://localhost:3002';
+const dbUrl = process.env.DB_URL || 'http://localhost:3002';
 
 const router = Router();
 
