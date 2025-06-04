@@ -11,7 +11,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import { Mousewheel } from 'swiper/modules';
-import useUserInfo2 from '@/hook/useUserInfo';
+import useUserInfo2 from '@/hook/UseUserInfo2';
 
 const ITEMS_PER_PAGE = 3;
 

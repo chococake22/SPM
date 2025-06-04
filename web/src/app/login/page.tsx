@@ -7,7 +7,7 @@ import { LoginForm, LoginResponse } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
 import { useUserInfo} from '@/hook/UserContext';
 import Button from '@/components/common/Button';
-import useUserInfo2 from '@/hook/useUserInfo';
+import useUserInfo2 from '@/hook/UseUserInfo2';
 
 const LoginPage = () => {
   const { setUser } = useUserInfo();

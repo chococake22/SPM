@@ -1,6 +1,6 @@
 "use client"
 
-import useUserInfo2 from '@/hook/useUserInfo';
+import useUserInfo2 from '@/hook/UseUserInfo2';
 
 import {
   useCallback,

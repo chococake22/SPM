@@ -24,7 +24,7 @@ const defaultState = { userId: '', username: '', phone: '', address: ''}
 /**
  * persist를 이용해서 로컬 스토리지에 user 정보 저장(안하면 새로고침 시 정보 없어짐)
  */
-const useUserInfo2 = create<UserInfoState & UserInfoActions>()(
+const UseUserInfo2 = create<UserInfoState & UserInfoActions>()(
   persist(
       (set) => ({
       userInfo: defaultState,
@@ -41,4 +41,4 @@ const useUserInfo2 = create<UserInfoState & UserInfoActions>()(
   )
 );
 
-export default useUserInfo2;
+export default UseUserInfo2;

@@ -2,7 +2,7 @@ import LinkButton from './LinkButton';
 import Link from 'next/link';
 import Image from 'next/image';
 
-const topNav = () => {
+const TopNav = () => {
   return (
     <div>
       <nav className="flex fixed w-full justify-evenly border-b-2 align-middle items-center bg-slate-100">
@@ -30,4 +30,4 @@ const topNav = () => {
   );
 };
 
-export default topNav;
+export default TopNav;

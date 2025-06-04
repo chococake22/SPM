@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-const bottomNav = () => {
+const BottomNav = () => {
   return (
     <div className="border-t-2 fixed bg-slate-200 w-full h-[5%] bottom-0 shadow-lg shadow-slate-500/50">
       <div className="flex items-center justify-center h-full">
@@ -39,4 +39,4 @@ const bottomNav = () => {
   );
 };
 
-export default bottomNav;
+export default BottomNav;
