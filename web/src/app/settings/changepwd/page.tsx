@@ -138,10 +138,10 @@ export default function Settings() {
       <div>Loading...</div>
     </div>
   ) : (
-    <div className="flex w-screen h-screen justify-center items-center">
+    <div className="flex w-full h-full justify-center items-center">
       <div className="flex flex-col w-[50%] h-[50%] justify-around">
         <form>
-          <div className="flex justify-center mb-3">
+          <div className="flex justify-center">
             <span className="text-3xl">비밀번호 변경</span>
           </div>
           <div>

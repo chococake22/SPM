@@ -122,7 +122,7 @@ const Home = () => {
   
 
   return itemList && (
-    <div className="mt-11 mb-11 flex flex-col space-y-10">
+    <div className="flex flex-col">
       {sortedItemList.map((entry, index) => (
         <ItemBox
           key={index}

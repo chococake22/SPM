@@ -68,9 +68,6 @@ export default function Mypage() {
           ITEMS_PER_PAGE
         );
 
-
-
-
         // 전체 개수 < 해당 페이지 수
         // 페이지가 더 없음.
         if (response.length < ITEMS_PER_PAGE) {
@@ -95,24 +92,23 @@ export default function Mypage() {
     [user, page, num]
   );
 
-    const prevRef = useRef<typeof getUserItems | null>(null);
+  const prevRef = useRef<typeof getUserItems | null>(null);
 
-    useEffect(() => {
-      if (prevRef.current !== getUserItems) {
-        console.log('🆕 getUserItems 함수가 새로 만들어졌습니다.');
-      } else {
-        console.log('✅ getUserItems 함수는 이전과 동일합니다.');
-      }
-      prevRef.current = getUserItems;
-    }, [getUserItems]);
+  useEffect(() => {
+    if (prevRef.current !== getUserItems) {
+      console.log('🆕 getUserItems 함수가 새로 만들어졌습니다.');
+    } else {
+      console.log('✅ getUserItems 함수는 이전과 동일합니다.');
+    }
+    prevRef.current = getUserItems;
+  }, [getUserItems]);
 
   const sortedItemList = useMemo(() => {
     console.log('다시 가져옴');
-    const items = itemList.data;
-    if(items) {
+    if (itemList && Array.isArray(itemList)) {
       // itemList를 가져와서 sorting
       // id는 number 타입이므로 연산을 통해 오름차순으로 정렬함.
-      return [...items].sort((a, b) => a.id - b.id);
+      return [...itemList].sort((a, b) => a.id - b.id);
     }
   }, [itemList]);
 
@@ -127,40 +123,22 @@ export default function Mypage() {
     }
   }, [user, page]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
 
-  useEffect(() => {
-    console.log('Component rendered');
-    console.log(sortedItemList);
-  }, [sortedItemList]);
-
-  // if (user === null) {
-  //   return (
-  //     <div className="flex w-screen h-screen justify-center items-center">
-  //       <div>Loading...</div> {/* 로딩 상태 표시 */}
-  //     </div>
-  //   );
-  // }
-
-  // if (itemList.length === 0) {
-  //   return (
-  //     <div className="flex w-screen h-screen justify-center items-center">
-  //       <div>데이터가 없습니다.</div> {/* 로딩 상태 표시 */}
-  //     </div>
-  //   );
-  // }
-
-  return (
-    <div className="flex flex-col w-screen h-screen justify-center items-center">
-      <div className="flex flex-col w-screen h-screen">
+  return user && (
+    <div className="flex flex-col h-screen justify-center items-center">
+      <div className="flex flex-col h-screen">
         <div className="flex flex-col w-full h-full">
-          <div className="flex w-full h-[20%] mt-9">
-            <div className="flex border-2 w-[32%] justify-center items-center">
-              <div className="w-[80%] h-[80%] rounded-full overflow-hidden">
+          <div className="flex w-full h-[20%]">
+            <div className="flex flex-col gap-2 border-2 w-[32%] justify-center items-center">
+              <div className="flex w-[60%] h-[60%] rounded-full overflow-hidden border-[1px]">
                 {user?.profileImg && (
                   <img
                     src={`${user.profileImg}`}
                     className="w-full h-full object-contain"
                   />
                 )}
+              </div>
+              <div>
+                <span>{user?.username}</span>
               </div>
             </div>
             <div className="flex border-2 w-[70%] justify-around items-center">
@@ -206,21 +184,18 @@ export default function Mypage() {
             </div>
             <div className="w-full h-full">
               <div className="grid grid-cols-3">
-                {itemList.length !== 0 &&
-                  sortedItemList.map((item, index) => (
-                    <div
-                      key={index}
-                      className="w-full h-[200px] border-2 box-border border-2"
-                      onClick={() => openModal(item.itemImg)}
-                    >
-                      {/* <div> */}
-                      <img
-                        src={`/testImages/${item.itemImg}`}
-                        className="w-full h-full"
-                      />
-                      {/* </div> */}
-                    </div>
-                  ))}
+                {sortedItemList.map((item, index) => (
+                  <div
+                    key={index}
+                    className="w-full h-[200px] border-2 box-border border-2"
+                    onClick={() => openModal(item.itemImg)}
+                  >
+                    <img
+                      src={`/testImages/${item.itemImg}`}
+                      className="w-full h-full"
+                    />
+                  </div>
+                ))}
               </div>
               {selectedImage && (
                 <div
@@ -243,5 +218,5 @@ export default function Mypage() {
         </div>
       </div>
     </div>
-  );
-}
+  )
+};

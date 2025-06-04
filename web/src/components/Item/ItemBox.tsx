@@ -21,9 +21,9 @@ interface ItemBoxProps {
 
 const itemBox: React.FC<ItemBoxProps> = ({ entry }) => {
   return (
-    <div className="flex items-center justify-center w-full h-full border-y-2">
+    <div className="flex items-center justify-center w-full h-full">
       <div className="flex justify-center items-center w-full h-full">
-        <div className="w-full h-[500px]">
+        <div className="w-full h-auto">
           <div className="h-[10%]">
             <ItemUserProfile
               userId={entry.username}

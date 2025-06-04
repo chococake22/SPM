@@ -9,6 +9,7 @@ import TestModal, { ModalRef } from '@/components/modal/TestModal';
 import { UserInfoResponse, UserInfoData } from '@/types/user/type';
 import Button from '../../components/common/Button';
 import Link from 'next/link';
+import Swal from 'sweetalert2';
 
 export default function Settings() {
   const router = useRouter();
@@ -23,13 +24,13 @@ export default function Settings() {
   });
 
   const handleLogout = async () => {
-    if (confirm('로그아웃 하시겠습니까?')) {
+    // if (confirm('로그아웃 하시겠습니까?')) {
       try {
         const response = await userService.logout();
         if (!response) {
           return <div>데이터가 없습니다.</div>;
         }
-        alert(response.message);
+        // alert(response.message);
         // 로컬 스토리지에서 사용자 정보 삭제
         localStorage.removeItem('userInfo');
         localStorage.removeItem('user-zustand');
@@ -38,7 +39,7 @@ export default function Settings() {
       } catch (error) {
         console.error(error);
       }
-    }
+    // }
   };
 
   const getUser = async () => {
@@ -124,6 +125,26 @@ export default function Settings() {
     modalRef.current?.open();
   };
 
+  const handleClick = () => {
+    Swal.fire({
+      title: '로그아웃하시겠습니까?',
+      // text: '이 작업은 되돌릴 수 없습니다!',
+      // icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: '로그아웃',
+      cancelButtonText: '취소',
+      confirmButtonColor: '#ef4444', // Tailwind red-500
+      cancelButtonColor: '#9ca3af', // Tailwind gray-400
+      customClass: {
+        popup: 'w-[70%] h-[40%]', // Tailwind로 가로 300px, 세로 200px 설정
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire('로그아웃 완료!');
+        handleLogout();
+      }
+    });
+  };
 
   return (
     <div className="max-w-lg mx-auto mt-6 space-y-6">
@@ -243,7 +264,7 @@ export default function Settings() {
           </li>
           <li
             className="flex items-center justify-between px-4 py-3 text-red-600 font-semibold cursor-pointer"
-            onClick={handleLogout}
+            onClick={handleClick}
           >
             <span>로그아웃</span>
           </li>
@@ -252,6 +273,12 @@ export default function Settings() {
           </li>
         </ul>
       </div>
+      {/* <button
+        onClick={handleClick}
+        className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded"
+      >
+        삭제하기
+      </button> */}
     </div>
   );
 

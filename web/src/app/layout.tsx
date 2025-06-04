@@ -31,15 +31,15 @@ export default function RootLayout({
     <html lang="en">
       <body className="flex flex-col h-screen">
         <UserProvider>
-          <header>
+          <header className="h-9 flex-shrink-0">
             <TopNav />
           </header>
 
-          <main>
+          <main className="flex-grow overflow-auto">
             {/* 메인 콘텐츠는 가능한 공간을 채웁니다. */}
             {children}
           </main>
-          <footer>
+          <footer className="h-12 flex-shrink-0">
             <BottomNav />
           </footer>
         </UserProvider>

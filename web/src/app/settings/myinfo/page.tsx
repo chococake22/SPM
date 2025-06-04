@@ -132,7 +132,7 @@ export default function Settings() {
       <div>Loading...</div>
     </div>
   ) : (
-    <div className="flex w-screen h-screen justify-center items-center">
+    <div className="flex w-full h-full justify-center items-center">
       <div className="flex flex-col w-[50%] h-[40%] justify-around">
         <div className="flex justify-center">
           <span className="text-3xl">사용자 정보</span>

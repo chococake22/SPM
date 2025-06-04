@@ -119,7 +119,7 @@
       "heartCnt": 5,
       "commentCnt": 2,
       "itemName": "포켓몬8",
-      "description": "이거는 포켓몬8"
+      "description": "이거는 포켓몬8 포켓몬9zxcvxcvzxcvzxcvzxcvzxcvzxcvzxcvzxcvzfadsfasdfassdfsdfsdfsdfsdfsfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdfasfasdfasdfasd"
     },
     {
       "id": "12",
@@ -130,19 +130,10 @@
       "heartCnt": 5,
       "commentCnt": 2,
       "itemName": "포켓몬9",
-      "description": "이거는 포켓몬9"
+      "description": "이거는 포켓몬9zxcvxcvzxcvzxcvzxcvzxcvzxcvzxcvzxcvzfadsfasdfassdfsdfsdfsdfsdfsfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfdfasfasdfasdfasd"
     }
   ],
   "users": [
-    {
-      "id": "5842",
-      "userId": "apple12@test.com",
-      "userPw": "$2b$10$lpkkBWlQANKfeDPoxcB4suQ05a64f4Nx5Q2SyU1uCGiLYDolZ.gU6",
-      "username": "애플1",
-      "phone": "123123123",
-      "profileImg": "/pngwing.com.png",
-      "address": "ㅁㄴㅇㄹㅁㄴㄹㅁㄴㅇㄹ"
-    },
     {
       "id": "91a3",
       "userId": "apple1@test.com",
@@ -409,6 +400,23 @@
       "username": "애플01",
       "phone": "01012341234",
       "address": "서"
+    },
+    {
+      "id": "6206",
+      "userId": "apple12@test.com",
+      "userPw": "$2b$10$8H/GTP.iAB2TmU4PxHBnhe5DoyBo8x2tYUQEl2Vw06apzSpoBTlQK",
+      "username": "애플1",
+      "phone": "01012341234",
+      "profileImg": "/pngwing.com.png",
+      "address": "서울시 주소임 수조"
+    },
+    {
+      "id": "9be5",
+      "userId": "test1@test.com",
+      "userPw": "$2b$10$Yu/1lbhMYsPntjiLndHYdudD6Ki3O5ApOcrhonb75gOepRV7h4LPa",
+      "username": "테스트1",
+      "phone": "01012341234",
+      "address": "주소임ㄴㅇㄹㄴㅇㄹㄴㅇㄹ"
     }
   ]
 }
