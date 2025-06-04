@@ -19,6 +19,7 @@ interface ItemBoxProps {
   onClick?: (() => void);
 }
 
+
 const itemBox: React.FC<ItemBoxProps> = ({ entry }) => {
   return (
     <div className="flex items-center justify-center w-full h-full">

@@ -5,6 +5,7 @@ interface itemValuesProps {
   commentCnt: string;
 }
 
+
 const itemValues: React.FC<itemValuesProps> = ({ heartCnt, commentCnt }) => {
   return (
     <div className="flex items-center w-full h-full">

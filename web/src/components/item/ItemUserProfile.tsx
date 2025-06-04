@@ -5,6 +5,7 @@ interface ItemUserProfileProps {
   userId: string;
 }
 
+
 const itemUserProfile: React.FC<ItemUserProfileProps> = ({ profileImg, userId }) => {
   return (
     <div className="flex items-center w-full h-full">

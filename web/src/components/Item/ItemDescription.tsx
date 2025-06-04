@@ -17,6 +17,7 @@ const ItemDescription: React.FC<ItemDescriptionProps> = ({
     setShowFullText((prev) => !prev);
   };
 
+  
   return (
     <div className="w-full max-h-[200px]">
       <span className="ml-2">{itemName}</span>

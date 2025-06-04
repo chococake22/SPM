@@ -14,6 +14,7 @@ const ItemPhoto: React.FC<ItemPhotoProps> = ({ imageInfo }) => {
     setIsOpenedModal(img);
   };
 
+  
   const closeModal = () => {
     console.log('close');
     setIsOpenedModal(null);
