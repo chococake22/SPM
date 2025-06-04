@@ -6,13 +6,15 @@ import auth from '../src/apis/auth/auth';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import { verifyAccessToken } from './apis/common/authRouter';
+import path from 'path';
 
-dotenv.config();
+const env = process.env.NODE_ENV || 'development';
+
+dotenv.config({
+  path: path.resolve(__dirname, `../.env.${env}`),
+});
 const app = express();
-
-const allowedOrigins = (process.env.WHITE_LIST || '')
-  .split(',')
-  .map((origin) => origin.trim());
+const allowedOrigins = process.env.WHITE_LIST;
 
 // origin 옵션에 배열 넣으면 정확히 이 리스트만 허용됩니다.
 app.use(
@@ -37,7 +39,6 @@ app.use('/api/user', verifyAccessToken, user);
 
 // port 번호
 const port: number = 3001;
-const env = process.env.NODE_ENV || 'dev';
 
 app.listen(port, () =>
   console.log(`Server On!!! ENV: ${env},  Port: ${port} `)
