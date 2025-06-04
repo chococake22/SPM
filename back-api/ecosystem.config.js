@@ -1,14 +1,16 @@
+require('dotenv').config();
+
 module.exports = {
   apps: [
     {
       name: 'SPM-back',
       script: 'src/index.ts',
-      interpreter: 'ts-node',
+      interpreter: './node_modules/.bin/ts-node',
       env: {
-        NODE_ENV: 'production', // 선택
-        JWT_SECRET: '2309jsdaoxjcvklzxjakwehraiueshiuas932wkj3',
+        REDIS_PORT: process.env.REDIS_PORT,
+        DB_URL: process.env.DB_URL,
+        JWT_SECRET: process.env.JWT_SECRET,
       },
     },
   ],
 };
-
