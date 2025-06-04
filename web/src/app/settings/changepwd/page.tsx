@@ -12,7 +12,6 @@ import Button from '@/components/common/Button';
 export default function Settings() {
   const router = useRouter();
   const { user, setUser } = useUserInfo();
-  const modalRef = useRef<ModalRef>(null);
   const [ userInfo, setUserInfo ] = useState<UserInfoData>();
   const [formData, setFormData] = useState({
     nowPwd: '',
@@ -112,10 +111,6 @@ export default function Settings() {
       }
     }
   }
-
-  const openChangdPwdModal = () => {
-    modalRef.current?.open();
-  };
 
   const handleBackPage = () => {
     router.back();

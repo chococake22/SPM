@@ -46,13 +46,13 @@ const Home = () => {
 
       flushSync(() => {
         if (pageNumber === 1) {
-          console.log(response.data)
-          setItemList(response.data);
+          console.log(response)
+          setItemList(response);
         } else {
           // 기존꺼에 새로운 가져온 데이터를 추가해서 배열을 만들었음.
           // 여기서 참조를 했음. 이전의 것인 prevItems를 그대로 복사하고 거기에 response를 더했기 때문에 아예 새로 만들어진 것이라고 봄.
           // 그래서 아래 ItemList를 dependency로 하고 있는 useMemo가 동작을 하고 있는 것임.
-          const items = response.data;
+          const items = response;
           setItemList((prevItems) => [...prevItems, ...items]);
         }
       });
@@ -73,7 +73,7 @@ const Home = () => {
   // 데이터를 가져와서 정렬하기.
   const sortedItemList = useMemo(() => {
     console.log('다시 가져옴');
-    console.log(itemList.data)
+    console.log(itemList)
     console.log(itemList);
     if (!Array.isArray(itemList)) return [];
 

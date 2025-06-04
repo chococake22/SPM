@@ -68,20 +68,23 @@ export default function Mypage() {
           ITEMS_PER_PAGE
         );
 
-        // 전체 개수 < 해당 페이지 수
-        // 페이지가 더 없음.
-        if (response.length < ITEMS_PER_PAGE) {
-          setHasMore(false);
-        };
+        if (!response) {
+          return <div>없습니다</div>
+        }
+          if (response.length < ITEMS_PER_PAGE) {
+            // 전체 개수 < 해당 페이지 수
+            // 페이지가 더 없음.
+            setHasMore(false);
+          };
 
         flushSync(() => {
           if (pageNumber === 1) {
-            setItemList(response.data);
+            setItemList(response);
           } else {
             // 기존꺼에 새로운 가져온 데이터를 추가해서 배열을 만들었음.
             // 여기서 참조를 했음. 이전의 것인 prevItems를 그대로 복사하고 거기에 response를 더했기 때문에 아예 새로 만들어진 것이라고 봄.
             // 그래서 아래 ItemList를 dependency로 하고 있는 useMemo가 동작을 하고 있는 것임.
-            const items = response.data;
+            const items = response;
             setItemList((prevItems) => [...prevItems, ...items]);
           }
         });
@@ -184,7 +187,7 @@ export default function Mypage() {
             </div>
             <div className="w-full h-full">
               <div className="grid grid-cols-3">
-                {sortedItemList.map((item, index) => (
+                {sortedItemList?.map((item, index) => (
                   <div
                     key={index}
                     className="w-full h-[200px] border-2 box-border border-2"
