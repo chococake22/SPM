@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import ItemBox from '@/components/Item/ItemBox';
+import ItemBox from '@/components/item/ItemBox';
 import itemService from '@/services/item.service';
 import { ItemListResponse } from '@/types/item/type';
 import { flushSync } from 'react-dom';
