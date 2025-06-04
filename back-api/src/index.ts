@@ -43,4 +43,6 @@ app.use('/api/user', verifyAccessToken, user);
 // port 번호
 const port: number = 3001;
 
-app.listen(port, () => console.log(`Server On!!! Port: ${port}`));
+app.listen(port, () =>
+  console.log(`Server On!!! Port: ${port} ${process.env.JWT_SECRET} `)
+);
