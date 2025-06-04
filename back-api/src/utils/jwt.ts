@@ -7,7 +7,11 @@ dotenv.config({
   path: path.resolve(__dirname, `../.env.${env}`),
 });
 
+console.log("env: " + env)
+
 const secretKey = process.env.JWT_SECRET as string;
+
+console.log('secretKey: ' + secretKey);
 
 // 액세스 토큰 발급
 export const generateAccessToken = (payload: object) => {
