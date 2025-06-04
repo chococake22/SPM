@@ -7,24 +7,19 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import { verifyAccessToken } from './apis/common/authRouter';
 
-
 dotenv.config();
 const app = express();
 
-console.log('JWT_SECRET:', process.env.JWT_SECRET || 'JWT_SECRET is NOT set');
+const allowedOrigins = (process.env.WHITE_LIST || '')
+  .split(',')
+  .map((origin) => origin.trim());
 
-
-// env로 빼기
+// origin 옵션에 배열 넣으면 정확히 이 리스트만 허용됩니다.
 app.use(
   cors({
-    origin: [
-      'http://localhost:3000',
-      'http://183.101.164.221:3000',
-      'http://www.informationmst.com:3000',
-      'http://114.207.245.151:3000',
-    ], // 허용할 도메인
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // 허용할 HTTP 메서드
-    allowedHeaders: ['Content-Type', 'Authorization'], // 허용할 헤더
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   })
 );
@@ -42,7 +37,8 @@ app.use('/api/user', verifyAccessToken, user);
 
 // port 번호
 const port: number = 3001;
+const env = process.env.NODE_ENV || 'dev';
 
 app.listen(port, () =>
-  console.log(`Server On!!! Port: ${port} ${process.env.JWT_SECRET} `)
+  console.log(`Server On!!! ENV: ${env},  Port: ${port} `)
 );
