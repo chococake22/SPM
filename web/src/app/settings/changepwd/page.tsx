@@ -4,7 +4,7 @@ import { useUserInfo } from '@/hook/UserContext';
 import { userService } from '@/services/user.service';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
-import InputText from '@/components/InputText';
+import InputText from '../../../components/InputText';
 import { UserInfoData, UserInfoResponse } from '@/types/user/type';
 import Button from '@/components/common/Button';
 

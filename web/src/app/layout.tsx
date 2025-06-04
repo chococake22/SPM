@@ -1,8 +1,8 @@
 "use client"
 
 import "./global.css";
-import BottomNav from "../components/BottomNav"
-import TopNav from '../components/TopNav';
+import BottomNav from "@/components/BottomNav"
+import TopNav from '@/components/TopNav';
 import { usePathname } from 'next/navigation';
 import { UserProvider } from "@/hook/UserContext";
 import path from "path";

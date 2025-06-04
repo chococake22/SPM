@@ -6,7 +6,7 @@ import { userService } from '@/services/user.service';
 import { LoginForm, LoginResponse } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
 import { useUserInfo} from '@/hook/UserContext';
-import Button from '../../components/common/Button';
+import Button from '@/components/common/Button';
 import useUserInfo2 from '@/hook/useUserInfo';
 
 const LoginPage = () => {

@@ -417,6 +417,14 @@
       "username": "테스트1",
       "phone": "01012341234",
       "address": "주소임ㄴㅇㄹㄴㅇㄹㄴㅇㄹ"
+    },
+    {
+      "id": "dc32",
+      "userId": "tomato21@test.com",
+      "userPw": "$2b$10$5M4vAdMIWXRyrBTiCVPB3uEWzs451/Ja6JjxtCRYgg73o67CU6Ute",
+      "username": "토마토21",
+      "phone": "01012341234",
+      "address": "서울시 토마토구 토마토동"
     }
   ]
 }
