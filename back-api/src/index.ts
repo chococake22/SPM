@@ -17,6 +17,7 @@ app.use(
       'http://localhost:3000',
       'http://183.101.164.221:3000',
       'http://www.informationmst.com:3000',
+      'http://114.207.245.151:3000',
     ], // 허용할 도메인
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // 허용할 HTTP 메서드
     allowedHeaders: ['Content-Type', 'Authorization'], // 허용할 헤더
