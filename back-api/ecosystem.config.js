@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 module.exports = {
   apps: [
     {
@@ -7,10 +5,9 @@ module.exports = {
       script: 'src/index.ts',
       interpreter: 'ts-node',
       env: {
-        REDIS_PORT: process.env.REDIS_PORT,
-        DB_URL: process.env.DB_URL,
-        JWT_SECRET: process.env.JWT_SECRET,
+        NODE_ENV: 'production', // 선택
       },
     },
   ],
 };
+
