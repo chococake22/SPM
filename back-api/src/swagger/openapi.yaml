@@ -1,0 +1,25 @@
+openapi: 3.0.0
+info:
+  title: SPM API Document
+  version: 1.0.0
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /api/login:
+    $ref: './paths/noauth/login.yaml'
+  /api/signup:
+    $ref: './paths/noauth/signup.yaml'
+  /api/check/user:
+    $ref: './paths/noauth/checkUser.yaml'
+  /api/logout:
+    $ref: './paths/noauth/logout.yaml'
+  /api/user/info:
+    $ref: './paths/user/getUserInfo.yaml'
+  /api/user/edit:
+    $ref: './paths/user/editUserInfo.yaml'
+  /api/user/edit/pwd:
+    $ref: './paths/user/editUserPwd.yaml'

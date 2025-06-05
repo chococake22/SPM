@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     /* === 컴파일 경로 설정 === */
-    "rootDir": "src",           // TypeScript 소스가 들어있는 폴더
-    "outDir": "dist",           // 컴파일된 JavaScript 파일을 출력할 폴더
+    "rootDir": "src", // TypeScript 소스가 들어있는 폴더
+    "outDir": "dist", // 컴파일된 JavaScript 파일을 출력할 폴더
 
     /* === 공통 설정 === */
     "target": "es2016",
@@ -10,7 +10,8 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   },
 
 

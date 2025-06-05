@@ -1,0 +1,47 @@
+post:
+  tags:
+    - 회원가입 및 로그인(토큰 필요 없음)
+  summary: 로그인
+  requestBody:
+    description: 로그인 정보 입력
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+            userPw:
+              type: string
+          required: [userId, userPw]
+  responses:
+    '200':
+      description: 로그인 성공
+      content:
+        application/json:
+          example:
+            data:
+              userId: string
+              username: string
+              phone: string
+              address: string
+            message: 로그인에 성공했습니다.
+            status: 200
+            success: true
+    '404':
+      description: 아이디나 비밀번호가 틀림
+      content:
+        application/json:
+          example:
+            message: 아이디나 비밀번호가 틀립니다.
+            status: 404
+            success: false
+    '500':
+      description: 서버 오류 발생
+      content:
+        application/json:
+          example:
+            message: 서버 오류가 발생했습니다.
+            status: 500
+            success: false

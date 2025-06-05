@@ -1,0 +1,374 @@
+openapi: 3.0.0
+info:
+  title: SPM API Document
+  version: 1.0.0
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+paths:
+  /api/login:
+    post:
+      tags:
+        - 회원가입 및 로그인(토큰 필요 없음)
+      summary: 로그인
+      requestBody:
+        description: 로그인 정보 입력
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                userPw:
+                  type: string
+              required:
+                - userId
+                - userPw
+      responses:
+        '200':
+          description: 로그인 성공
+          content:
+            application/json:
+              example:
+                data:
+                  userId: string
+                  username: string
+                  phone: string
+                  address: string
+                message: 로그인에 성공했습니다.
+                status: 200
+                success: true
+        '404':
+          description: 아이디나 비밀번호가 틀림
+          content:
+            application/json:
+              example:
+                message: 아이디나 비밀번호가 틀립니다.
+                status: 404
+                success: false
+        '500':
+          description: 서버 오류 발생
+          content:
+            application/json:
+              example:
+                message: 서버 오류가 발생했습니다.
+                status: 500
+                success: false
+  /api/signup:
+    post:
+      tags:
+        - 회원가입 및 로그인(토큰 필요 없음)
+      summary: 회원가입
+      requestBody:
+        description: 회원가입 정보 입력
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                userPw:
+                  type: string
+                userPwChk:
+                  type: string
+                username:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string
+              required:
+                - userId
+                - userPw
+                - userPwChk
+                - username
+                - phone
+                - address
+      responses:
+        '201':
+          description: 회원가입 성공
+          content:
+            application/json:
+              example:
+                data:
+                  id: '1234'
+                  userId: user12@test.com
+                  userPw: password
+                  username: 사용자12
+                  phone: '01012341234'
+                  address: 서울시 테스트구 테스트동
+                message: 가입이 완료되었습니다.
+                status: 201
+                success: true
+        '400':
+          description: 잘못된 요청
+          content:
+            application/json:
+              example:
+                message: 잘못된 요청입니다.
+                status: 400
+                success: false
+        '500':
+          description: 서버 오류 발생
+          content:
+            application/json:
+              example:
+                message: 서버 오류가 발생했습니다.
+                status: 500
+                success: false
+  /api/check/user:
+    get:
+      tags:
+        - 회원가입 및 로그인(토큰 필요 없음)
+      summary: 아이디 중복 여부 확인
+      parameters:
+        - name: userId
+          in: query
+          description: 중복 확인할 아이디
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: 사용할 수 있는 아이디
+          content:
+            application/json:
+              example:
+                data:
+                  userId: user12@test.com
+                message: 사용할 수 있는 아이디입니다.
+                status: 201
+                success: true
+        '400':
+          description: 이미 사용중인 아이디
+          content:
+            application/json:
+              example:
+                message: 이미 사용중인 아이디입니다.
+                status: 400
+                success: false
+        '500':
+          description: 서버 오류 발생
+          content:
+            application/json:
+              example:
+                message: 서버 오류가 발생했습니다.
+                status: 500
+                success: false
+  /api/logout:
+    post:
+      tags:
+        - 회원가입 및 로그인(토큰 필요 없음)
+      summary: 로그아웃
+      requestBody:
+        description: 로그아웃
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: 회원가입 성공
+          content:
+            application/json:
+              example:
+                data:
+                  id: '1234'
+                  userId: user12@test.com
+                  userPw: password
+                  username: 사용자12
+                  phone: '01012341234'
+                  address: 서울시 테스트구 테스트동
+                message: 가입이 완료되었습니다.
+                status: 201
+                success: true
+        '400':
+          description: 잘못된 요청
+          content:
+            application/json:
+              example:
+                message: 잘못된 요청입니다.
+                status: 400
+                success: false
+        '500':
+          description: 서버 오류 발생
+          content:
+            application/json:
+              example:
+                message: 서버 오류가 발생했습니다.
+                status: 500
+                success: false
+  /api/user/info:
+    get:
+      tags:
+        - 회원정보
+      summary: 회원정보 가져오기
+      security:
+        - Access Token: []
+      parameters:
+        - name: userId
+          in: query
+          description: 해당 회원 정보 가져오기
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: 사용자 정보 가져오기 성공
+          content:
+            application/json:
+              example:
+                data:
+                  userId: user12@test.com
+                  username: 유저12
+                  phone: 1012341234
+                  profileImg: /test.png
+                  address: 테스트시 테스트구 테스트동
+                message: 사용자 정보 가져오기 성공
+                status: 200
+                success: true
+        '400':
+          description: 잘못된 요청
+          content:
+            application/json:
+              example:
+                message: 잘못된 요청입니다.
+                status: 400
+                success: false
+        '500':
+          description: 서버 오류 발생
+          content:
+            application/json:
+              example:
+                message: 서버 오류가 발생했습니다.
+                status: 500
+                success: false
+  /api/user/edit:
+    patch:
+      tags:
+        - 회원정보
+      summary: 회원정보 수정하기
+      security:
+        - Access Token: []
+      requestBody:
+        description: 회원정보 수정하기
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                username:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string
+              required:
+                - userId
+                - username
+                - phone
+                - address
+      responses:
+        '201':
+          description: 사용자 정보 수정 성공
+          content:
+            application/json:
+              example:
+                data:
+                  userId: user12@test.com
+                  username: 유저12
+                  phone: 1012341234
+                  address: 테스트시 테스트구 테스트동
+                message: 사용자 정보 가져오기 성공
+                status: 200
+                success: true
+        '404':
+          description: 잘못된 요청
+          content:
+            application/json:
+              example:
+                message: 잘못된 요청입니다.
+                status: 404
+                success: false
+        '500':
+          description: 서버 오류 발생
+          content:
+            application/json:
+              example:
+                message: 서버 오류가 발생했습니다.
+                status: 500
+                success: false
+  /api/user/edit/pwd:
+    patch:
+      tags:
+        - 회원정보
+      summary: 비밀번호 수정하기
+      security:
+        - Access Token: []
+      requestBody:
+        description: 비밀번호 수정하기
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                nowPwd:
+                  type: string
+                newPwd:
+                  type: string
+                newPwdConfirm:
+                  type: string
+              required:
+                - userId
+                - nowPwd
+                - newPwd
+                - newPwdConfirm
+      responses:
+        '201':
+          description: 사용자 정보 수정 성공
+          content:
+            application/json:
+              example:
+                data:
+                  userId: user12@test.com
+                message: 사용자 정보 가져오기 성공
+                status: 200
+                success: true
+        '400':
+          description: 잘못된 현재 비밀번호
+          content:
+            application/json:
+              example:
+                message: 현재 비밀번호가 잘못되었습니다.
+                status: 400
+                success: false
+        '404':
+          description: 존재하지 않는 아이디
+          content:
+            application/json:
+              example:
+                message: 존재하지 않는 아이디입니다.
+                status: 404
+                success: false
+        '500':
+          description: 서버 오류 발생
+          content:
+            application/json:
+              example:
+                message: 서버 오류가 발생했습니다.
+                status: 500
+                success: false

@@ -1,26 +1,14 @@
 import { Router, Request, Response } from 'express';
 import api from '../../../../web/src/lib/axios'; // Axios 인스턴스 가져오기
-import { generateAccessToken, generateRefreshToken } from '../../utils/jwt';
 import bcrypt from 'bcrypt';
 
 const dbUrl = process.env.DB_URL || 'http://localhost:3002';
 
 const router = Router();
 
-router.post('/logout', async (req: Request, res: Response): Promise<void> => {
-  try {
-    // 토큰 삭제
-    res.clearCookie('accessToken');
-    res.clearCookie('refreshToken');
-    res.clearCookie('userInfo');
-
-    res.status(200).json({ message: '로그아웃이 되었습니다.' });
-  } catch (error) {
-    console.error('Error fetching items:', error);
-    res.status(500).json({ message: 'Error fetching items' });
-  }
-});
-
+/**
+ * user/getUserInfo.yaml
+ */
 router.get('/info', async (req: Request, res: Response): Promise<void> => {
   const { userId } = req.query as { userId: string }; // ✅ query에서 추출
 
@@ -41,23 +29,38 @@ router.get('/info', async (req: Request, res: Response): Promise<void> => {
         address: userDb.address
       }
 
-      res.json({
-        data,
+      res.status(200).json({
+        data: data,
+        message: "사용자 정보를 가져왔습니다.",
+        status: 200,
+        success: true
+      });
+    } else {
+      res.status(400).json({
+        message: '해당 사용자가 없습니다',
+        status: 400,
+        success: false,
       });
     }
   } catch (error) {
-    console.error('Error fetching items:', error);
-    res.status(500).json({ message: 'Error fetching items' });
+    res.status(500).json({
+      message: '서버 에러가 발생했습니다.',
+      status: 200,
+      success: true,
+    });
     return;
   }
 });
 
-router.post(
+/**
+ * user/getUserInfo.yaml
+ */
+router.patch(
   '/edit',
   async (req: Request, res: Response): Promise<void> => {
     const { userId, username, phone, address } = req.body;
 
-    console.log("method: 'POST', url: '/user/edit'");
+    console.log("method: 'PUT', url: '/user/edit'");
     console.log("userId: " + userId);
     console.log('username: ' + username);
     console.log('phone: ' + phone);
@@ -71,41 +74,56 @@ router.post(
       const userList = dbUser.data;
 
       if (userList.length === 0) {
-        res
-          .status(404)
-          .json({ message: '해당 사용자가 없습니다.', data: res });
+        res.status(404).json({
+          message: '해당 사용자가 없습니다.',
+          status: 404,
+          success: false,
+        });
       }
 
-      const userIdInDb = userList[0].id;
+      const id = userList[0].id;
 
-      const updateRes = await api.patch(`${dbUrl}/users/${userIdInDb}`, {
+      const updateRes = await api.patch(`${dbUrl}/users/${id}`, {
         userId,
         username,
         phone,
         address,
       });
 
+      const data = {
+        userId: updateRes.data.userId,
+        username: updateRes.data.username,
+        phone: updateRes.data.phone,
+        address: updateRes.data.address
+      };
+
       res
-        .status(200)
+        .status(201)
         .json({
-          message: '사용자 정보가 변경되었습니다.',
-          data: updateRes.data,
+            data: data,
+            message: '사용자 정보가 변경되었습니다.',
+            status: 201,
+            success: true
         });
     } catch (error) {
       console.error('Error fetching users:', error);
-      res.status(500).json({ message: 'Error fetching users' });
+      res.status(500).json({
+        message: '서버 에러가 발생했습니다.',
+        status: 500,
+        success: false,
+      });
     }
   }
 );
 
-router.patch('/edit/change-pwd', async (req: Request, res: Response): Promise<void> => {
+router.patch('/edit/pwd', async (req: Request, res: Response): Promise<void> => {
   const { userId, nowPwd, newPwd, newPwdConfirm } = req.body;
 
-  console.log("post, '/change-pwd': " + nowPwd + ', ' + newPwd);
+  console.log("patch, '/edit/pwd': " + nowPwd + ', ' + newPwd);
 
   try {
     // 데이터를 가져옴
-    const dbUser = await api.get(`${dbUrl}/users`, { params: { userId } }); 
+    const dbUser = await api.get(`${dbUrl}/users`, { params: { userId } });
     const userList = dbUser.data;
     const id = userList[0].id;
 
@@ -118,6 +136,8 @@ router.patch('/edit/change-pwd', async (req: Request, res: Response): Promise<vo
       if (!comparePwd) {
         res.status(400).json({
           message: '현재 비밀번호가 틀렸습니다.',
+          status: 400,
+          success: false,
         });
         return;
       }
@@ -125,13 +145,11 @@ router.patch('/edit/change-pwd', async (req: Request, res: Response): Promise<vo
       const saltRounds = 10;
       const newHashedPw = await bcrypt.hash(newPwd, saltRounds);
 
-      console.log('비교: ' + nowPwd === newPwd);
-      console.log('nowPwd: ' + nowPwd);
-      console.log('newPwd: ' + newPwd);
-
       if (nowPwd === newPwd) {
         res.status(400).json({
           message: '현재와 동일한 비밀번호를 사용할 수 없습니다.',
+          status: 400,
+          success: false,
         });
         return;
       }
@@ -141,18 +159,30 @@ router.patch('/edit/change-pwd', async (req: Request, res: Response): Promise<vo
         userPw: newHashedPw,
       });
 
+      const data = {
+        userId: userId,
+      };
+
       res.status(200).json({
         message: '비밀번호가 변경되었습니다.',
-        data: updateRes.data,
+        data: data,
+        status: 200,
+        success: true,
       });
       return;
     } else {
-      res.status(404).json({ message: '존재하지 않는 아이디입니다.' });
+      res.status(404).json({
+        message: '존재하지 않는 아이디입니다.',
+        status: 404,
+        success: false,
+      });
       return;
     }
   } catch (error) {
     console.error('Error fetching items:', error);
-    res.status(500).json({ message: 'Error fetching items' });
+    res
+      .status(500)
+      .json({ message: 'Error fetching items', status: 500, success: false });
     return;
   }
 });

@@ -29,7 +29,7 @@ export function verifyAccessToken(
   }
 
   if (!accessToken) {
-    res.status(401).json({ message: 'Access Token is missing' });
+    res.status(401).json({ message: '액세스 토큰이 없습니다.' });
     return;
   }
 
@@ -40,7 +40,7 @@ export function verifyAccessToken(
   } catch (err: any) {
     if (err.name === 'TokenExpiredError') {
       if (!refreshToken) {
-        res.status(401).json({ message: 'Refresh Token is missing' });
+        res.status(401).json({ message: '리프레시 토큰이 없습니다.' });
         return;
       }
 
@@ -53,10 +53,8 @@ export function verifyAccessToken(
         const newAccessToken = jwt.sign(
           { userId: decodedRefresh.userId },
           JWT_SECRET,
-          { expiresIn: '10s' }
+          { expiresIn: '10m' }
         );
-
-        console.log("New Access Token is created!!")
 
         // 새 토큰을 쿠키에 설정
         res.cookie('accessToken', newAccessToken, {

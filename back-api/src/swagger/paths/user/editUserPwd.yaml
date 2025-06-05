@@ -1,0 +1,58 @@
+patch:
+  tags:
+    - 회원정보
+  summary: 비밀번호 수정하기
+  security:
+    - Access Token: []  # 🔐 토큰 필요 설정
+  requestBody:
+    description: 비밀번호 수정하기
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            userId: { type: string }
+            nowPwd: { type: string }
+            newPwd: { type: string }
+            newPwdConfirm: { type: string }
+          required:
+            - userId
+            - nowPwd
+            - newPwd
+            - newPwdConfirm
+  responses:
+    '201':
+      description: 사용자 정보 수정 성공
+      content:
+        application/json:
+          example:
+            data:
+              userId: user12@test.com
+            message: 사용자 정보 가져오기 성공
+            status: 200
+            success: true
+    '400':
+      description: 잘못된 현재 비밀번호
+      content:
+        application/json:
+          example:
+            message: 현재 비밀번호가 잘못되었습니다.
+            status: 400
+            success: false
+    '404':
+      description: 존재하지 않는 아이디
+      content:
+        application/json:
+          example:
+            message: 존재하지 않는 아이디입니다.
+            status: 404
+            success: false
+    '500':
+      description: 서버 오류 발생
+      content:
+        application/json:
+          example:
+            message: 서버 오류가 발생했습니다.
+            status: 500
+            success: false
