@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from 'react';
 import InputText from "@/components/InputText";
-import { userService } from '@/services/user.service';
+import { noauthService } from '@/services/noauth.service';
 import { LoginForm, LoginResponse } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
 import { useUserInfo} from '@/hook/UserContext';
@@ -41,7 +41,7 @@ const LoginPage = () => {
     }
 
     try {
-      const response = await userService.login(params);
+      const response = await noauthService.login(params);
       if(response.userId) {
         setUserInfo(response);
         setUser(response)

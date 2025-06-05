@@ -6,6 +6,7 @@ import { userService } from '@/services/user.service';
 import { SignupRequest } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
 import Button from '../../components/common/Button';
+import { noauthService } from '@/services/noauth.service';
 
 
 
@@ -56,7 +57,7 @@ const SignUpPage = () => {
 
     if(confirm("가입하시겠습니까?")) {
       try {
-        const response = await userService.signup(data);
+        const response = await noauthService.signup(data);
         if(response.status === 201) {
           alert("가입이 완료되었습니다.")
           router.push('/login');
@@ -107,7 +108,7 @@ const SignUpPage = () => {
     }
 
     try {
-      const response = await userService.checkUserIdExist(data.userId);
+      const response = await noauthService.checkUserIdExist(data.userId);
       // console.log("userId: " + response.data.userId)      
       if(response.data?.userId) {
         alert('이미 존재하는 아이디입니다.');

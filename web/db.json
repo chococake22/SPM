@@ -3,7 +3,7 @@
     {
       "id": "1",
       "imageInfo": "apple",
-      "username": "애플1",
+      "username": "노노1",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/apple.png",
       "heartCnt": 12,
@@ -25,7 +25,7 @@
     {
       "id": "3",
       "imageInfo": "banana",
-      "username": "애플1",
+      "username": "노노1",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/banana.png",
       "heartCnt": 7,
@@ -36,7 +36,7 @@
     {
       "id": "4",
       "imageInfo": "banana",
-      "username": "애플1",
+      "username": "노노1",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/poket1.jpeg",
       "heartCnt": 7,
@@ -58,7 +58,7 @@
     {
       "id": "6",
       "imageInfo": "banana",
-      "username": "애플1",
+      "username": "노노1",
       "profileImg": "/pngwing.com.png",
       "itemImg": "/poket3.jpeg",
       "heartCnt": 7,
@@ -487,12 +487,20 @@
       "address": "wasdfasdf"
     },
     {
-      "id": "87d9",
+      "id": "967f",
       "userId": "apple123@test.com",
-      "userPw": "$2b$10$vUvz5.55fM5MHro0zcSvvOh3Hy97.ApdhnbY7RKJynyvBFIznz1GC",
-      "username": "애플123",
-      "phone": "01012344434",
-      "address": "asdfasdfasdfasdf"
+      "userPw": "$2b$10$8uog2tUOaE9VwXE0qplbnuVPweXC1B8xbDa0lq.63Ijtmwq6.Ot.G",
+      "username": "asdfs",
+      "phone": "01012344444",
+      "address": "asdfsdfsdf"
+    },
+    {
+      "id": "ac39",
+      "userId": "nono1@test.com",
+      "userPw": "$2b$10$RiDg15rT6qryINQ/0YmA8u14Z0Rgo5UjDoK6fGgfhn8o7h.49skje",
+      "username": "노노1",
+      "phone": "01012341234",
+      "address": "asdfasdfasfasdf"
     }
   ]
 }

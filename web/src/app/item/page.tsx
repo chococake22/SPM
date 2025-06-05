@@ -15,7 +15,7 @@ interface ChildProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
-function ShopPage() {
+function AddItemPage() {
 
   const [count, setCount] = useState(0);
   const [text, setText] = useState('');  
@@ -33,7 +33,7 @@ function ShopPage() {
 
   useEffect(() => {
 
-    console.log('userInfo - shop: ' + userInfo.userId);
+    console.log('userInfo - item: ' + userInfo.userId);
   }, [userInfo])
 
 
@@ -58,5 +58,5 @@ function ShopPage() {
 };
 
 
-export default ShopPage; 
+export default AddItemPage; 
 

@@ -15,7 +15,7 @@ const BottomNav = () => {
               height={5}
             />
           </Link>
-          <Link href="/shop" className="flex items-center">
+          <Link href="/item" className="flex items-center">
             <Image
               src="/icons/shop.svg"
               alt="Shop"

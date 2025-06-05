@@ -8,6 +8,7 @@ import InputText from '@/components/InputText';
 import TestModal, { ModalRef } from '@/components/modal/TestModal';
 import { UserInfoResponse, UserInfoData } from '@/types/user/type';
 import Button from '@/components/common/Button';
+import { noauthService } from '@/services/noauth.service';
 
 export default function Settings() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function Settings() {
   const handleLogout = async () => {
     if (confirm('로그아웃 하시겠습니까?')) {
       try {
-        const response = await userService.logout();
+        const response = await noauthService.logout();
         if (!response) {
           return <div>데이터가 없습니다.</div>;
         }
