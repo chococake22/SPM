@@ -23,3 +23,7 @@ paths:
     $ref: './paths/user/editUserInfo.yaml'
   /api/user/edit/pwd:
     $ref: './paths/user/editUserPwd.yaml'
+  /api/item/list:
+    $ref: './paths/item/getItemList.yaml'
+  /api/item/user-items:
+    $ref: './paths/item/getItemListByUser.yaml'

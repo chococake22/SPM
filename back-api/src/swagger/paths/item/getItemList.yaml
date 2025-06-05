@@ -1,0 +1,63 @@
+get:
+  tags:
+    - 게시글
+  summary: 게시글 가져오기
+  security:
+    - Access Token: []  # 🔐 토큰 필요 설정
+  parameters:
+    - name: offset
+      in: query
+      description: 해당 회원 정보 가져오기
+      required: true
+      schema:
+        type: number
+    - name: limit
+      in: query
+      description: 아이템 종류 필터
+      required: false
+      schema:
+        type: number
+  responses:
+    '200':
+      description: 사용자 정보 가져오기 성공
+      content:
+        application/json:
+          example:
+            data:
+              - id: 1
+                imageInfo: apple
+                username: 애플1
+                profileImg: /pngwing.com.png
+                itemImg: /apple.png
+                heartCnt: 12
+                commentCnt: 3
+                itemName: 사과 10개
+                description: 겁나 달달한 사과임asdfaasdffasdsdfasdfasdfasdfasdfasdasdfasdasdf
+              - id: 2
+                imageInfo: apple
+                username: 애플2
+                profileImg: /pngwing.com.png
+                itemImg: /apple.png
+                heartCnt: 5
+                commentCnt: 1
+                itemName: 사과 9개
+                description: 3234234234234234234ㅁㄴㅇㄹㅁㄴㅇㄴㅇㄹㅁㄴ
+            message: 사용자 정보 가져오기 성공
+            status: 200
+            success: true
+    '400':
+      description: 잘못된 요청
+      content:
+        application/json:
+          example:
+            message: 잘못된 요청입니다.
+            status: 400
+            success: false
+    '500':
+      description: 서버 오류 발생
+      content:
+        application/json:
+          example:
+            message: 서버 오류가 발생했습니다.
+            status: 500
+            success: false
