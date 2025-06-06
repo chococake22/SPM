@@ -26,8 +26,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (isFirstLoad) {
       const storedUser = localStorage.getItem('userInfo');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+      // const userData = storedUser.data;
+      if (storedUser && storedUser.data) {
+        setUser(JSON.parse(userData));
       }
       setIsFirstLoad(false);
     }
@@ -36,7 +37,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   // 상태가 바뀔 때마다 localStorage에 저장
   useEffect(() => {
     if (user !== null) {
-      setUser(user);
+      setUser(user); 
       const userJson = JSON.stringify(user);
       localStorage.setItem('userInfo', userJson);
     } else {

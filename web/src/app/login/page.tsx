@@ -7,14 +7,14 @@ import { LoginForm, LoginResponse } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
 import { useUserInfo} from '@/hook/UserContext';
 import Button from '@/components/common/Button';
-import useUserInfo2 from '@/hook/UseUserInfo2';
+import UseUserData from '@/hook/UseUserData';
 
 const LoginPage = () => {
   const { setUser } = useUserInfo();
   const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { setUserInfo } = useUserInfo2();
+    const { setUserInfo } = UseUserData();
 
   const handleSignup = () => {
     router.push('/signup');
@@ -42,10 +42,11 @@ const LoginPage = () => {
 
     try {
       const response = await noauthService.login(params);
-      if(response.userId) {
-        setUserInfo(response);
-        setUser(response)
-        router.push("/");
+      console.log(response.data.userId)
+      if (response.data.userId) {
+        setUserInfo(response.data);
+        setUser(response.data);
+        router.push('/');
       }
     } catch (error) {
       console.error(error);

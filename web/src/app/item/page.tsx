@@ -1,6 +1,6 @@
 "use client"
 
-import useUserInfo2 from '@/hook/UseUserInfo2';
+import UseUserData from '@/hook/UseUserData';
 
 import {
   useCallback,
@@ -19,7 +19,7 @@ function AddItemPage() {
 
   const [count, setCount] = useState(0);
   const [text, setText] = useState('');  
-  const { userInfo, deleteUserInfo } = useUserInfo2();
+  const { userInfo, deleteUserInfo } = UseUserData();
   
   const handleChangeText = (e: ChangeEvent<HTMLInputElement>) => {
     

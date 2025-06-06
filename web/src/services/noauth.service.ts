@@ -60,7 +60,7 @@ export const noauthService = {
   },
   async logout(): Promise<LogoutResponse | undefined> {
     try {
-      const response = await api.post<LogoutRequest>('/api/user/logout');
+      const response = await api.post<LogoutRequest>('/api/logout');
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

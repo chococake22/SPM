@@ -11,7 +11,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import { Mousewheel } from 'swiper/modules';
-import useUserInfo2 from '@/hook/UseUserInfo2';
+import UseUserData from '@/hook/UseUserData';
 
 const ITEMS_PER_PAGE = 3;
 
@@ -20,7 +20,7 @@ const Home = () => {
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const { userInfo, deleteUserInfo } = useUserInfo2();
+  const { userInfo, deleteUserInfo } = UseUserData();
 
   useEffect(() => {
     console.log('userInfo - /: ' + userInfo.userId);

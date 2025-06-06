@@ -479,14 +479,6 @@
       "address": "주소는 여기입니다"
     },
     {
-      "id": "947c",
-      "userId": "apple12@test.com",
-      "userPw": "$2b$10$mhdVJlLcNbv7qDZXeoTFkOMNRGyU54zot3rr7lQwNgLjqZEgpU.dC",
-      "username": "애플1",
-      "phone": "01012341234",
-      "address": "wasdfasdf"
-    },
-    {
       "id": "967f",
       "userId": "apple123@test.com",
       "userPw": "$2b$10$8uog2tUOaE9VwXE0qplbnuVPweXC1B8xbDa0lq.63Ijtmwq6.Ot.G",
@@ -501,6 +493,14 @@
       "username": "노노1",
       "phone": "01012341234",
       "address": "asdfasdfasfasdf"
+    },
+    {
+      "id": "7bf7",
+      "userId": "apple12@test.com",
+      "userPw": "$2b$10$hb1n653ZtA/Sd1uaIC8DquYZ6RbGLfbULyaHvHRh4e3wz/VKobzmm",
+      "username": "애플1",
+      "phone": "01012341234",
+      "address": "7, Nambusunhwan-ro 180-gil, Gwanak-gu, Seoul, Republic of Korea"
     }
   ]
 }

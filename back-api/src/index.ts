@@ -26,6 +26,9 @@ const swaggerObj = yaml.load(swaggerDocument);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerObj as object));
 
 const allowedOrigins = process.env.WHITE_LIST;
+
+console.log("allow: " + allowedOrigins)
+
 // origin 옵션에 배열 넣으면 정확히 이 리스트만 허용됩니다.
 app.use(
   cors({

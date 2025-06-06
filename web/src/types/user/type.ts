@@ -74,6 +74,7 @@ export interface UserInfoResponse {
 
 export interface CheckUserIdResponse {
   data: UserIdResponse;
+  success: boolean;
 }
 
 export interface UserIdResponse {
