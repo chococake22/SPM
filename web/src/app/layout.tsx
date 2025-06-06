@@ -35,7 +35,7 @@ export default function RootLayout({
             <TopNav />
           </header>
 
-          <main className="flex-grow overflow-auto">
+          <main className="flex items-center justify-center h-screen px-4">
             {/* 메인 콘텐츠는 가능한 공간을 채웁니다. */}
             {children}
           </main>

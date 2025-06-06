@@ -148,7 +148,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-6 space-y-6">
+    <div className="w-full max-w-lg">
       {/* Section 1: 계정 */}
       <div>
         <h2 className="text-xs font-semibold text-gray-500 uppercase mb-2">

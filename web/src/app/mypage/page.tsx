@@ -126,100 +126,102 @@ export default function Mypage() {
     }
   }, [user, page]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
 
-  return user && (
-    <div className="flex flex-col h-screen justify-center items-center">
-      <div className="flex flex-col h-screen">
-        <div className="flex flex-col w-full h-full">
-          <div className="flex w-full h-[20%]">
-            <div className="flex flex-col gap-2 border-2 w-[32%] justify-center items-center">
-              <div className="flex w-[60%] h-[60%] rounded-full overflow-hidden border-[1px]">
-                {user?.profileImg && (
-                  <img
-                    src={`${user.profileImg}`}
-                    className="w-full h-full object-contain"
-                  />
-                )}
+  return (
+    user && (
+      <div className="flex flex-col h-screen justify-center items-center max-w-lg">
+        <div className="flex flex-col h-screen w-full">
+          <div className="flex flex-col w-full h-full">
+            <div className="flex w-full h-[20%]">
+              <div className="flex flex-col gap-2 border-2 w-[32%] justify-center items-center">
+                <div className="flex w-[60%] h-[60%] rounded-full overflow-hidden border-[1px]">
+                  {user?.profileImg && (
+                    <img
+                      src={`${user.profileImg}`}
+                      className="w-full h-full object-contain"
+                    />
+                  )}
+                </div>
+                <div>
+                  <span>{user?.username}</span>
+                </div>
               </div>
-              <div>
-                <span>{user?.username}</span>
+              <div className="flex border-2 w-[70%] justify-around items-center">
+                <div className="border-2">
+                  <div>게시물</div>
+                  <div className="flex items-center justify-center">
+                    <span>89</span>
+                  </div>
+                </div>
+                <div className="border-2">
+                  <div>팔로잉</div>
+                  <div className="flex items-center justify-center">
+                    <span>89</span>
+                  </div>
+                </div>
+                <div className="border-2">
+                  <div>팔로워</div>
+                  <div className="flex items-center justify-center">
+                    <span>89</span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="flex border-2 w-[70%] justify-around items-center">
-              <div className="border-2">
-                <div>게시물</div>
-                <div className="flex items-center justify-center">
-                  <span>89</span>
-                </div>
-              </div>
-              <div className="border-2">
-                <div>팔로잉</div>
-                <div className="flex items-center justify-center">
-                  <span>89</span>
-                </div>
-              </div>
-              <div className="border-2">
-                <div>팔로워</div>
-                <div className="flex items-center justify-center">
-                  <span>89</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="w-full h-full">
-            <div className="border-b border-gray-200">
-              <nav className="-mb-px flex justify-around" aria-label="Tabs">
-                {tabs.map((tab, index) => (
-                  <button
-                    key={index}
-                    className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm 
+            <div className="w-full h-full">
+              <div className="border-b border-gray-200">
+                <nav className="-mb-px flex justify-around" aria-label="Tabs">
+                  {tabs.map((tab, index) => (
+                    <button
+                      key={index}
+                      className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm 
                 ${
                   activeTab === index
                     ? 'border-indigo-500 text-indigo-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }
                 focus:outline-none`}
-                    onClick={() => setActiveTab(index)}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </nav>
-            </div>
-            <div className="w-full h-full">
-              <div className="grid grid-cols-3">
-                {sortedItemList?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="w-full h-[200px] border-2 box-border border-2"
-                    onClick={() => openModal(item.itemImg)}
-                  >
-                    <img
-                      src={`/testImages/${item.itemImg}`}
-                      className="w-full h-full"
-                    />
-                  </div>
-                ))}
-              </div>
-              {selectedImage && (
-                <div
-                  className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
-                  onClick={closeModal}
-                >
-                  <div className="bg-white rounded-lg p-4 max-w-[90%] max-h-[90%] relative">
-                    <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">
-                      &times;
+                      onClick={() => setActiveTab(index)}
+                    >
+                      {tab.label}
                     </button>
-                    <img
-                      src={`/testImages/${selectedImage}`}
-                      className="max-w-full max-h-[80vh] object-contain"
-                    />
-                  </div>
+                  ))}
+                </nav>
+              </div>
+              <div className="w-full h-full">
+                <div className="grid grid-cols-3">
+                  {sortedItemList?.map((item, index) => (
+                    <div
+                      key={index}
+                      className="w-full h-[200px] border-2 box-border border-2"
+                      onClick={() => openModal(item.itemImg)}
+                    >
+                      <img
+                        src={`/testImages/${item.itemImg}`}
+                        className="w-full h-full"
+                      />
+                    </div>
+                  ))}
                 </div>
-              )}
+                {selectedImage && (
+                  <div
+                    className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
+                    onClick={closeModal}
+                  >
+                    <div className="bg-white rounded-lg p-4 max-w-[90%] max-h-[90%] relative">
+                      <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">
+                        &times;
+                      </button>
+                      <img
+                        src={`/testImages/${selectedImage}`}
+                        className="max-w-full max-h-[80vh] object-contain"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  );
 };
