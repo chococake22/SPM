@@ -29,17 +29,16 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className="flex flex-col h-screen">
+      <body className="flex flex-col">
         <UserProvider>
-          <header className="h-9 flex-shrink-0">
+          <header className="fixed h-9 w-full flex-shrink-0 z-50">
             <TopNav />
           </header>
-
-          <main className="flex items-center justify-center h-screen px-4">
-            {/* 메인 콘텐츠는 가능한 공간을 채웁니다. */}
+          <main className="flex-1 flex items-center justify-center pb-12 pt-9">
             {children}
           </main>
-          <footer className="h-12 flex-shrink-0">
+
+          <footer className="fixed h-12 w-full bottom-0 bg-white z-50">
             <BottomNav />
           </footer>
         </UserProvider>

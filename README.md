@@ -10,4 +10,4 @@ DB: http://localhost:3002
 json-server --watch db.json --port 3002
 
 # api swagger 최신화
-yarn swagger:bundle
+yarn build:swagger

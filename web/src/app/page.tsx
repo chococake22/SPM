@@ -120,16 +120,15 @@ const Home = () => {
   }
   
 
-  return itemList && (
-    <div className="flex flex-col h-screen w-full max-w-lg">
-      {sortedItemList.map((entry, index) => (
-        <ItemBox
-          key={index}
-          entry={entry}
-        />
-      ))}
-      {hasMore && <div ref={loadMoreRef} className="h-10" />}
-    </div>
+  return (
+    itemList && (
+      <div className="flex flex-col w-full max-w-lg">
+        {sortedItemList.map((entry, index) => (
+          <ItemBox key={index} entry={entry} />
+        ))}
+        {hasMore && <div ref={loadMoreRef} className="h-10" />}
+      </div>
+    )
   );
 
   /**

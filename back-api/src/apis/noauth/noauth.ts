@@ -60,6 +60,10 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
             profileImg: userDb.profileImg,
             phone: userDb.phone,
             address: userDb.address,
+            tokens: {
+              accessToken: accessToken,
+              refreshToken: refreshToken
+            }
           },
         });
         return;

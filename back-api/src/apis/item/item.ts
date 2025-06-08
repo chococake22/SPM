@@ -23,7 +23,7 @@ router.get('/list', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/user-items', async (req: Request, res: Response) => {
+router.get('/user-list', async (req: Request, res: Response) => {
   const { username, offset, limit } = req.query as {
     username: string;
     offset: string;

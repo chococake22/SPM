@@ -53,27 +53,6 @@ const LoginPage = () => {
     }
   };
 
-
-  const handleLoginTest = async () => {
-    console.log('??????????');
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await res.json();
-
-    if (data.ok) {
-      alert('로그인 성공!');
-      window.location.href = '/dashboard'; // 원하는 페이지로 이동
-    } else {
-      alert('로그인 실패!');
-    }
-  };
-
   return (
     <div className="flex justify-center items-center w-full h-full">
       <div>

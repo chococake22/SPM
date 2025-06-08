@@ -41,7 +41,7 @@ const itemService = {
     limit: number
   ): Promise<ItemListResponse | undefined> {
     try {
-      const response = await api.get<ItemListResponse>('/api/item/user-items', {
+      const response = await api.get<ItemListResponse>('/api/item/user-list', {
         params: {
           // get 메소드의 경우 param으로 쿼리스트링을 담아야 함.
           username,

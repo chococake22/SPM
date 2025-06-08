@@ -25,5 +25,5 @@ paths:
     $ref: './paths/user/editUserPwd.yaml'
   /api/item/list:
     $ref: './paths/item/getItemList.yaml'
-  /api/item/user-items:
+  /api/item/user-list:
     $ref: './paths/item/getItemListByUser.yaml'

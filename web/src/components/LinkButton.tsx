@@ -17,7 +17,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({ menu }) => {
   const spanClassName =
     menu === '/' ? 'text-3xl font-bold text-yellow-600' : '';
 
-  const menuName = menu === '/' ? 'Coco' : menu;
+  const menuName = menu === '/' ? 'SPM' : menu;
 
   return (
     <div className={divClassName}>
