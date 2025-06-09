@@ -1,6 +1,5 @@
 "use client"
 
-import { useUserInfo } from '@/hook/UserContext';
 import { userService } from '@/services/user.service';
 import { useContext, useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { UserContext } from '@/hook/UserContext';
@@ -8,6 +7,7 @@ import { createContext } from 'react';
 import itemService from '@/services/item.service';
 import { flushSync } from 'react-dom';
 import { ItemListResponse, Item } from '@/types/item/type';
+import { useUserInfo } from '@/hook/UserContext';
 
 interface Tab {
   label: string;
@@ -19,7 +19,6 @@ interface TabsProps {
 }
 
 export default function Mypage() {
-  const { user, setUser } = useUserInfo();
   const [activeTab, setActiveTab] = useState(0);
   const [tabData, setTabData] = useState<{ index: number; img: string }[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -28,6 +27,7 @@ export default function Mypage() {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isTest, setIsTest] = useState<boolean>(false);
   const [num, setNum] = useState<number>(0);
+  const { user, setUser } = useUserInfo();
 
   const openModal = (img: string) => {
     setSelectedImage(img);
@@ -54,8 +54,6 @@ export default function Mypage() {
   const getUserItems = useCallback(
     async (pageNumber: number) => {
       console.log('callback - getUserItems');
-      console.log(isTest);
-      console.log(user);
       if (!user) {
         return;
       }
@@ -128,7 +126,7 @@ export default function Mypage() {
 
   return (
     user && (
-      <div className="flex flex-col h-screen justify-center items-center max-w-lg">
+      <div className="flex flex-col h-screen justify-center items-center max-w-lg pt-9">
         <div className="flex flex-col h-screen w-full">
           <div className="flex flex-col w-full h-full">
             <div className="flex w-full h-[20%]">

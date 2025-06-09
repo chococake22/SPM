@@ -1,0 +1,17 @@
+# 베이스 이미지로 node 최신 LTS 사용
+FROM node:lts-alpine
+
+# 작업 디렉터리 설정
+WORKDIR /app
+
+# json-server 전역 설치
+RUN npm install -g json-server
+
+# 데이터 파일 복사 (실제 빌드시 db.json 위치 맞게 조정)
+COPY ./web/db.json /app/db.json
+
+# 3002 포트 노출
+EXPOSE 3002
+
+# json-server 실행 명령
+CMD ["json-server", "--watch", "/app/db.json", "--port", "3002"]

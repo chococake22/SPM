@@ -34,7 +34,7 @@ export default function RootLayout({
           <header className="fixed h-9 w-full flex-shrink-0 z-50">
             <TopNav />
           </header>
-          <main className="flex-1 flex items-center justify-center pb-12 pt-9">
+          <main className="flex-1 flex items-center justify-center">
             {children}
           </main>
 

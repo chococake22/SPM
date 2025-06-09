@@ -1,6 +1,6 @@
 "use client"
 
-import UseUserData from '@/hook/UseUserData';
+import { useUserInfo } from '@/hook/UserContext';
 
 import {
   useCallback,
@@ -18,8 +18,8 @@ interface ChildProps {
 function AddItemPage() {
 
   const [count, setCount] = useState(0);
-  const [text, setText] = useState('');  
-  const { userInfo, deleteUserInfo } = UseUserData();
+  const [text, setText] = useState(''); 
+  const { user, setUser } = useUserInfo(); 
   
   const handleChangeText = (e: ChangeEvent<HTMLInputElement>) => {
     
@@ -30,11 +30,6 @@ function AddItemPage() {
     console.log('handleClick is created/re-created');
     setCount((prevCount) => prevCount + 1);
   }, [count]);
-
-  useEffect(() => {
-
-    console.log('userInfo - item: ' + userInfo.userId);
-  }, [userInfo])
 
 
   // input에 값이 변할 때마다 함수가 새로 생성이 된다.

@@ -23,6 +23,13 @@ export interface LoginForm {
 }
 
 export interface LoginResponse {
+  data?: UserData;
+  success: boolean;
+  message: string;
+  status: number;
+}
+
+export type UserData = {
   userId: string | undefined;
   status?: number | undefined;
   redirectUrl?: string | undefined;
@@ -30,7 +37,7 @@ export interface LoginResponse {
   phone?: string | undefined;
   address?: string | undefined;
   profileImg?: string | undefined;
-}
+};
 
 export interface LogoutRequest {
   userId: string;

@@ -501,6 +501,14 @@
       "username": "애플1",
       "phone": "01012341234",
       "address": "7, Nambusunhwan-ro 180-gil, Gwanak-gu, Seoul, Republic of Korea"
+    },
+    {
+      "id": "568d",
+      "userId": "test00@test.com",
+      "userPw": "$2b$10$YwlAHws7MNXtRQKk0BdAv.tPd8lxe1v5tCCJ/LKSsvPecDYDXi1qq",
+      "username": "테스트00",
+      "phone": "010123412344",
+      "address": "서울시 관악구 수수수숫수"
     }
   ]
 }

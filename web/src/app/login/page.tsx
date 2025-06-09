@@ -5,16 +5,14 @@ import InputText from "@/components/InputText";
 import { noauthService } from '@/services/noauth.service';
 import { LoginForm, LoginResponse } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
-import { useUserInfo} from '@/hook/UserContext';
 import Button from '@/components/common/Button';
-import UseUserData from '@/hook/UseUserData';
-
+import { useUserInfo } from '@/hook/UserContext';
+ 
 const LoginPage = () => {
-  const { setUser } = useUserInfo();
   const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { setUserInfo } = UseUserData();
+        const { user, setUser } = useUserInfo();
 
   const handleSignup = () => {
     router.push('/signup');
@@ -42,10 +40,12 @@ const LoginPage = () => {
 
     try {
       const response = await noauthService.login(params);
-      console.log(response.data.userId)
-      if (response.data.userId) {
-        setUserInfo(response.data);
+      console.log(response.data)
+      if (response.data) {
+        // setData(response.data);
         setUser(response.data);
+        const resData = JSON.stringify(response.data);
+        localStorage.setItem('user', resData);
         router.push('/');
       }
     } catch (error) {

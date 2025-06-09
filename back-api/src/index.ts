@@ -16,7 +16,10 @@ const app = express();
 const env = process.env.NODE_ENV || 'development';
 
 dotenv.config({
-  path: path.resolve(__dirname, `../.env.${env}`),
+  path: path.resolve(
+    __dirname,
+    `../../.env.${process.env.NODE_ENV || 'development'}`
+  ),
 });
 
 // swagger 설정

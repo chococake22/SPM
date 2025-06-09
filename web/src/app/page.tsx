@@ -11,7 +11,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 
 import { Mousewheel } from 'swiper/modules';
-import UseUserData from '@/hook/UseUserData';
+import { useUserInfo } from '@/hook/UserContext';
 
 const ITEMS_PER_PAGE = 3;
 
@@ -20,12 +20,7 @@ const Home = () => {
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const { userInfo, deleteUserInfo } = UseUserData();
-
-  useEffect(() => {
-    console.log('userInfo - /: ' + userInfo.userId);
-  }, [userInfo]);
-
+  const { user, setUser } = useUserInfo();
 
   // 맨 처음 렌더링이 될 때에는 함수가 실행되지는 않고 정의만 된다.
   const getItems = useCallback(async (pageNumber: number) => {
@@ -71,9 +66,6 @@ const Home = () => {
 
   // 데이터를 가져와서 정렬하기.
   const sortedItemList = useMemo(() => {
-    console.log('다시 가져옴');
-    console.log(itemList)
-    console.log(itemList);
     if (!Array.isArray(itemList)) return [];
 
     // itemList를 가져와서 sorting
@@ -122,7 +114,7 @@ const Home = () => {
 
   return (
     itemList && (
-      <div className="flex flex-col w-full max-w-lg">
+      <div className="flex flex-col w-full max-w-lg pb-12 pt-9">
         {sortedItemList.map((entry, index) => (
           <ItemBox key={index} entry={entry} />
         ))}

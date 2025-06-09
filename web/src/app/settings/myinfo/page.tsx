@@ -45,7 +45,7 @@ export default function Settings() {
     
     try {
       const param = {
-        userId: user.userId,
+        userId: user?.userId,
       };
 
     // user 정보 가져오는 api 호출
@@ -133,35 +133,37 @@ export default function Settings() {
       <div>Loading...</div>
     </div>
   ) : (
-    <div className="flex w-full h-full justify-center items-center">
-      <div className="flex flex-col w-[50%] h-[40%] justify-around">
-        <div className="flex justify-center">
-          <span className="text-3xl">사용자 정보</span>
+    <div className="flex w-full h-full">
+      <div className="flex w-screen h-screen justify-center items-center">
+        <div className="flex flex-col w-[50%] h-[40%] justify-around">
+          <div className="flex justify-center">
+            <span className="text-3xl">사용자 정보</span>
+          </div>
+          <div>
+            <InputText
+              placeholder="Phone"
+              name="phone"
+              type="text"
+              menuName="전화번호"
+              defaultValue={userInfo.phone}
+              onChange={handleInputChange}
+            />
+            <InputText
+              placeholder="Address"
+              name="address"
+              type="text"
+              menuName="주소"
+              defaultValue={userInfo.address}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="flex justify-center">
+            <Button buttonName="수정" onClick={handleEditUserInfo}></Button>
+            {/* <Button buttonName="Logout" onClick={handleLogout}></Button> */}
+            <Button buttonName="뒤로가기" onClick={handleBackPage}></Button>
+          </div>
+          <TestModal ref={modalRef} />
         </div>
-        <div>
-          <InputText
-            placeholder="Phone"
-            name="phone"
-            type="text"
-            menuName="전화번호"
-            defaultValue={userInfo.phone}
-            onChange={handleInputChange}
-          />
-          <InputText
-            placeholder="Address"
-            name="address"
-            type="text"
-            menuName="주소"
-            defaultValue={userInfo.address}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="flex justify-center">
-          <Button buttonName="수정" onClick={handleEditUserInfo}></Button>
-          {/* <Button buttonName="Logout" onClick={handleLogout}></Button> */}
-          <Button buttonName="뒤로가기" onClick={handleBackPage}></Button>
-        </div>
-        <TestModal ref={modalRef} />
       </div>
     </div>
   );

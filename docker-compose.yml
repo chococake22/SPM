@@ -1,0 +1,38 @@
+services:
+  web:
+    build:
+      context: ./web
+    volumes:
+      - ./web:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - back-api
+    env_file:
+      - ./web/.env.production
+    command: yarn start
+
+  back-api:
+    build:
+      context: ./back-api
+    volumes:
+      - ./back-api:/app
+      - /app/node_modules
+    env_file:
+      - ./back-api/.env.production  # 여기에 API_URL 정의된 파일 경로
+    ports:
+      - "3001:3001"
+    command: sh -c "yarn build:swagger && yarn start"
+  
+  # json-server:
+  #   image: clue/json-server
+  #   platform: linux/amd64
+  #   volumes:
+  #     - ./web/db.json:/data/db.json
+  #   command:
+  #     - --watch
+  #     - /data/db.json
+  #     - --port
+  #     - "3002"
+  #   ports:
+  #     - "3002:3002"

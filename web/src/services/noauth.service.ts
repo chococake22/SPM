@@ -18,6 +18,7 @@ export const noauthService = {
   async login(data: LoginForm): Promise<LoginResponse> {
     try {
       const response = await api.post<LoginResponse>('/api/login', data);
+      console.log(response.data)
       return response.data;
     } catch (error) {
       console.log('Error object:', error);

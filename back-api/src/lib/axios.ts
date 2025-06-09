@@ -1,5 +1,14 @@
 // src/lib/axios.ts
 import axios from 'axios';
+import dotenv from 'dotenv';
+import path from 'path';
+
+dotenv.config({
+  path: path.resolve(
+    __dirname,
+    `../../.env.${process.env.NODE_ENV || 'development'}`
+  ),
+});
 
 const apiUrl = process.env.API_URL; // .env에서 API_URL 가져오기
 

@@ -36,7 +36,7 @@ export default function Settings() {
     
     try {
       const param = {
-        userId: user.userId,
+        userId: user?.userId,
       };
 
     // user 정보 가져오는 api 호출
@@ -133,7 +133,7 @@ export default function Settings() {
       <div>Loading...</div>
     </div>
   ) : (
-    <div className="flex w-full h-full justify-center items-center">
+    <div className="flex w-screen h-screen justify-center items-center">
       <div className="flex flex-col w-[50%] h-[50%] justify-around">
         <form>
           <div className="flex justify-center">

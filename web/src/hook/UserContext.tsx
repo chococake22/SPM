@@ -1,11 +1,11 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import { LoginResponse } from '@/types/user/type';
+import { LoginResponse, UserData } from '@/types/user/type';
 
 interface UserContextType {
-  user: LoginResponse | null;
-  setUser: (user: LoginResponse | null) => void; 
+  user: UserData | null;
+  setUser: (user: UserData | null) => void;
 }
 
 /**
@@ -19,31 +19,33 @@ export const UserContext = createContext<UserContextType | undefined>(undefined)
  * 하위 컴포넌트에서 전역으로 상태 접근 가능
  */
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<LoginResponse | null>(null);
+  const [user, setUserState] = useState<UserData | null>(null);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   // 앱 시작할 때 localStorage에서 유저 불러오기
   useEffect(() => {
     if (isFirstLoad) {
-      const storedUser = localStorage.getItem('userInfo');
-      // const userData = storedUser.data;
-      if (storedUser && storedUser.data) {
-        setUser(JSON.parse(userData));
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        const parsedUser = JSON.parse(storedUser);
+        console.log(parsedUser)
+        setUserState(parsedUser);
       }
       setIsFirstLoad(false);
     }
   }, [isFirstLoad]);
 
-  // 상태가 바뀔 때마다 localStorage에 저장
   useEffect(() => {
-    if (user !== null) {
-      setUser(user); 
-      const userJson = JSON.stringify(user);
-      localStorage.setItem('userInfo', userJson);
-    } else {
-      localStorage.removeItem('userInfo');
+    if (user) {
+      console.log(user)
+      const userJson = JSON.stringify(user); // ✅ user 전체 저장
+      localStorage.setItem('user', userJson);
     }
   }, [user]);
+
+  const setUser = (user: UserData | null) => {
+    setUserState(user);
+  };
 
   return (
     <UserContext.Provider value={{ user, setUser }}>

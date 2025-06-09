@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import api from '../../../../web/src/lib/axios'; // Axios 인스턴스 가져오기
+import api from '../../lib/axios'; 
 import bcrypt from 'bcrypt';
 
 const dbUrl = process.env.DB_URL || 'http://localhost:3002';
