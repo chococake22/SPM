@@ -217,7 +217,7 @@ export default function Mypage() {
   }, [user, isOpen])
 
   useEffect(() => {
-    console.log('WEB BASE URL:', process.env.NEXT_PUBLIC_WEB_BASE_URL);
+    console.log('WEB BASE URL:', process.env.NEXT_PUBLIC_API_BASE_URL);
   }, []);
 
   return (
@@ -234,7 +234,7 @@ export default function Mypage() {
                   {userImg ? (
                     <img
                       key={userImg}
-                      src={`${process.env.NEXT_PUBLIC_WEB_BASE_URL}/storage/profileImg/${userImg}`}
+                      src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/profileImg/${userImg}`}
                       className="w-full h-full"
                     />
                   ) : (
