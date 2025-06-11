@@ -8,6 +8,9 @@ import itemService from '@/services/item.service';
 import { flushSync } from 'react-dom';
 import { ItemListResponse, Item } from '@/types/item/type';
 import { useUserInfo } from '@/hook/UserContext';
+import Cropper from 'react-easy-crop';
+import getCroppedImg from '@/lib/cropImage'; // canvas 잘라주는 util 함수 필요
+
 
 interface Tab {
   label: string;
@@ -28,6 +31,16 @@ export default function Mypage() {
   const [isTest, setIsTest] = useState<boolean>(false);
   const [num, setNum] = useState<number>(0);
   const { user, setUser } = useUserInfo();
+  const [ isOpen, setIsOpen ]= useState<boolean>(false);
+  const [ hasImage, setHasImage] = useState<boolean>(false);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [userImg, setUserImg] = useState<string | null>(null);
+
+
 
   const openModal = (img: string) => {
     setSelectedImage(img);
@@ -124,20 +137,112 @@ export default function Mypage() {
     }
   }, [user, page]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
 
+
+  const handleAddImage = () => {
+    inputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        setImageSrc(result);
+        setHasImage(true);
+      };
+
+    reader.readAsDataURL(file);
+    if (inputRef.current) {
+      inputRef.current.value = ''; // 이 줄이 중요!
+    }
+    }
+  };
+
+  useEffect(() => {
+    if (hasImage) {
+      setIsOpen(true);
+      setHasImage(false); // ✅ 반드시 isOpen을 true로 설정한 뒤에 false로 초기화
+    }
+  }, [hasImage]);
+
+  const onCropComplete = (_: any, croppedAreaPixels: any) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  };
+
+  const uploadCroppedImage = async () => {
+    console.log("사진 업로드")
+    if (!imageSrc || !croppedAreaPixels || !user?.userId) return;
+    const croppedImageBlob = await getCroppedImg(imageSrc, croppedAreaPixels);
+
+    // 이 blob을 FormData에 담아 업로드하면 됨
+    const formData = new FormData();
+    formData.append('userId', user?.userId);
+    formData.append('image', croppedImageBlob, 'profile.png');
+    try {
+      const response = await userService.editUserProfile(formData);
+      console.log(response)
+      setIsOpen(false)
+    } catch(error) {
+      console.error(error);
+    }
+  };
+
+  const getUserImg = async() => {
+    if(!user) return;
+    const param = {
+      userId: user?.userId
+    }
+    try {
+      const response = await userService.getUserProfileImg(param);
+      // console.log(response.data)
+      if (response && response.data.profileImg) {
+        const newImg = response.data.profileImg;
+        // 캐시 무효화를 위해 쿼리스트링 추가
+        setUserImg(`${newImg}?t=${Date.now()}`);
+        console.log(userImg)
+      } else {
+        setUserImg(null); // 기본 이미지 표시를 위해 null 처리
+      }
+      
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    if(!isOpen) {
+      getUserImg();
+    }
+  }, [user, isOpen])
+
   return (
     user && (
-      <div className="flex flex-col h-screen justify-center items-center max-w-lg pt-9">
+      <div className="flex flex-col h-screen justify-center items-center max-w-lg pt-9 relative">
         <div className="flex flex-col h-screen w-full">
           <div className="flex flex-col w-full h-full">
             <div className="flex w-full h-[20%]">
               <div className="flex flex-col gap-2 border-2 w-[32%] justify-center items-center">
-                <div className="flex w-[60%] h-[60%] rounded-full overflow-hidden border-[1px]">
-                  {user?.profileImg && (
+                <div
+                  onClick={handleAddImage}
+                  className="flex w-[60%] h-[60%] rounded-full overflow-hidden border-[2px] hover:border-blue-500 transition-colors duration-200 cursor-pointer"
+                >
+                  {userImg ? (
                     <img
-                      src={`${user.profileImg}`}
-                      className="w-full h-full object-contain"
+                      key={userImg}
+                      src={`http://localhost:3001${userImg}`}
+                      className="w-full h-full"
                     />
+                  ) : (
+                    <img src="/defaultProfile.png" className="w-full h-full" />
                   )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={inputRef}
+                    className="hidden"
+                    onChange={handleFileChange}
+                  />
                 </div>
                 <div>
                   <span>{user?.username}</span>
@@ -189,7 +294,7 @@ export default function Mypage() {
                   {sortedItemList?.map((item, index) => (
                     <div
                       key={index}
-                      className="w-full h-[200px] border-2 box-border border-2"
+                      className="w-full h-[200px] border-2 box-border"
                       onClick={() => openModal(item.itemImg)}
                     >
                       <img
@@ -201,7 +306,7 @@ export default function Mypage() {
                 </div>
                 {selectedImage && (
                   <div
-                    className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
+                    className="inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
                     onClick={closeModal}
                   >
                     <div className="bg-white rounded-lg p-4 max-w-[90%] max-h-[90%] relative">
@@ -217,6 +322,50 @@ export default function Mypage() {
                 )}
               </div>
             </div>
+            {isOpen && (
+              <div
+                className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                onClick={() => setIsOpen(false)}
+              >
+                <div
+                  className="bg-white rounded-lg shadow-lg w-[60%] p-6"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <h2 className="text-xl font-bold mb-4">
+                    이미지 크기를 맞춰주세요
+                  </h2>
+                  <div className="flex justify-center">
+                    {imageSrc && (
+                      <div className="relative w-[280px] h-[280px] rounded-full overflow-hidden">
+                        <Cropper
+                          image={imageSrc}
+                          crop={crop}
+                          zoom={zoom}
+                          aspect={1}
+                          onCropChange={setCrop}
+                          onZoomChange={setZoom}
+                          onCropComplete={onCropComplete}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex justify-between">
+                    <button
+                      onClick={uploadCroppedImage}
+                      className="mt-4 px-4 py-2 bg-green-500 text-white rounded"
+                    >
+                      업로드
+                    </button>
+                    <button
+                      onClick={() => setIsOpen(false)}
+                      className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    >
+                      닫기
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

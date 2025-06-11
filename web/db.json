@@ -140,7 +140,6 @@
       "userPw": "$2b$10$Gccd0nKbLkV5tFtCvidNFOtnMzWjYZNbHyBX/hjYW0p0/nW8XnYTm",
       "username": "ttt",
       "phone": "123123123",
-      "profileImg": "/pngwing.com.png",
       "address": "ffs"
     },
     {
@@ -149,7 +148,6 @@
       "userPw": "$2b$10$qwtPrDwKEmpTqp4oChAVmubiwv7fzKsNK9tBZjU15ulkZQeciD7p.",
       "username": "애플21",
       "phone": "01012341234",
-      "profileImg": "/pngwing.com.png",
       "address": "주소 주소 주소 주소 111-1"
     },
     {
@@ -158,7 +156,6 @@
       "userPw": "$2b$10$JkrFbfk82mFbqDsefCCm3er.h/WLQWJ5apEwiaZTXdEum6XIU4nFK",
       "username": "test12",
       "phone": "01012341234",
-      "profileImg": "/pngwing.com.png",
       "address": "주소 주소 주소 주소 111-1"
     },
     {
@@ -500,7 +497,8 @@
       "userPw": "$2b$10$hb1n653ZtA/Sd1uaIC8DquYZ6RbGLfbULyaHvHRh4e3wz/VKobzmm",
       "username": "애플1",
       "phone": "01012341234",
-      "address": "7, Nambusunhwan-ro 180-gil, Gwanak-gu, Seoul, Republic of Korea"
+      "address": "7, Nambusunhwan-ro 180-gil, Gwanak-gu, Seoul, Republic of Korea",
+      "profileImg": "/profileImg/1749629300710_image.png"
     },
     {
       "id": "568d",

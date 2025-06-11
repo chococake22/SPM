@@ -42,6 +42,13 @@ app.use(
   })
 );
 
+// 프로필 사진 이미지 불러오는 로컬에 있는 저장소
+app.use(
+  '/profileImg',
+  express.static(path.join(__dirname, '../../storage/profileImg'))
+);
+
+
 app.options('*', cors());
 app.use(express.json());
 app.use(cookieParser());

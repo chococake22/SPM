@@ -72,6 +72,7 @@ export interface UserInfoData {
   phone: string;
   address: string;
   message?: string;
+  profileImg?: string;
 }
 
 export interface UserInfoResponse {
@@ -97,6 +98,16 @@ export interface EditUserPwdRequest {
 }
 
 export interface EditUserPwdResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface EditUserImgRequest {
+  userId: string;
+  profileImg: string;
+}
+
+export interface EditUserImgResponse {
   success: boolean;
   message: string;
 }

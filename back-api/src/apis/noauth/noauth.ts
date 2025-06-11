@@ -57,7 +57,6 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
           data: {
             userId: userDb.userId,
             username: userDb.username,
-            profileImg: userDb.profileImg,
             phone: userDb.phone,
             address: userDb.address,
             tokens: {

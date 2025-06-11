@@ -1,0 +1,5 @@
+# 이건 포함시키고
+!storage/profileImg/
+
+# 이건 제외시킴
+storage/profileImg/*.png

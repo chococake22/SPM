@@ -1,9 +1,13 @@
 import { Router, Request, Response } from 'express';
 import api from '../../lib/axios'; 
 import bcrypt from 'bcrypt';
+import upload from '../../utils/upload';
+
+interface MulterRequest extends Request {
+  file: Express.Multer.File;
+}
 
 const dbUrl = process.env.DB_URL || 'http://localhost:3002';
-
 const router = Router();
 
 /**
@@ -25,7 +29,6 @@ router.get('/info', async (req: Request, res: Response): Promise<void> => {
         userId: userDb.userId,
         username: userDb.username,
         phone: userDb.phone,
-        profileImg: userDb.profileImg,
         address: userDb.address
       }
 
@@ -183,6 +186,113 @@ router.patch('/edit/pwd', async (req: Request, res: Response): Promise<void> => 
     res
       .status(500)
       .json({ message: 'Error fetching items', status: 500, success: false });
+    return;
+  }
+});
+
+
+router.patch(
+  '/edit/img',
+  upload.single('image'),
+  async (req: Request, res: Response): Promise<void> => {
+    const { userId } = req.body;
+    const file = (req as MulterRequest).file;
+
+    console.log('userId:', userId);
+    console.log('file:', file?.originalname, file?.mimetype);
+
+    if (!file) {
+      res.status(400).json({ message: '파일이 없습니다.', success: false });
+      return;
+    }
+
+    try {
+      // 데이터를 가져옴
+      const dbUser = await api.get(`${dbUrl}/users`, { params: { userId } });
+      const userList = dbUser.data;
+      const id = userList[0].id;
+
+      // 해당 ID가 있는지 먼저 확인.
+      if (id) {
+        const imagePath = `/profileImg/${file.filename}`;
+        const userDb = userList[0];
+
+        const id = userDb.id;
+
+        // 비밀번호 변경
+        await api.patch(`${dbUrl}/users/${id}`, {
+          profileImg: imagePath,
+        });
+
+        const data = {
+          userId: userId,
+        };
+
+        res.status(200).json({
+          message: '프로필 이미지가 변경되었습니다.',
+          data: data,
+          status: 200,
+          success: true,
+        });
+        return;
+      } else {
+        res.status(404).json({
+          message: '존재하지 않는 아이디입니다.',
+          status: 404,
+          success: false,
+        });
+        return;
+      }
+    } catch (error) {
+      console.error('Error fetching items:', error);
+      res
+        .status(500)
+        .json({ message: 'Error fetching items', status: 500, success: false });
+      return;
+    }
+  }
+);
+
+
+router.get('/img', async (req: Request, res: Response): Promise<void> => {
+  const { userId } = req.query as { userId: string }; // ✅ query에서 추출
+
+  console.log("GET '/img':", userId);
+
+  try {
+    // 데이터를 가져옴
+    const response = await api.get(`${dbUrl}/users`, { params: { userId } }); // /items로 요청 (baseURL 자동 적용)
+
+
+    console.log(response)
+
+    // 해당 ID가 있는지 먼저 확인.
+    if (response.data[0]) {
+      const userDb = response.data[0];
+      const data = {
+        userId: userDb.userId,
+        profileImg: userDb.profileImg,
+      };
+
+      res.status(200).json({
+        data: data,
+        message: '프로필 이미지 정보를 가져왔습니다.',
+        status: 200,
+        success: true,
+      });
+    } else {
+      res.status(400).json({
+        message: '해당 사용자가 없습니다',
+        status: 400,
+        success: false,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: '서버 에러가 발생했습니다.',
+      status: 200,
+      success: true,
+    });
     return;
   }
 });
