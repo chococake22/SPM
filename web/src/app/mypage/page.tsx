@@ -230,7 +230,7 @@ export default function Mypage() {
                   {userImg ? (
                     <img
                       key={userImg}
-                      src={`http://localhost:3001${userImg}`}
+                      src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${userImg}`}
                       className="w-full h-full"
                     />
                   ) : (
