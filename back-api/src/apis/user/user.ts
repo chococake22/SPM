@@ -214,12 +214,12 @@ router.patch(
 
       // 해당 ID가 있는지 먼저 확인.
       if (id) {
-        const imagePath = `/profileImg/${file.filename}`;
+        const imagePath = file.filename;
         const userDb = userList[0];
 
         const id = userDb.id;
 
-        // 비밀번호 변경
+        // 이미지 변경
         await api.patch(`${dbUrl}/users/${id}`, {
           profileImg: imagePath,
         });
@@ -262,9 +262,6 @@ router.get('/img', async (req: Request, res: Response): Promise<void> => {
   try {
     // 데이터를 가져옴
     const response = await api.get(`${dbUrl}/users`, { params: { userId } }); // /items로 요청 (baseURL 자동 적용)
-
-
-    console.log(response)
 
     // 해당 ID가 있는지 먼저 확인.
     if (response.data[0]) {
