@@ -32,12 +32,12 @@ const ItemPhoto: React.FC<ItemPhotoProps> = ({ imageInfo }) => {
           className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
           onClick={closeModal}
         >
-          <div className="bg-white rounded-lg p-4 max-w-[90%] max-h-[90%] relative">
-            <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">
+          <div className="bg-white rounded-lg p-4 max-h-[90%] relative">
+            {/* <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">
               &times;
-            </button>
+            </button> */}
             <img
-              src={`/testImages/${imageInfo}`}
+              src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_ITEM_IMAGE_URL}${imageInfo}`}
               className="max-w-full max-h-[80vh] object-contain"
             />
           </div>

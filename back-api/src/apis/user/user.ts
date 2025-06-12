@@ -193,7 +193,7 @@ router.patch('/edit/pwd', async (req: Request, res: Response): Promise<void> => 
 
 router.patch(
   '/edit/img',
-  upload.single('image'),
+  upload.single('profile'),
   async (req: Request, res: Response): Promise<void> => {
     const { userId } = req.body;
     const file = (req as MulterRequest).file;

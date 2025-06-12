@@ -171,14 +171,13 @@ export default function Mypage() {
   };
 
   const uploadCroppedImage = async () => {
-    console.log("사진 업로드")
     if (!imageSrc || !croppedAreaPixels || !user?.userId) return;
     const croppedImageBlob = await getCroppedImg(imageSrc, croppedAreaPixels);
 
     // 이 blob을 FormData에 담아 업로드하면 됨
     const formData = new FormData();
     formData.append('userId', user?.userId);
-    formData.append('image', croppedImageBlob, 'profile.png');
+    formData.append('profile', croppedImageBlob, 'profile.png');
     try {
       const response = await userService.editUserProfile(formData);
       console.log(response)
@@ -298,7 +297,7 @@ export default function Mypage() {
                   {sortedItemList?.map((item, index) => (
                     <div
                       key={index}
-                      className="w-full h-[200px] border-2 box-border"
+                      className="w-full h-[200px] border-2 box-border hover:border-blue-500 transition-colors duration-200 cursor-pointer"
                       onClick={() => openModal(item.itemImg)}
                     >
                       <img
@@ -309,7 +308,7 @@ export default function Mypage() {
                     </div>
                   ))}
                 </div>
-                {selectedImage && (
+                {/* {selectedImage && (
                   <div
                     className="inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
                     onClick={closeModal}
@@ -319,12 +318,12 @@ export default function Mypage() {
                         &times;
                       </button>
                       <img
-                        src={`/testImages/${selectedImage}`}
+                        src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/itemImg/${selectedImage}`}
                         className="max-w-full max-h-[80vh] object-contain"
                       />
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
             {isOpen && (
