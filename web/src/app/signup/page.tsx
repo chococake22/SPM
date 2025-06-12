@@ -40,10 +40,6 @@ const SignUpPage = () => {
       return;
     }
 
-    console.log(!isValidPwd(data.userPw));
-    console.log(!isValidPwd(data.userPwChk));
-    console.log(data.userPw !== data.userPwChk);
-
     if (
       !isValidPwd(data.userPw) ||
       !isValidPwd(data.userPwChk) ||

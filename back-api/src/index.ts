@@ -48,6 +48,12 @@ app.use(
   express.static(path.join(__dirname, '../../storage/profileImg'))
 );
 
+// 추가: 아이템 이미지
+app.use(
+  '/storage/itemImg',
+  express.static(path.resolve(__dirname, '../../storage/itemImg'))
+);
+
 
 app.options('*', cors());
 app.use(express.json());

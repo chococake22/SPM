@@ -302,7 +302,8 @@ export default function Mypage() {
                       onClick={() => openModal(item.itemImg)}
                     >
                       <img
-                        src={`/testImages/${item.itemImg}`}
+                        src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/itemImg/${item.itemImg}`}
+                        // src={`/testImages/${item.itemImg}`}
                         className="w-full h-full"
                       />
                     </div>

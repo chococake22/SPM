@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 
 interface ItemPhotoProps {
   imageInfo: string;
@@ -13,17 +13,16 @@ const ItemPhoto: React.FC<ItemPhotoProps> = ({ imageInfo }) => {
     console.log("open: " + img)
     setIsOpenedModal(img);
   };
-
   
   const closeModal = () => {
-    console.log('close');
     setIsOpenedModal(null);
   };
+
   return (
     <div className="w-full h-full">
       <div className="w-full h-full" onClick={() => openModal(imageInfo)}>
         <img
-          src={`/testImages/${imageInfo}`}
+          src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${process.env.NEXT_PUBLIC_ITEM_IMAGE_URL}${imageInfo}`}
           alt={`${imageInfo}`}
           className="w-full h-full"
         />

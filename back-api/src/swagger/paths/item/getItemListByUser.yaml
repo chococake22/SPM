@@ -1,7 +1,7 @@
 get:
   tags:
     - 게시글
-  summary: 사용자별 가져오기
+  summary: 사용자별 게시글 가져오기
   security:
     - Access Token: []  # 🔐 토큰 필요 설정
   parameters:

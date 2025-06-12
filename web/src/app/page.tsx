@@ -21,6 +21,10 @@ const Home = () => {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const { user, setUser } = useUserInfo();
+  const [ webUrl, setWebUrl] = useState<string | null>(null);
+  const [ apiUrl, setApiUrl] = useState<string | null>(null);
+  const [ profileImgUrl, setProfileImgUrl] = useState<string | null>(null);
+  const [itemImgUrl, setItemImgUrl] = useState<string | null>(null);
 
   // 맨 처음 렌더링이 될 때에는 함수가 실행되지는 않고 정의만 된다.
   const getItems = useCallback(async (pageNumber: number) => {
@@ -110,6 +114,17 @@ const Home = () => {
   if(!itemList) {
     <div>데이터가 없습니다.</div>
   }
+
+  // useEffect(() => {
+  //   setWebUrl(process.env.NEXT_PUBLIC_API_BASE_URL as string);
+  //   setApiUrl()
+  //   setItemImgUrl()
+  //   setProfileImgUrl()
+  //   console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
+  //   console.log(process.env.NEXT_PUBLIC_WEB_BASE_URL);
+  //   console.log(process.env.NEXT_PUBLIC_ITEM_IMAGE_URL);
+  //   console.log(process.env.NEXT_PUBLIC_USER_PROFILE_URL);
+  // }, [])
   
 
   return (

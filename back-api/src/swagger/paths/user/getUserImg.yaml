@@ -1,29 +1,26 @@
 get:
   tags:
     - 회원정보
-  summary: 회원정보 가져오기
+  summary: 회원 프로필 이미지 가져오기
   security:
     - Access Token: []  # 🔐 토큰 필요 설정
   parameters:
     - name: userId
       in: query
-      description: 해당 회원 정보 가져오기
+      description: 해당 회원 프로필 이미지 가져오기
       required: true
       schema:
         type: string
   responses:
     '200':
-      description: 사용자 정보 가져오기 성공
+      description: 사용자 이미지 가져오기 성공
       content:
         application/json:
           example:
             data:
               userId: user12@test.com
-              username: 유저12
-              phone: 01012341234
               profileImg: /test.png
-              address: 테스트시 테스트구 테스트동
-            message: 사용자 정보 가져오기 성공
+            message: 사용자 이미지 가져오기 성공
             status: 200
             success: true
     '400':

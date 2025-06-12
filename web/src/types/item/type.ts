@@ -13,3 +13,14 @@ export interface Item {
   description: string;
   id: number;
 }
+
+export interface UploadItemRequest {
+  image: string;
+  itemName: string;
+  description: string;
+}
+
+export interface UploadItemResponse {
+  success:boolean;
+  message:string;
+}

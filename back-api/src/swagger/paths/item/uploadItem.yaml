@@ -1,0 +1,64 @@
+post:
+  tags:
+    - 게시글
+  summary: 게시글 등록
+  security:
+    - Access Token: []  # 🔐 토큰 필요 설정
+  requestBody:
+    description: 게시글 등록하기
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            userId:
+              type: string
+              description: 사용자 ID
+            username:
+              type: string
+              description: 사용자 닉네임
+            itemName:
+              type: string
+              description: 게시글 제목
+            description:
+              type: string
+              description: 게시글 내용            
+            itemImg:
+              type: string
+              format: binary
+              description: 업로드할 게시글 이미지 파일
+          required:
+            - userId
+            - username
+            - itemName
+            - description
+            - itemImg            
+
+  responses:
+    '200':
+      description: 게시글 등록 성공
+      content:
+        application/json:
+          example:
+            data:
+              userId: user12@test.com
+            message: 게시글 등록 성공
+            status: 200
+            success: true
+    '404':
+      description: 잘못된 요청
+      content:
+        application/json:
+          example:
+            message: 잘못된 요청입니다.
+            status: 404
+            success: false
+    '500':
+      description: 서버 오류 발생
+      content:
+        application/json:
+          example:
+            message: 서버 오류가 발생했습니다.
+            status: 500
+            success: false
