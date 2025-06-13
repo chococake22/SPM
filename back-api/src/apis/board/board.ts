@@ -59,20 +59,33 @@ router.get('/list', async (req: Request, res: Response) => {
 router.post('/upload', async (req: Request, res: Response): Promise<void> => {
   const { title, content } = req.body;
 
-  const token = req.cookies.accessToken;
-  const decoded = jwt.verify(token, JWT_SECRET) as {
-    userId: string;
-    [key: string]: any;
-  };
-
-  const now = new Date();
-  const formattedNow = formatDateToYMDHMS(now);
-
-  console.log(
-    "post, '/upload': " + decoded.username + ', ' + title + ', ' + content
-  );
-
   try {
+    const token = req.cookies.accessToken;
+    if (!token) {
+      res.status(401).json({ message: '인증 토큰이 없습니다.' });
+    }
+    let decoded = jwt.verify(token, JWT_SECRET) as {
+      userId: string;
+      [key: string]: any;
+    };
+
+    try {
+      decoded = jwt.verify(token, JWT_SECRET) as {
+        userId: string;
+        username: string;
+      };
+    } catch (err) {
+      console.error('JWT 검증 실패:', err);
+      res.status(403).json({ message: '유효하지 않은 토큰입니다.' });
+    }
+
+    const now = new Date();
+    const formattedNow = formatDateToYMDHMS(now);
+
+    console.log(
+      "post, '/upload': " + decoded.username + ', ' + title + ', ' + content
+    );
+
     const response = await api.post(`${dbUrl}/boards`, {
       username: decoded.username,
       title: title,

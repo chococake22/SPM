@@ -48,11 +48,6 @@ const [image, setImage] = useState<Blob | null>(null);
     [] // setData는 React에서 보장하는 stable 함수라 빈 배열로 OK
   );
 
-  useEffect(() => {
-    console.log("???")
-
-  }, [handleInputChange]);
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
