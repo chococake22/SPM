@@ -6,32 +6,41 @@ type PaginationProps = {
   totalCount: number;
 };
 
-export function Pagination({ offset, currentPage, totalCount }: PaginationProps) {
+export function Pagination({
+  offset,
+  currentPage,
+  totalCount,
+}: PaginationProps) {
   const pages = Array.from({ length: totalCount }, (_, i) => i + 1);
-  
-  console.log(currentPage)
-  console.log(totalCount)
+
+
+  console.log("current: " + currentPage)
 
   return (
     <div className="flex justify-center">
-      <nav className="inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+      <nav
+        className="inline-flex -space-x-px rounded-md shadow-sm"
+        aria-label="Pagination"
+      >
         {/* 이전 버튼 */}
-        <Link
-          href={`?page=${currentPage - 1}`}
-          className={`px-3 py-2 border text-sm font-medium rounded-l-md ${
-            currentPage === 1
-              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              : 'bg-white text-gray-700 hover:bg-gray-100'
-          }`}
-        >
-          이전
-        </Link>
+        {currentPage === 1 ? (
+          <span className="px-3 py-2 border text-sm font-medium rounded-l-md bg-gray-200 text-gray-400 cursor-not-allowed">
+            이전
+          </span>
+        ) : (
+          <Link
+            href={`?page=${ currentPage ===  2 ? 0 : currentPage - 1}&offset=${offset}`}
+            className="px-3 py-2 border text-sm font-medium rounded-l-md bg-white text-gray-700 hover:bg-gray-100"
+          >
+            이전
+          </Link>
+        )}
 
         {/* 페이지 번호들 */}
         {pages.map((page) => (
           <Link
             key={page}
-            href={`?page=${page-1}&offset=${offset}`}
+            href={`?page=${page - 1}&offset=${offset}`}
             className={`px-3 py-2 border text-sm font-medium ${
               page === currentPage
                 ? 'bg-blue-500 text-white'
@@ -43,16 +52,18 @@ export function Pagination({ offset, currentPage, totalCount }: PaginationProps)
         ))}
 
         {/* 다음 버튼 */}
-        <Link
-          href={`?page=${currentPage + 1}`}
-          className={`px-3 py-2 border text-sm font-medium rounded-r-md ${
-            currentPage === totalCount
-              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              : 'bg-white text-gray-700 hover:bg-gray-100'
-          }`}
-        >
-          다음
-        </Link>
+        {currentPage === totalCount ? (
+          <span className="px-3 py-2 border text-sm font-medium rounded-r-md bg-gray-200 text-gray-400 cursor-not-allowed">
+            다음
+          </span>
+        ) : (
+          <Link
+            href={`?page=${currentPage}&offset=${offset}`}
+            className="px-3 py-2 border text-sm font-medium rounded-r-md bg-white text-gray-700 hover:bg-gray-100"
+          >
+            다음
+          </Link>
+        )}
       </nav>
     </div>
   );

@@ -50,47 +50,52 @@ export default function BoardPage() {
   }, [page]);
 
 
-
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="flex flex-col w-full max-w-lg">
-        <div>
-          {boardList && boardList.length > 0 ? (
-            <div>
-              <div className="h-[700px] grid grid-cols-2 gap-x-3 gap-y-6 ">
-                {boardList.map((post) => (
-                  <Link key={post.id} href={`/board/${post.id}`}>
-                    <PostCard
-                      title={post.title}
-                      username={post.username}
-                      content={post.content}
-                    />
-                  </Link>
-                ))}
-              </div>
-              <div className="flex w-full h-[10%] justify-center items-center">
-                <Pagination
-                  offset={ITEMS_PER_PAGE}
-                  currentPage={page}
-                  totalCount={totalCount}
-                />
-              </div>
+    <div className="flex justify-center items-center w-full h-screen">
+      <div className="flex flex-col w-full max-w-lg gap-y-4">
+        {boardList && boardList.length > 0 ? (
+          <div className="flex-grow flex flex-col gap-y-8">
+            <div className="grid grid-cols-2 gap-x-3 gap-y-6 ">
+              {boardList.map((post) => (
+                <Link key={post.id} href={`/board/${post.id}`}>
+                  <PostCard
+                    title={post.title}
+                    username={post.username}
+                    content={post.content}
+                  />
+                </Link>
+              ))}
             </div>
-          ) : (
-            <div>게시글이 없습니다.</div>
-          )}
-          <div className="flex w-full justify-end">
-            <div className="flex items-end">
-              <button
-                type="submit"
-                onClick={handleEdit}
-                className="bg-blue-500 text-white px-4 py-2 rounded"
-              >
-                글쓰기
-              </button>
+            <div className="flex w-full justify-center items-center">
+              <Pagination
+                offset={ITEMS_PER_PAGE}
+                currentPage={page}
+                totalCount={totalCount}
+              />
+            </div>
+            <div className="flex justify-end items-end">
+              <div>
+                <button
+                  type="submit"
+                  onClick={handleEdit}
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  글쓰기
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div>
+            <button
+              type="submit"
+              onClick={handleEdit}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              글쓰기
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

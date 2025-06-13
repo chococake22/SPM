@@ -52,6 +52,7 @@ function AddItemPage() {
         const response = await boardService.uploadBoard(data);
         if (response.success) {
           alert('등록되었습니다.');
+          router.back();
         }
       } catch (error) {
         console.error(error);
