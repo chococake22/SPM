@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 
-interface TalkProps {
+interface TalkIdLayoutProps {
   children: ReactNode; // children의 타입을 ReactNode로 설정
 }
 
-export default function TalkLayout({ children }: TalkProps) {
+export default function TalkIdLayout({ children }: TalkIdLayoutProps) {
   return <>{children}</>;
 }
