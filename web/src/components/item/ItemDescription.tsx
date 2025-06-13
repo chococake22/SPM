@@ -23,7 +23,7 @@ const ItemDescription: React.FC<ItemDescriptionProps> = ({
       <span className="ml-2">{itemName}</span>
       <div className="ml-2 line-clamp-7">
         <p
-          className={`whitespace-normal break-words ${showFullText ? '' : 'line-clamp-1'}`}
+          className={`whitespace-normal break-words text-sm font-light ${showFullText ? '' : 'line-clamp-1'}`}
         >
           {description}
         </p>

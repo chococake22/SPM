@@ -1,16 +1,10 @@
 get:
   tags:
-    - 아이템
-  summary: 사용자별 아이템 가져오기
+    - 게시글
+  summary: 게시글 가져오기
   security:
     - Access Token: []  # 🔐 토큰 필요 설정
   parameters:
-    - name: username
-      in: query
-      description: 사용자 이름
-      required: false
-      schema:
-        type: string
     - name: offset
       in: query
       description: 해당 회원 정보 가져오기
@@ -31,23 +25,17 @@ get:
           example:
             data:
               - id: 1
-                imageInfo: apple
                 username: 애플1
-                profileImg: /pngwing.com.png
-                itemImg: /apple.png
-                heartCnt: 12
-                commentCnt: 3
-                itemName: 사과 10개
-                description: 겁나 달달한 사과임asdfaasdffasdsdfasdfasdfasdfasdfasdasdfasdasdf
+                title: sdfsdfsdf
+                content: sdfsdfsdf
+                regiDttm: 2025-06-13 15:49:43
+                finalModDttm: 2025-06-13 15:49:43
               - id: 2
-                imageInfo: apple
                 username: 애플2
-                profileImg: /pngwing.com.png
-                itemImg: /apple.png
-                heartCnt: 5
-                commentCnt: 1
-                itemName: 사과 9개
-                description: 3234234234234234234ㅁㄴㅇㄹㅁㄴㅇㄴㅇㄹㅁㄴ
+                title: sdfsdfsdf
+                content: sdfsdfsdf
+                regiDttm: 2025-06-13 15:49:43
+                finalModDttm: 2025-06-13 15:49:43
             message: 사용자 정보 가져오기 성공
             status: 200
             success: true

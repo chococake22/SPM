@@ -1,0 +1,47 @@
+post:
+  tags:
+    - 게시글
+  summary: 게시글 등록
+  security:
+    - Access Token: []  # 🔐 토큰 필요 설정
+  requestBody:
+    description: 게시글 등록
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            title: { type: string }
+            content: { type: string }
+          required:
+            - title
+            - content
+
+  responses:
+    '200':
+      description: 게시글 등록 성공
+      content:
+        application/json:
+          example:
+            data:
+              userId: user12@test.com
+            message: 게시글 등록 성공
+            status: 200
+            success: true
+    '404':
+      description: 잘못된 요청
+      content:
+        application/json:
+          example:
+            message: 잘못된 요청입니다.
+            status: 404
+            success: false
+    '500':
+      description: 서버 오류 발생
+      content:
+        application/json:
+          example:
+            message: 서버 오류가 발생했습니다.
+            status: 500
+            success: false

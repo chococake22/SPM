@@ -23,10 +23,10 @@ const BottomNav = () => {
             height={5}
           />
         </Link>
-        <Link href="/talk" className="flex items-center">
+        <Link href="/board" className="flex items-center">
           <Image
-            src="/icons/talk.svg"
-            alt="Talk"
+            src="/icons/board.svg"
+            alt="Board"
             className="w-6 h-6 mr-1"
             width={5}
             height={5}

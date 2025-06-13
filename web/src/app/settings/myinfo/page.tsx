@@ -3,10 +3,10 @@
 import { useUserInfo } from '@/hook/UserContext';
 import { userService } from '@/services/user.service';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import InputText from '@/components/InputText';
 import TestModal, { ModalRef } from '@/components/modal/TestModal';
-import { UserInfoResponse, UserInfoData } from '@/types/user/type';
+import { UserInfoData } from '@/types/user/type';
 import Button from '@/components/common/Button';
 import { noauthService } from '@/services/noauth.service';
 
@@ -21,24 +21,6 @@ export default function Settings() {
     phone: user?.phone,
     address: user?.address
   });
-
-  const handleLogout = async () => {
-    if (confirm('로그아웃 하시겠습니까?')) {
-      try {
-        const response = await noauthService.logout();
-        if (!response) {
-          return <div>데이터가 없습니다.</div>;
-        }
-        alert(response.message);
-        // 로컬 스토리지에서 사용자 정보 삭제
-        localStorage.removeItem('userInfo');
-        // 로그아웃을 하고 나면 뒤로 갈 수 없어야 해서 replace 사용
-        router.replace('/login');
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
 
   const getUser = async () => {
     if(!user) return;
@@ -82,10 +64,10 @@ export default function Settings() {
   }, [user]);
 
   // 데이터 변화 감지
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData(prev => ({...prev, [name]: value})) 
-  }
+  },[])
 
   // 회원 정보 수정
   const handleEditUserInfo = async () => {

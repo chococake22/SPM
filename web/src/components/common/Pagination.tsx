@@ -9,7 +9,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className="flex justify-center mt-8">
+    <div className="flex justify-center">
       <nav className="inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
         {/* 이전 버튼 */}
         <Link

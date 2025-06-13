@@ -3,7 +3,7 @@
 import { useUserInfo } from '@/hook/UserContext';
 import { userService } from '@/services/user.service';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import InputText from '../../../components/InputText';
 import { UserInfoData, UserInfoResponse } from '@/types/user/type';
 import Button from '@/components/common/Button';
@@ -116,13 +116,13 @@ export default function Settings() {
     router.back();
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-  };
+  }, []);
 
   useEffect(() => {
     console.log(formData);

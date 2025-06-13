@@ -2,7 +2,7 @@
 
 import { userService } from '@/services/user.service';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import InputText from '@/components/InputText';
 import TestModal, { ModalRef } from '@/components/modal/TestModal';
 import { UserInfoResponse, UserInfoData } from '@/types/user/type';
@@ -87,10 +87,10 @@ export default function Settings() {
   }, [])
 
   // 데이터 변화 감지
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData(prev => ({...prev, [name]: value})) 
-  }
+  },[])
 
   // 회원 정보 수정
   const handleEditUserInfo = async () => {

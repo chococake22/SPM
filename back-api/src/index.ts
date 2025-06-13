@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';  // CORS 미들웨어 임포트
 import item from "./apis/item/item"
-import user from '../src/apis/user/user';
+import user from './apis/user/user';
+import board from './apis/board/board';
 import noauth from './apis/noauth/noauth';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
@@ -15,6 +16,7 @@ import * as yaml from 'js-yaml';
 const app = express();
 const env = process.env.NODE_ENV || 'development';
 
+// 환경변수 불러오기
 dotenv.config({
   path: path.resolve(
     __dirname,
@@ -48,7 +50,7 @@ app.use(
   express.static(path.join(__dirname, '../../storage/profileImg'))
 );
 
-// 추가: 아이템 이미지
+// 아이템 이미지 저장소
 app.use(
   '/storage/itemImg',
   express.static(path.resolve(__dirname, '../../storage/itemImg'))
@@ -65,6 +67,7 @@ app.use('/api', noauth); // /api/login, /api/signup 등
 // 인증이 필요한 라우터는 미들웨어로 감싸기
 app.use('/api/item', verifyAccessToken, item);
 app.use('/api/user', verifyAccessToken, user);
+app.use('/api/board', verifyAccessToken, board);
 
 // port 번호
 const port: number = 3001;

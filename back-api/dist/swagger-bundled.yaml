@@ -469,8 +469,8 @@ paths:
   /api/item/list:
     get:
       tags:
-        - 게시글
-      summary: 게시글 가져오기
+        - 아이템
+      summary: 아이템 가져오기
       security:
         - Access Token: []
       parameters:
@@ -533,8 +533,8 @@ paths:
   /api/item/user-list:
     get:
       tags:
-        - 게시글
-      summary: 사용자별 게시글 가져오기
+        - 아이템
+      summary: 사용자별 아이템 가져오기
       security:
         - Access Token: []
       parameters:
@@ -603,12 +603,12 @@ paths:
   /api/item/upload:
     post:
       tags:
-        - 게시글
-      summary: 게시글 등록
+        - 아이템
+      summary: 아이템 등록
       security:
         - Access Token: []
       requestBody:
-        description: 게시글 등록하기
+        description: 아이템 등록하기
         required: true
         content:
           multipart/form-data:
@@ -623,20 +623,127 @@ paths:
                   description: 사용자 닉네임
                 itemName:
                   type: string
-                  description: 게시글 제목
+                  description: 아이템 제목
                 description:
                   type: string
-                  description: 게시글 내용
+                  description: 아이템 내용
                 itemImg:
                   type: string
                   format: binary
-                  description: 업로드할 게시글 이미지 파일
+                  description: 업로드할 아이템 이미지 파일
               required:
                 - userId
                 - username
                 - itemName
                 - description
                 - itemImg
+      responses:
+        '200':
+          description: 아이템 등록 성공
+          content:
+            application/json:
+              example:
+                data:
+                  userId: user12@test.com
+                message: 아이템 등록 성공
+                status: 200
+                success: true
+        '404':
+          description: 잘못된 요청
+          content:
+            application/json:
+              example:
+                message: 잘못된 요청입니다.
+                status: 404
+                success: false
+        '500':
+          description: 서버 오류 발생
+          content:
+            application/json:
+              example:
+                message: 서버 오류가 발생했습니다.
+                status: 500
+                success: false
+  /api/board/list:
+    get:
+      tags:
+        - 게시글
+      summary: 게시글 가져오기
+      security:
+        - Access Token: []
+      parameters:
+        - name: offset
+          in: query
+          description: 해당 회원 정보 가져오기
+          required: true
+          schema:
+            type: number
+        - name: limit
+          in: query
+          description: 아이템 종류 필터
+          required: false
+          schema:
+            type: number
+      responses:
+        '200':
+          description: 사용자 정보 가져오기 성공
+          content:
+            application/json:
+              example:
+                data:
+                  - id: 1
+                    username: 애플1
+                    title: sdfsdfsdf
+                    content: sdfsdfsdf
+                    regiDttm: '2025-06-13 15:49:43'
+                    finalModDttm: '2025-06-13 15:49:43'
+                  - id: 2
+                    username: 애플2
+                    title: sdfsdfsdf
+                    content: sdfsdfsdf
+                    regiDttm: '2025-06-13 15:49:43'
+                    finalModDttm: '2025-06-13 15:49:43'
+                message: 사용자 정보 가져오기 성공
+                status: 200
+                success: true
+        '400':
+          description: 잘못된 요청
+          content:
+            application/json:
+              example:
+                message: 잘못된 요청입니다.
+                status: 400
+                success: false
+        '500':
+          description: 서버 오류 발생
+          content:
+            application/json:
+              example:
+                message: 서버 오류가 발생했습니다.
+                status: 500
+                success: false
+  /api/board/upload:
+    post:
+      tags:
+        - 게시글
+      summary: 게시글 등록
+      security:
+        - Access Token: []
+      requestBody:
+        description: 게시글 등록
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+              required:
+                - title
+                - content
       responses:
         '200':
           description: 게시글 등록 성공

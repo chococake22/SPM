@@ -35,5 +35,11 @@ paths:
   /api/item/user-list:
     $ref: './paths/item/getItemListByUser.yaml'
   /api/item/upload:
-    $ref: './paths/item/uploadItem.yaml'    
+    $ref: './paths/item/uploadItem.yaml'
+# board
+  /api/board/list:
+    $ref: './paths/board/getBoardList.yaml'
+  /api/board/upload:
+    $ref: './paths/board/uploadBoard.yaml'
+
 

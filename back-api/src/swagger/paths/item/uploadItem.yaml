@@ -1,11 +1,11 @@
 post:
   tags:
-    - 게시글
-  summary: 게시글 등록
+    - 아이템
+  summary: 아이템 등록
   security:
     - Access Token: []  # 🔐 토큰 필요 설정
   requestBody:
-    description: 게시글 등록하기
+    description: 아이템 등록하기
     required: true
     content:
       multipart/form-data:
@@ -20,14 +20,14 @@ post:
               description: 사용자 닉네임
             itemName:
               type: string
-              description: 게시글 제목
+              description: 아이템 제목
             description:
               type: string
-              description: 게시글 내용            
+              description: 아이템 내용            
             itemImg:
               type: string
               format: binary
-              description: 업로드할 게시글 이미지 파일
+              description: 업로드할 아이템 이미지 파일
           required:
             - userId
             - username
@@ -37,13 +37,13 @@ post:
 
   responses:
     '200':
-      description: 게시글 등록 성공
+      description: 아이템 등록 성공
       content:
         application/json:
           example:
             data:
               userId: user12@test.com
-            message: 게시글 등록 성공
+            message: 아이템 등록 성공
             status: 200
             success: true
     '404':

@@ -1,15 +1,11 @@
 "use client"
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useCallback } from 'react';
 import InputText from "@/components/InputText";
-import { userService } from '@/services/user.service';
 import { SignupRequest } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
 import Button from '../../components/common/Button';
 import { noauthService } from '@/services/noauth.service';
-
-
-
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -23,13 +19,16 @@ const SignUpPage = () => {
     address: ''
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setData((prevData) => ({
-      ...prevData,
-      [name]: value, // name 속성을 키로 사용하여 값 업데이트
-    }));
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
+      setData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    },
+    [] // setData는 React에서 보장하는 stable 함수라 빈 배열로 OK
+  );
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault(); // 폼 제출시 페이지가 새로고침되지 않도록 하기

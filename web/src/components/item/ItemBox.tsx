@@ -35,7 +35,7 @@ const itemBox: React.FC<ItemBoxProps> = ({ entry }) => {
             <ItemPhoto imageInfo={entry.itemImg} />
           </div>
 
-          <div className="h-[10%]">
+          <div className="h-[5vh]">
             <ItemValues
               heartCnt={entry.heartCnt}
               commentCnt={entry.commentCnt}

@@ -576,7 +576,7 @@
       "username": "애플1",
       "phone": "01012341234",
       "address": "7, Nambusunhwan-ro 180-gil, Gwanak-gu, Seoul, Republic of Korea",
-      "profileImg": "1749737099940_profile.png"
+      "profileImg": "1749797415416_profile.png"
     },
     {
       "id": "568d",
@@ -585,6 +585,40 @@
       "username": "테스트00",
       "phone": "010123412344",
       "address": "서울시 관악구 수수수숫수"
+    }
+  ],
+  "boards": [
+    {
+      "id": "99a5",
+      "username": "애플1",
+      "title": "sdfsdfsdf",
+      "content": "sdfsdfsdf",
+      "regiDttm": "2025-06-13 15:49:43",
+      "finalModDttm": "2025-06-13 15:49:43"
+    },
+    {
+      "id": "4b49",
+      "username": "애플1",
+      "title": "sdfsdfsdfs",
+      "content": "12312312312312312313223",
+      "regiDttm": "2025-06-13 15:55:33",
+      "finalModDttm": "2025-06-13 15:55:33"
+    },
+    {
+      "id": "d45d",
+      "username": "애플1",
+      "title": "88888",
+      "content": "111123123123123123123123123123",
+      "regiDttm": "2025-06-13 15:55:42",
+      "finalModDttm": "2025-06-13 15:55:42"
+    },
+    {
+      "id": "89f3",
+      "username": "애플1",
+      "title": "asdfasdf",
+      "content": "asdfasfasdf",
+      "regiDttm": "2025-06-13 16:03:05",
+      "finalModDttm": "2025-06-13 16:03:05"
     }
   ]
 }
