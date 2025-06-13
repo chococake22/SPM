@@ -1,5 +1,6 @@
 # SPM
-쇼핑몰 프로젝트
+SPM 프로젝트
+- 인스타그램 UI/UX 참고
 
 # Port 구조
 Front: http://localhost:3000  
