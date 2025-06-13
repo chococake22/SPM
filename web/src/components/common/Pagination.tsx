@@ -13,9 +13,6 @@ export function Pagination({
 }: PaginationProps) {
   const pages = Array.from({ length: totalCount }, (_, i) => i + 1);
 
-
-  console.log("current: " + currentPage)
-
   return (
     <div className="flex justify-center">
       <nav
@@ -29,7 +26,7 @@ export function Pagination({
           </span>
         ) : (
           <Link
-            href={`?page=${ currentPage ===  2 ? 0 : currentPage - 1}&offset=${offset}`}
+            href={`?page=${ currentPage ===  0 ? 0 : currentPage - 2}&offset=${offset}`}
             className="px-3 py-2 border text-sm font-medium rounded-l-md bg-white text-gray-700 hover:bg-gray-100"
           >
             이전

@@ -36,7 +36,6 @@ export default function BoardPage() {
 
       const boards = response?.data?.list || [];
       const count = response?.data.totalCount || 0;
-      console.log(boards);
       setBoardList(boards);
       setTotalCount(Math.ceil(count / ITEMS_PER_PAGE));
     } catch (error) {

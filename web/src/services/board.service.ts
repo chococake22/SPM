@@ -9,8 +9,6 @@ const boardService = {
     offset: number,
     limit: number
   ): Promise<BoardListResponse | undefined> {
-    console.log("offset: " + offset)
-    console.log("limit: " + limit)
     try {
       const response = await api.get<BoardListResponse>('/api/board/list', {
         params: {

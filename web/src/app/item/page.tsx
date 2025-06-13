@@ -2,23 +2,21 @@
 
 import { useUserInfo } from '@/hook/UserContext';
 import {
-  ChangeEvent,
   FormEvent,
   useState,
   useRef,
-  useEffect,
   useCallback,
 } from 'react';
-import axios from 'axios';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '@/lib/cropImage';
 import { UploadItemRequest } from '@/types/item/type';
 import itemService from '@/services/item.service';
+import { useRouter } from 'next/navigation';
 
 
 function AddItemPage() {
   const [text, setText] = useState('');
-const [image, setImage] = useState<Blob | null>(null);
+  const [image, setImage] = useState<Blob | null>(null);
   const { user } = useUserInfo();
   const inputRef = useRef<HTMLInputElement>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -31,6 +29,7 @@ const [image, setImage] = useState<Blob | null>(null);
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
   const [hasImage, setHasImage] = useState<boolean>(false);
+  const router = useRouter();
   const [data, setData] = useState<UploadItemRequest>({
     image: '',
     itemName: '',
@@ -64,7 +63,15 @@ const [image, setImage] = useState<Blob | null>(null);
     formData.append('itemImg', image, 'profile.png');
 
     try {
+      if(!confirm("아이템을 등록하시겠습니까?")) {
+        return;
+      }
       const response = await itemService.uploadItem(formData);
+      if(response.success) {
+        alert("아이템이 등록되었습니다.")
+        router.push("/")
+      }
+      console.log(response)
     } catch (error) {
       console.error(error);
     }

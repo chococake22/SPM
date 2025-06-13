@@ -1,5 +1,8 @@
 # 이건 포함시키고
 !storage/profileImg/
+!storage/itemImg/
 
 # 이건 제외시킴
 storage/profileImg/*.png
+storage/itemImg/*.png
+/web/db.json

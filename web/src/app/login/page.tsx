@@ -1,18 +1,17 @@
 "use client"
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import InputText from "@/components/InputText";
 import { noauthService } from '@/services/noauth.service';
-import { LoginForm, LoginResponse } from '@/types/user/type';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/common/Button';
 import { useUserInfo } from '@/hook/UserContext';
  
 const LoginPage = () => {
   const router = useRouter();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-        const { user, setUser } = useUserInfo();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { user, setUser } = useUserInfo();
 
   const handleSignup = () => {
     router.push('/signup');
