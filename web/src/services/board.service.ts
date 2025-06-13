@@ -18,10 +18,7 @@ const boardService = {
           limit,
         },
       });
-
-      console.log(response)
-
-      return response.data.data;
+      return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         const status = error.response?.status;

@@ -1,5 +1,5 @@
 export interface ItemListResponse {
-  data: Item[]
+  data: Item[] | undefined;
 }
 
 export interface Item {

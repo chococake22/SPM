@@ -31,7 +31,6 @@ const Home = () => {
     try {
       const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
       const response = await itemService.getItems(offset, ITEMS_PER_PAGE);
-
       // 전체 개수 < 해당 페이지 수
       // 페이지가 더 없음.
 

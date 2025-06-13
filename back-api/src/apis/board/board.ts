@@ -17,9 +17,8 @@ router.get('/list', async (req: Request, res: Response) => {
     // 4개만 가져오도록
     const response = await api.get(`${dbUrl}/boards?_start=${offset}&_limit=${limit}`); // /items로 요청 (baseURL 자동 적용)
     const total = await api.get(`${dbUrl}/boards`);
-    console.log(total.data.length);
     const data = {
-      data: response.data,
+      list: response.data,
       totalCount: total.data.length,
     };
     res.status(200).json({ message:'데이터를 가져왔습니다.', data: data, status: 200, success: true});

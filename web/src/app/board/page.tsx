@@ -8,6 +8,7 @@ import { useEffect, useCallback, useState } from 'react';
 import boardService from '@/services/board.service';
 import { Board } from '@/types/board/type';
 
+
 const ITEMS_PER_PAGE = 6;
 
 export default function BoardPage() {
@@ -15,7 +16,7 @@ export default function BoardPage() {
   const searchParams = useSearchParams();
   const pageParam = searchParams.get('page');
   const page = pageParam ? parseInt(pageParam) + 1 : 1;
-  const [boardList, setBoardList] = useState<Board[]>([]);
+  const [boardList, setBoardList] = useState<Board[] | undefined>([]);
   const [offset, setOffSet] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
 
@@ -24,30 +25,37 @@ export default function BoardPage() {
   }
 
   const getItems = useCallback(async (pageNumber: number) => {
-    const offsetNum = (pageNumber - 1) * ITEMS_PER_PAGE | 0;
-    
-    setOffSet(offsetNum)
+    const offsetNum = ((pageNumber - 1) * ITEMS_PER_PAGE) | 0;
+    setOffSet(offsetNum);
 
     try {
-      const response = await boardService.getBoards(offsetNum, ITEMS_PER_PAGE);
-      if(!response) return;
-      console.log(response.data);
-      setBoardList(response.data)
-      setTotalCount(Math.ceil(response.totalCount / ITEMS_PER_PAGE));
-    } catch(error) {
-      console.error(error)
+      const response = await boardService.getBoards(
+        offsetNum,
+        ITEMS_PER_PAGE
+      );
+
+      const boards = response?.data?.list || [];
+      const count = response?.data.totalCount || 0;
+      console.log(boards);
+      setBoardList(boards);
+      setTotalCount(Math.ceil(count / ITEMS_PER_PAGE));
+    } catch (error) {
+      console.error(error);
     }
-  }, [boardList, totalCount]);
+  }, []);
+
 
   useEffect(() => {
     getItems(page);
   }, [page]);
 
+
+
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="flex flex-col w-full max-w-lg">
         <div>
-          {boardList ? (
+          {boardList && boardList.length > 0 ? (
             <div>
               <div className="h-[700px] grid grid-cols-2 gap-x-3 gap-y-6 ">
                 {boardList.map((post) => (
