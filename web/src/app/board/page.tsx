@@ -6,7 +6,7 @@ import { Pagination } from '@/components/common/Pagination';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useCallback, useState } from 'react';
 import boardService from '@/services/board.service';
-import { BoardListResponse, Board } from '@/types/board/type';
+import { Board } from '@/types/board/type';
 
 const ITEMS_PER_PAGE = 6;
 
