@@ -1,6 +1,6 @@
 import api from '@/lib/axios';
-import { ItemListResponse, UploadItemResponse } from '@/types/item/type';
-import { UploadBoardRequest, UploadBoardResponse } from '@/types/board/type';
+import { ItemListResponse  } from '@/types/item/type';
+import { BoardListResponse, UploadBoardRequest, UploadBoardResponse } from '@/types/board/type';
 import { redirect } from 'next/navigation';
 import { AxiosError } from 'axios';
 
@@ -8,16 +8,20 @@ const boardService = {
   async getBoards(
     offset: number,
     limit: number
-  ): Promise<ItemListResponse | undefined> {
+  ): Promise<BoardListResponse | undefined> {
+    console.log("offset: " + offset)
+    console.log("limit: " + limit)
     try {
-      const response = await api.get<ItemListResponse>('/api/item/list', {
+      const response = await api.get<BoardListResponse>('/api/board/list', {
         params: {
           offset,
           limit,
         },
       });
 
-      return response.data;
+      console.log(response)
+
+      return response.data.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         const status = error.response?.status;

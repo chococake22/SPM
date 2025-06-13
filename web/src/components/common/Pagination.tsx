@@ -1,12 +1,16 @@
 import Link from 'next/link';
 
 type PaginationProps = {
+  offset: number;
   currentPage: number;
-  totalPages: number;
+  totalCount: number;
 };
 
-export function Pagination({ currentPage, totalPages }: PaginationProps) {
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+export function Pagination({ offset, currentPage, totalCount }: PaginationProps) {
+  const pages = Array.from({ length: totalCount }, (_, i) => i + 1);
+  
+  console.log(currentPage)
+  console.log(totalCount)
 
   return (
     <div className="flex justify-center">
@@ -27,7 +31,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
         {pages.map((page) => (
           <Link
             key={page}
-            href={`?page=${page}`}
+            href={`?page=${page-1}&offset=${offset}`}
             className={`px-3 py-2 border text-sm font-medium ${
               page === currentPage
                 ? 'bg-blue-500 text-white'
@@ -42,7 +46,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
         <Link
           href={`?page=${currentPage + 1}`}
           className={`px-3 py-2 border text-sm font-medium rounded-r-md ${
-            currentPage === totalPages
+            currentPage === totalCount
               ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
               : 'bg-white text-gray-700 hover:bg-gray-100'
           }`}

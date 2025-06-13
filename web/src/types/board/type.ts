@@ -1,16 +1,14 @@
-export interface ItemListResponse {
-  data: Item[]
+export interface BoardListResponse {
+  data: Board[];
+  totalCount: number;
 }
 
-export interface Item {
-  imageInfo: string;
+export interface Board {
+  title: string;
+  content: string;
+  regiDttm: string;
+  finalModDttm: string;
   username: string;
-  profileImg: string;
-  itemImg: string;
-  heartCnt: string;
-  commentCnt: string;
-  itemName: string;
-  description: string;
   id: number;
 }
 
