@@ -41,6 +41,8 @@ export default function Mypage() {
   const [userImg, setUserImg] = useState<string | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+   // 변경: 스크롤 컨테이너 Ref의 이름을 명확하게 변경했습니다.
+  const itemGridScrollContainerRef = useRef<HTMLDivElement>(null); 
 
   const openModal = (img: string) => {
     setSelectedImage(img);
@@ -57,7 +59,7 @@ export default function Mypage() {
   ];
 
   // 페이지당 사진 개수
-  const ITEMS_PER_PAGE = 9;
+  const ITEMS_PER_PAGE = 12;
 
   /**
    * useCallback을 사용하고 두 번째 인자로 빈 배열을 넣음
@@ -103,7 +105,7 @@ export default function Mypage() {
         console.error('Error fetching data:', error);
       }
     },
-    [user, page, num]
+    [user]
   );
 
   const prevRef = useRef<typeof getUserItems | null>(null);
@@ -144,7 +146,10 @@ export default function Mypage() {
 
   useEffect(() => {
     console.log("????SDFASDF")
-    if (!hasMore) return;
+    if (!hasMore) {
+      console.log('더 이상 로드할 데이터가 없어 옵저버 설정 건너뜜.'); 
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -154,7 +159,7 @@ export default function Mypage() {
         }
       },
       {
-        root: scrollContainerRef.current, // 내부 스크롤 div 지정
+        root: itemGridScrollContainerRef.current, // <- 여기!
         threshold: 1.0,
       }
     );
@@ -255,156 +260,167 @@ export default function Mypage() {
     }
   }, [user, isOpen])
 
+  // observer로 해결 못함
+  // 스크롤 감지로 대체
   useEffect(() => {
-    console.log('WEB BASE URL:', process.env.NEXT_PUBLIC_API_BASE_URL);
-  }, []);
+    const onScroll = () => {
+      console.log('window.innerHeight: ' + window.innerHeight);
+      console.log('window.scrollY: ' + window.scrollY);
+      console.log('document.documentElement.scrollHeight: ' + document.documentElement.scrollHeight);
+      if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 50
+      ) {
+        console.log('window scroll near bottom');
+        loadMoreItems();
+      } else {
+        console.log("그냥 스크롤")
+      }
+    };
+
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [loadMoreItems]);
 
   return (
     user && (
-      <div
-        ref={scrollContainerRef}
-        className="flex flex-col justify-center items-center w-full max-w-lg pt-10"
-      >
-        <div className="flex flex-col h-screen w-full">
-          <div className="flex flex-col w-full h-full">
-            <div className="flex w-full h-[20%]">
-              <div className="flex flex-col gap-2 border-2 w-[32%] justify-center items-center">
-                <div
-                  onClick={handleAddImage}
-                  className="flex w-[60%] h-[60%] rounded-full overflow-hidden border-[2px] hover:border-blue-500 transition-colors duration-200 cursor-pointer"
-                >
-                  {userImg ? (
-                    <img
-                      key={userImg}
-                      src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/profileImg/${userImg}`}
-                      className="w-full h-full"
-                    />
-                  ) : (
-                    <img src="/defaultProfile.png" className="w-full h-full" />
-                  )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    ref={inputRef}
-                    className="hidden"
-                    onChange={handleFileChange}
-                  />
-                </div>
-                <div>
-                  <span>{user?.username}</span>
-                </div>
-              </div>
-              <div className="flex border-2 w-[70%] justify-around items-center">
-                <div className="border-2">
-                  <div>게시물</div>
-                  <div className="flex items-center justify-center">
-                    <span>89</span>
-                  </div>
-                </div>
-                <div className="border-2">
-                  <div>팔로잉</div>
-                  <div className="flex items-center justify-center">
-                    <span>89</span>
-                  </div>
-                </div>
-                <div className="border-2">
-                  <div>팔로워</div>
-                  <div className="flex items-center justify-center">
-                    <span>89</span>
-                  </div>
-                </div>
+      <div className="flex flex-col max-w-lg pt-10 pb-12">
+        <div className="flex w-full h-[20%]">
+          <div className="flex flex-col gap-2 border-2 w-[32%] justify-center items-center">
+            <div
+              onClick={handleAddImage}
+              className="flex w-[60%] h-[60%] rounded-full overflow-hidden border-[2px] hover:border-blue-500 transition-colors duration-200 cursor-pointer"
+            >
+              {userImg ? (
+                <img
+                  key={userImg}
+                  src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/profileImg/${userImg}`}
+                  className="w-full h-full"
+                />
+              ) : (
+                <img src="/defaultProfile.png" className="w-full h-full" />
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                ref={inputRef}
+                className="hidden"
+                onChange={handleFileChange}
+              />
+            </div>
+            <div>
+              <span>{user?.username}</span>
+            </div>
+          </div>
+          <div className="flex border-2 w-[70%] justify-around items-center">
+            <div className="border-2">
+              <div>게시물</div>
+              <div className="flex items-center justify-center">
+                <span>89</span>
               </div>
             </div>
-            <div className="w-full h-full">
-              <div className="border-b border-gray-200">
-                <nav className="-mb-px flex justify-around" aria-label="Tabs">
-                  {tabs.map((tab, index) => (
-                    <button
-                      key={index}
-                      className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm 
-                ${
-                  activeTab === index
-                    ? 'border-indigo-500 text-indigo-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }
-                focus:outline-none`}
-                      onClick={() => setActiveTab(index)}
-                    >
-                      {tab.label}
-                    </button>
-                  ))}
-                </nav>
-              </div>
-              <div className="w-full h-full">
-                <div className="grid grid-cols-3">
-                  {sortedItemList?.map((item, index) => (
-                    <div
-                      key={index}
-                      className="w-full h-[200px] border-2 box-border hover:border-blue-500 transition-colors duration-200 cursor-pointer"
-                      onClick={() => openModal(item.itemImg)}
-                    >
-                      <img
-                        src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/itemImg/${item.itemImg}`}
-                        className="w-full h-full"
-                      />
-                    </div>
-                  ))}
-                  {hasMore && (
-                    <div
-                      ref={loadMoreRef}
-                      className="h-10 bg-transparent col-span-3"
-                    />
-                  )}
-                </div>
+            <div className="border-2">
+              <div>팔로잉</div>
+              <div className="flex items-center justify-center">
+                <span>89</span>
               </div>
             </div>
-
-            {isOpen && (
-              <div
-                className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-                onClick={() => setIsOpen(false)}
-              >
-                <div
-                  className="bg-white rounded-lg shadow-lg w-[60%] p-6"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <h2 className="text-xl font-bold mb-4">
-                    이미지 크기를 맞춰주세요
-                  </h2>
-                  <div className="flex justify-center">
-                    {imageSrc && (
-                      <div className="relative w-[280px] h-[280px] rounded-full overflow-hidden">
-                        <Cropper
-                          image={imageSrc}
-                          crop={crop}
-                          zoom={zoom}
-                          aspect={1}
-                          onCropChange={setCrop}
-                          onZoomChange={setZoom}
-                          onCropComplete={onCropComplete}
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex justify-between">
-                    <button
-                      onClick={uploadCroppedImage}
-                      className="mt-4 px-4 py-2 bg-green-500 text-white rounded"
-                    >
-                      업로드
-                    </button>
-                    <button
-                      onClick={() => setIsOpen(false)}
-                      className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                    >
-                      닫기
-                    </button>
-                  </div>
-                </div>
+            <div className="border-2">
+              <div>팔로워</div>
+              <div className="flex items-center justify-center">
+                <span>89</span>
               </div>
-            )}
+            </div>
           </div>
         </div>
+
+        <div className="w-full h-full">
+          <div className="border-b border-gray-200">
+            <nav className="-mb-px flex justify-around" aria-label="Tabs">
+              {tabs.map((tab, index) => (
+                <button
+                  key={index}
+                  className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm 
+            ${
+              activeTab === index
+                ? 'border-indigo-500 text-indigo-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+            }
+            focus:outline-none`}
+                  onClick={() => setActiveTab(index)}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+          <div
+            className="flex flex-col w-full overflow-y-auto"
+            ref={itemGridScrollContainerRef}
+          >
+            <div className="grid grid-cols-3">
+              {sortedItemList?.map((item, index) => (
+                <div
+                  key={index}
+                  className="w-full h-[200px] border-2 box-border hover:border-blue-500 transition-colors duration-200 cursor-pointer"
+                  onClick={() => openModal(item.itemImg)}
+                >
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/itemImg/${item.itemImg}`}
+                    className="w-full h-full"
+                  />
+                </div>
+              ))}
+              {/* 감지용 DIV */}
+              {hasMore && <div ref={loadMoreRef} className="h-10"></div>}
+            </div>
+          </div>
+        </div>
+
+        {isOpen && (
+          <div
+            className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            onClick={() => setIsOpen(false)}
+          >
+            <div
+              className="bg-white rounded-lg shadow-lg w-[60%] p-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="text-xl font-bold mb-4">
+                이미지 크기를 맞춰주세요
+              </h2>
+              <div className="flex justify-center">
+                {imageSrc && (
+                  <div className="relative w-[280px] h-[280px] rounded-full overflow-hidden">
+                    <Cropper
+                      image={imageSrc}
+                      crop={crop}
+                      zoom={zoom}
+                      aspect={1}
+                      onCropChange={setCrop}
+                      onZoomChange={setZoom}
+                      onCropComplete={onCropComplete}
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-between">
+                <button
+                  onClick={uploadCroppedImage}
+                  className="mt-4 px-4 py-2 bg-green-500 text-white rounded"
+                >
+                  업로드
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                  닫기
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   );

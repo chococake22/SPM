@@ -126,36 +126,6 @@ const Home = () => {
       </div>
     )
   );
-
-  /**
-   * swiper 기능 적용시 필요함, 현재는 미사용
-   */
-  // return (
-  //   <Swiper
-  //     direction="vertical"
-  //     slidesPerView={1}
-  //     spaceBetween={0}
-  //     mousewheel={true}
-  //     className="w-full h-screen"
-  //     modules={[Mousewheel]}
-  //   >
-  //     {sortedItemList.map((entry, index) => (
-  //       <SwiperSlide key={index}>
-  //         <ItemBox entry={entry} />
-  //       </SwiperSlide>
-  //     ))}
-  //     {hasMore && (
-  //       <SwiperSlide>
-  //         <div
-  //           ref={loadMoreRef}
-  //           className="w-full h-screen flex items-center justify-center"
-  //         >
-  //           <p>Loading more...</p>
-  //         </div>
-  //       </SwiperSlide>
-  //     )}
-  //   </Swiper>
-  // );
 };
 
 export default Home;

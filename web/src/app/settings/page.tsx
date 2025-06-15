@@ -25,22 +25,21 @@ export default function Settings() {
   });
 
   const handleLogout = async () => {
-    // if (confirm('로그아웃 하시겠습니까?')) {
-      try {
-        const response = await noauthService.logout();
-        if (response && response.success) {
-          // alert(response.message);
-          // 로컬 스토리지에서 사용자 정보 삭제
-          localStorage.removeItem('user');
-          // 로그아웃을 하고 나면 뒤로 갈 수 없어야 해서 replace 사용
-          router.replace('/login');
-        } else {
-          alert(response?.message)
-        }
-      } catch (error) {
-        console.error(error);
+    try {
+      const response = await noauthService.logout();
+      if (response && response.success) {
+        // alert(response.message);
+        // 로컬 스토리지에서 사용자 정보 삭제
+        localStorage.removeItem('user');
+        // 로그아웃을 하고 나면 뒤로 갈 수 없어야 해서 replace 사용
+        router.replace('/login');
+      } else {
+        alert(response?.message)
       }
-    // }
+    } catch (error) {
+      console.error(error);
+      alert('네트워크 오류로 로그아웃하지 못했습니다.');
+    }
   };
 
   const getUser = async () => {
