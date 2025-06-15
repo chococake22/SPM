@@ -10,7 +10,7 @@ get:
       schema:
         type: string
   responses:
-    '201':
+    '200':
       description: 사용할 수 있는 아이디
       content:
         application/json:
@@ -18,7 +18,7 @@ get:
             data:
               userId: user12@test.com
             message: 사용할 수 있는 아이디입니다.
-            status: 201
+            status: 200
             success: true
     '400':
       description: 이미 사용중인 아이디

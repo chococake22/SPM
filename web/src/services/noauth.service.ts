@@ -18,30 +18,22 @@ export const noauthService = {
   async login(data: LoginForm): Promise<LoginResponse> {
     try {
       const response = await api.post<LoginResponse>('/api/login', data);
-      console.log(response.data)
       return response.data;
     } catch (error) {
-      console.log('Error object:', error);
-      console.log(error instanceof AxiosError);
-
-      // axios는 404나 500을 catch단에서 Erorr로 처리함.
       if (error instanceof AxiosError) {
-        console.log('status: ' + error.response?.status);
-        console.log('message: ' + error.response?.data.message);
-
-        // 404 상태일 경우 로그인 실패 처리
-        if (error.response?.status === 404) {
-          alert(error.response?.data.message);
-        } else {
-          alert('(오류 발생) 다시 시도해 주세요.');
-        }
-
-        return {} as LoginResponse;
+        const message = error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          success: false,
+          message: message,
+          status: status 
+        };
       } else {
-        // 일반적인 오류 처리
-        console.log('Network or server error');
-        alert('(오류 발생) 다시 시도해 주세요.');
-        return {} as LoginResponse;
+        return {
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
     }
   },
@@ -50,31 +42,43 @@ export const noauthService = {
       const response = await api.post<SignupResponse>('/api/signup', data);
       return response.data;
     } catch (error) {
-      if (error instanceof Error) {
-        alert('signup 에러 발생');
-        return {} as SignupResponse;
+      if (error instanceof AxiosError) {
+        const message =
+          error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          success: false,
+          message: message,
+          status: status,
+        };
       } else {
-        alert('(오류발생)다시 시도해주세요.');
-        return {} as SignupResponse;
+        return {
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
     }
   },
   async logout(): Promise<LogoutResponse | undefined> {
     try {
-      const response = await api.post<LogoutRequest>('/api/logout');
+      const response = await api.post<LogoutResponse>('/api/logout');
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        const status = error.response?.status;
-        const message = error.response?.data?.message || error.message;
-        console.log('status: ' + status);
-        if (status === 401) {
-          redirect('/expired');
-        } else {
-          alert(`요청 실패: ${message}`);
-        }
+        const message = error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          success: false,
+          message: message,
+          status: status,
+        };
       } else {
-        alert('Unexpected Error!');
+        return {
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
     }
   },
@@ -83,17 +87,22 @@ export const noauthService = {
       const response = await api.get('/api/check/user', {
         params: { userId },
       });
-      console.log(response.data);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log('status: ' + error.response?.status);
-        console.log('message: ' + error.response?.data.message);
-        alert('checkUserIdExist 에러 발생');
-        return {} as CheckUserIdResponse;
+        const message = error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          success: false,
+          message: message,
+          status: status,
+        };
       } else {
-        alert('(오류발생)다시 시도해주세요.');
-        return {} as CheckUserIdResponse;
+        return {
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
     }
   },

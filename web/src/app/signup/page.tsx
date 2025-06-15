@@ -105,7 +105,7 @@ const SignUpPage = () => {
     try {
       const response = await noauthService.checkUserIdExist(data.userId); 
       if(!response.success) {
-        alert('이미 존재하는 아이디입니다.');
+        alert(response.message);
         setIsCheckUserId(false);
       } else {
         alert('사용할 수 있는 아이디입니다.');

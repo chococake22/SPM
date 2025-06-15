@@ -50,11 +50,11 @@ export default function BoardPage() {
 
 
   return (
-    <div className="flex justify-center items-center w-full h-screen">
+    <div className="flex justify-center items-center w-full h-screen mt-6 mb-10">
       <div className="flex flex-col w-full max-w-lg gap-y-4">
         {boardList && boardList.length > 0 ? (
-          <div className="flex-grow flex flex-col gap-y-8">
-            <div className="grid grid-cols-2 gap-x-3 gap-y-6 ">
+          <div className="flex-grow flex flex-col gap-y-5">
+            <div className="grid grid-cols-2 gap-x-3 gap-y-3 ">
               {boardList.map((post) => (
                 <Link key={post.id} href={`/board/${post.id}`}>
                   <PostCard

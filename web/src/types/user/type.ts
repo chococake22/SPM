@@ -8,13 +8,10 @@ export interface SignupRequest {
 }
 
 export interface SignupResponse {
-  userId: string;
-  userPw?: string;
-  username: string;
-  phone: string;
-  status? :number;
-  address?: string;
-
+  data?: UserData;
+  success: boolean;
+  message: string;
+  status: number;
 }
 
 export interface LoginForm {
@@ -46,12 +43,11 @@ export interface LogoutRequest {
   phone: string;
 }
 
-export interface LogoutResponse {
-  userId: string;
-  userPw: string;
-  username: string;
-  phone: string;
-  message?: string;
+export interface LoginResponse {
+  data?: UserData;
+  success: boolean;
+  message: string;
+  status: number;
 }
 
 export type tokenSet = {
@@ -76,13 +72,17 @@ export interface UserInfoData {
 }
 
 export interface UserInfoResponse {
-  data: UserInfoData;
-  status?: number;
+  data?: UserData;
+  success: boolean;
+  message: string;
+  status: number;
 }
 
 export interface CheckUserIdResponse {
-  data: UserIdResponse;
+  data?: UserData;
   success: boolean;
+  message: string;
+  status: number;
 }
 
 export interface UserIdResponse {

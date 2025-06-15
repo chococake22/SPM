@@ -39,8 +39,8 @@ export default function Mypage() {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [userImg, setUserImg] = useState<string | null>(null);
-
-
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const openModal = (img: string) => {
     setSelectedImage(img);
@@ -137,6 +137,46 @@ export default function Mypage() {
     }
   }, [user, page]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
 
+  const loadMoreItems = useCallback(() => {
+    console.log('loadMOreItems');
+    setPage((prevPage) => prevPage + 1);
+  }, []);
+
+  useEffect(() => {
+    console.log("????SDFASDF")
+    if (!hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          console.log('📌 감지됨: 하단 요소 보임');
+          loadMoreItems(); // 스크롤로 인해 하단 요소가 보이면 다음 페이지 로드
+        }
+      },
+      {
+        root: scrollContainerRef.current, // 내부 스크롤 div 지정
+        threshold: 1.0,
+      }
+    );
+
+    const currentRef = loadMoreRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+      console.log('옵저버 시작', currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [loadMoreItems, hasMore]);
+
+  useEffect(() => {
+    console.log('user:', user);
+    console.log('page:', page);
+    console.log('hasMore:', hasMore);
+  }, [user, page, hasMore]);
 
   const handleAddImage = () => {
     inputRef.current?.click();
@@ -221,7 +261,10 @@ export default function Mypage() {
 
   return (
     user && (
-      <div className="flex flex-col h-screen justify-center items-center max-w-lg pt-9 relative">
+      <div
+        ref={scrollContainerRef}
+        className="flex flex-col justify-center items-center w-full max-w-lg pt-10"
+      >
         <div className="flex flex-col h-screen w-full">
           <div className="flex flex-col w-full h-full">
             <div className="flex w-full h-[20%]">
@@ -302,30 +345,20 @@ export default function Mypage() {
                     >
                       <img
                         src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/itemImg/${item.itemImg}`}
-                        // src={`/testImages/${item.itemImg}`}
                         className="w-full h-full"
                       />
                     </div>
                   ))}
+                  {hasMore && (
+                    <div
+                      ref={loadMoreRef}
+                      className="h-10 bg-transparent col-span-3"
+                    />
+                  )}
                 </div>
-                {/* {selectedImage && (
-                  <div
-                    className="inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50"
-                    onClick={closeModal}
-                  >
-                    <div className="bg-white rounded-lg p-4 max-w-[90%] max-h-[90%] relative">
-                      <button className="absolute top-2 right-2 text-gray-500 hover:text-black text-xl">
-                        &times;
-                      </button>
-                      <img
-                        src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/itemImg/${selectedImage}`}
-                        className="max-w-full max-h-[80vh] object-contain"
-                      />
-                    </div>
-                  </div>
-                )} */}
               </div>
             </div>
+
             {isOpen && (
               <div
                 className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"

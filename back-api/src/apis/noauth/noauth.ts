@@ -78,9 +78,9 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
       return;
       
     } else {
-      res.status(400).json({
+      res.status(404).json({
         message: '존재하지 않는 아이디입니다.',
-        status: 400,
+        status: 404,
         success: false,
       });
       return;
@@ -88,7 +88,6 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status || 500;
-      const message = error.response?.data?.message || error.message;
       res.status(status).json({
         message: '서버 오류가 발생했습니다.',
         status: 500,
@@ -106,7 +105,6 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     }
   }
 });
-
 
 router.post('/signup', async (req: Request, res: Response): Promise<void> => {  
   const { userId, userPw, username, phone, address } = req.body; 
@@ -127,7 +125,7 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
     const status = response.status;
 
     res
-      .status(200)
+      .status(201)
       .json({
         data: data,
         message: '가입이 완료되었습니다.',
@@ -137,7 +135,6 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status || 500;
-      const message = error.response?.data?.message || error.message;
       res.status(status).json({
         message: '서버 오류가 발생했습니다.',
         status: 500,
@@ -186,7 +183,6 @@ router.get(
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const status = error.response?.status || 500;
-        const message = error.response?.data?.message || error.message;
         res.status(status).json({
           message: '서버 오류가 발생했습니다.',
           status: 500,
@@ -209,13 +205,24 @@ router.post('/logout', async (req: Request, res: Response): Promise<void> => {
     // 토큰 삭제
     res.clearCookie('accessToken');
     res.clearCookie('refreshToken');
-    res.clearCookie('userInfo');
 
     res.status(200).json({ message: '로그아웃이 되었습니다.', status: 200, success:true });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: '서버 에러가 발생했습니다.', status: 500, success: false });
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status || 500;
+      res.status(status).json({
+        message: '서버 오류가 발생했습니다.',
+        status: 500,
+        success: false,
+      });
+    } else {
+      // axios 에러가 아닐 때
+      res.status(500).json({
+        message: '서버 오류가 발생했습니다.',
+        status: 500,
+        success: false,
+      });
+    }
   }
 });
 

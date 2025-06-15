@@ -6,7 +6,7 @@ type PostCardProps = {
 
 export function PostCard({ title, username, content }: PostCardProps) {
   return (
-    <div className="w-full h-[200px] p-3 border rounded-lg hover:shadow-md transition bg-white cursor-pointer">
+    <div className="w-full h-[160px] p-3 border rounded-lg hover:shadow-md transition bg-white cursor-pointer">
       <h2 className="text-xl font-semibold whitespace-normal break-words">
         {title}
       </h2>

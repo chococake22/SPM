@@ -106,7 +106,7 @@ export default function Settings() {
         // user 정보 가져오는 api 호출
         const response = await userService.editUserInfo(param);
 
-        if(response.status === 200) {
+        if(response.success) {
           // 필요한 데이터만 UserInfo에 가져다가 사용함.
           const data = {
             userId: response.data.userId,
@@ -114,9 +114,8 @@ export default function Settings() {
             phone: response.data.phone,
             address: response.data.address,
           };
-
-          setUserInfo(data);
-          alert(response.data.message)
+          setUserInfo(data)
+          alert(response.message);
         }
       } catch (error) {
         console.log(error);

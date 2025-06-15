@@ -100,14 +100,12 @@ router.patch(
         address: updateRes.data.address
       };
 
-      res
-        .status(201)
-        .json({
-            data: data,
-            message: '사용자 정보가 변경되었습니다.',
-            status: 201,
-            success: true
-        });
+      res.status(200).json({
+        data: data,
+        message: '사용자 정보가 변경되었습니다.',
+        status: 200,
+        success: true,
+      });
     } catch (error) {
       console.error('Error fetching users:', error);
       res.status(500).json({

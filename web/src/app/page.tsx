@@ -31,6 +31,7 @@ const Home = () => {
     try {
       const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
       const response = await itemService.getItems(offset, ITEMS_PER_PAGE);
+      console.log(response)
       // 전체 개수 < 해당 페이지 수
       // 페이지가 더 없음.
 
@@ -113,17 +114,6 @@ const Home = () => {
   if(!itemList) {
     <div>데이터가 없습니다.</div>
   }
-
-  // useEffect(() => {
-  //   setWebUrl(process.env.NEXT_PUBLIC_API_BASE_URL as string);
-  //   setApiUrl()
-  //   setItemImgUrl()
-  //   setProfileImgUrl()
-  //   console.log(process.env.NEXT_PUBLIC_API_BASE_URL);
-  //   console.log(process.env.NEXT_PUBLIC_WEB_BASE_URL);
-  //   console.log(process.env.NEXT_PUBLIC_ITEM_IMAGE_URL);
-  //   console.log(process.env.NEXT_PUBLIC_USER_PROFILE_URL);
-  // }, [])
   
 
   return (

@@ -39,13 +39,14 @@ const LoginPage = () => {
 
     try {
       const response = await noauthService.login(params);
-      console.log(response.data)
-      if (response.data) {
+      if (response.success && response.data) {
         // setData(response.data);
         setUser(response.data);
         const resData = JSON.stringify(response.data);
         localStorage.setItem('user', resData);
         router.push('/');
+      } else {
+        alert(response.message)
       }
     } catch (error) {
       console.error(error);
