@@ -18,6 +18,7 @@ export default function Settings() {
     newPwd: '',
     newPwdConfirm: '',
   });
+
   const [userData, setUserData] = useState({
     userId: user?.userId,
     username: user?.username,
@@ -28,37 +29,41 @@ export default function Settings() {
   const checkPwdRegex = (pwd: string): boolean => {
     const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     return pwdRegex.test(pwd)
-}
+  }
         
-
   const getUser = async () => {
     if(!user) return;
     
     try {
       const param = {
-        userId: user?.userId,
+        userId: user.userId,
       };
 
-    // user 정보 가져오는 api 호출
-    const response = await userService.user(param);
+      // user 정보 가져오는 api 호출
+      const response = await userService.user(param);
 
+      if (
+        response?.data &&
+        response.data.userId &&
+        response.data.username &&
+        response.data.phone &&
+        response.data.address
+      ) {
+        // 필요한 데이터만 UserInfo에 가져다가 사용함.
+        const data: UserInfoData = {
+          userId: response.data.userId,
+          username: response.data.username,
+          phone: response.data.phone,
+          address: response.data.address,
+        };
 
-    if(!response) {
-      return <div>데이터가 없습니다.</div>
-    }
-
-    // 필요한 데이터만 UserInfo에 가져다가 사용함.
-    const data = {
-      userId: response.data.userId,
-      username: response.data.username,
-      phone: response.data.phone,
-      address: response.data.address,
-    };
-
-    console.log(data);
-    // 로컬 스토리지 정보
-    setUserInfo(data);
-    setUserData(data);
+        console.log(response.data);
+        // 로컬 스토리지 정보
+        setUserInfo(data);
+        setUserData(data);
+      } else {
+        alert(response?.message || '유저 정보를 불러오지 못했습니다.');
+      }
     } catch (error) {
       console.log(error);
     }

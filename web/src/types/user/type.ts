@@ -43,6 +43,13 @@ export interface LogoutRequest {
   phone: string;
 }
 
+export interface LogoutResponse {
+  data?: UserData;
+  success: boolean;
+  message: string;
+  status: number;
+}
+
 export interface LoginResponse {
   data?: UserData;
   success: boolean;

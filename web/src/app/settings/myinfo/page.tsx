@@ -27,28 +27,32 @@ export default function Settings() {
     
     try {
       const param = {
-        userId: user?.userId,
+        userId: user.userId,
       };
 
     // user 정보 가져오는 api 호출
-    const response = await userService.user(param);
+      const response = await userService.user(param);
 
-    if(!response) {
-      return <div>데이터가 업습니다</div>
-    }
+      if (
+        response?.data &&
+        response.data.userId &&
+        response.data.username &&
+        response.data.phone &&
+        response.data.address
+      ) {
+        // 필요한 데이터만 UserInfo에 가져다가 사용함.
+        const data = {
+          userId: response.data.userId,
+          username: response.data.username,
+          phone: response.data.phone,
+          address: response.data.address,
+        };
 
-    // 필요한 데이터만 UserInfo에 가져다가 사용함.
-    const data = {
-      userId: response.data.userId,
-      username: response.data.username,
-      phone: response.data.phone,
-      address: response.data.address,
-    };
-
-    console.log(data);
-    // 로컬 스토리지 정보
-    setUserInfo(data);
-    setUserData(data);
+        setUserInfo(data);
+        setUserData(data);
+      } else {
+        alert(response?.message || '유저 정보를 불러오지 못했습니다.');
+      }
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +86,13 @@ export default function Settings() {
 
         // user 정보 가져오는 api 호출
         const response = await userService.editUserInfo(param);
-        if(response.success) {
+        if (
+          response?.data &&
+          response.data.userId &&
+          response.data.username &&
+          response.data.phone &&
+          response.data.address
+        ) {
           // 필요한 데이터만 UserInfo에 가져다가 사용함.
           const data = {
             userId: response.data.userId,
@@ -92,7 +102,9 @@ export default function Settings() {
           };
 
           setUserInfo(data);
-          alert(response.message)
+          alert(response.message);
+        } else {
+          alert(response.message);
         }
       } catch (error) {
         console.log(error);

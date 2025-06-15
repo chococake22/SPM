@@ -28,14 +28,15 @@ export default function Settings() {
     // if (confirm('로그아웃 하시겠습니까?')) {
       try {
         const response = await noauthService.logout();
-        if (!response) {
-          return <div>데이터가 없습니다.</div>;
+        if (response && response.success) {
+          // alert(response.message);
+          // 로컬 스토리지에서 사용자 정보 삭제
+          localStorage.removeItem('user');
+          // 로그아웃을 하고 나면 뒤로 갈 수 없어야 해서 replace 사용
+          router.replace('/login');
+        } else {
+          alert(response?.message)
         }
-        // alert(response.message);
-        // 로컬 스토리지에서 사용자 정보 삭제
-        localStorage.removeItem('user');
-        // 로그아웃을 하고 나면 뒤로 갈 수 없어야 해서 replace 사용
-        router.replace('/login');
       } catch (error) {
         console.error(error);
       }
@@ -43,7 +44,7 @@ export default function Settings() {
   };
 
   const getUser = async () => {
-    if(!user || !user) return;
+    if(!user) return;
     
     try {
       const param = {
@@ -53,21 +54,28 @@ export default function Settings() {
     // user 정보 가져오는 api 호출
     const response = await userService.user(param);
 
-    if (!response) {
-      return <div>데이터가 없습니다</div>;
-    }
+      if (
+        response?.data &&
+        response.data.userId &&
+        response.data.username &&
+        response.data.phone &&
+        response.data.address
+      ) {
+        // 필요한 데이터만 UserInfo에 가져다가 사용함.
+        const data: UserInfoData = {
+          userId: response.data.userId,
+          username: response.data.username,
+          phone: response.data.phone,
+          address: response.data.address,
+        };
 
-    // 필요한 데이터만 UserInfo에 가져다가 사용함.
-    const data = {
-      userId: response.data.userId,
-      username: response.data.username,
-      phone: response.data.phone,
-      address: response.data.address,
-    };
+        // 로컬 스토리지 정보
+        setUserInfo(data);
+        setUserData(data);
+      } else {
+        alert(response?.message || '유저 정보를 불러오지 못했습니다.');
+      }
 
-    // 로컬 스토리지 정보
-    setUserInfo(data);
-    setUserData(data);
     } catch (error) {
       console.log(error);
     }
@@ -81,51 +89,6 @@ export default function Settings() {
       getUser();
     }
   }, [user]);
-
-  useEffect(() => {
-    console.log(user)
-  }, [])
-
-  // 데이터 변화 감지
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserData(prev => ({...prev, [name]: value})) 
-  },[])
-
-  // 회원 정보 수정
-  const handleEditUserInfo = async () => {
-    if(confirm("회원 정보를 수정하시겠습니까?")) {
-      try {
-        const param = {
-          userId: userData.userId,
-          username: userData.username,
-          phone: userData.phone,
-          address: userData.address,
-        };
-
-        // user 정보 가져오는 api 호출
-        const response = await userService.editUserInfo(param);
-
-        if(response.success) {
-          // 필요한 데이터만 UserInfo에 가져다가 사용함.
-          const data = {
-            userId: response.data.userId,
-            username: response.data.username,
-            phone: response.data.phone,
-            address: response.data.address,
-          };
-          setUserInfo(data)
-          alert(response.message);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }
-
-  const openChangdPwdModal = () => {
-    modalRef.current?.open();
-  };
 
   const handleClick = () => {
     Swal.fire({
