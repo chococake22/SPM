@@ -17,12 +17,44 @@ router.get('/list', async (req: Request, res: Response) => {
     limit: string;
   };
   try {
-    // 4개만 가져오도록
-    const response = await api.get(`${dbUrl}/items?_start=${offset}&_limit=${limit}`); // /items로 요청 (baseURL 자동 적용)
-    const data = response.data;
-    res.status(200).json({ message:'데이터를 가져왔습니다.', data: data, status: 200, success: true});
+    const itemsRes = await api.get(
+      `${dbUrl}/items?_start=${offset}&_limit=${limit}`
+    );
+    const items = itemsRes.data;
+
+    // 중복 제거된 username 리스트
+    const usernames = [...new Set(items.map((item: any) => item.username))];
+
+    // 각 사용자 정보 가져오기
+    const userResponses = await Promise.all(
+      usernames.map((username) =>
+        api.get(`${dbUrl}/users?username=${username}`)
+      )
+    );
+
+    const userMap = new Map();
+    userResponses.forEach((res) => {
+      const user = res.data[0]; // ?username=xxx 는 배열로 응답
+      if (user) {
+        userMap.set(user.username, user);
+      }
+    });
+
+    // item에 user 정보 병합
+    const combined = items.map((item: any) => ({
+      ...item,
+      profileImg: userMap.get(item.username)?.profileImg || null,
+    }));
+    console.log(combined)
+
+    res.status(200).json({
+      message: '데이터를 가져왔습니다.',
+      data: combined,
+      status: 200,
+      success: true,
+    });
   } catch (error) {
-    console.error('Error fetching items:', error);
+    console.error('Error fetching items with users:', error);
     res.status(500).json({ message: 'Error fetching items' });
   }
 });

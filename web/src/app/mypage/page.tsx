@@ -28,11 +28,10 @@ export default function Mypage() {
   const [itemList, setItemList] = useState<Item[]>([]);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
-  const [isTest, setIsTest] = useState<boolean>(false);
   const [num, setNum] = useState<number>(0);
   const { user, setUser } = useUserInfo();
-  const [ isOpen, setIsOpen ]= useState<boolean>(false);
-  const [ hasImage, setHasImage] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [hasImage, setHasImage] = useState<boolean>(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -40,16 +39,11 @@ export default function Mypage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [userImg, setUserImg] = useState<string | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-   // 변경: 스크롤 컨테이너 Ref의 이름을 명확하게 변경했습니다.
-  const itemGridScrollContainerRef = useRef<HTMLDivElement>(null); 
+  // 변경: 스크롤 컨테이너 Ref의 이름을 명확하게 변경했습니다.
+  const itemGridScrollContainerRef = useRef<HTMLDivElement>(null);
 
   const openModal = (img: string) => {
     setSelectedImage(img);
-  };
-
-  const closeModal = () => {
-    setSelectedImage(null);
   };
 
   const tabs = [
@@ -68,7 +62,6 @@ export default function Mypage() {
    */
   const getUserItems = useCallback(
     async (pageNumber: number) => {
-      console.log('callback - getUserItems');
       if (!user) {
         return;
       }
@@ -82,20 +75,20 @@ export default function Mypage() {
         );
 
         if (!response?.data) {
-          return <div>없습니다</div>
+          return <div>없습니다</div>;
         }
-          if (response.data.length < ITEMS_PER_PAGE) {
-            // 전체 개수 < 해당 페이지 수
-            // 페이지가 더 없음.
-            setHasMore(false);
-          };
+
+        if (response.data.length < ITEMS_PER_PAGE) {
+          // 전체 개수 < 해당 페이지 수
+          // 페이지가 더 없음.
+          setHasMore(false);
+        }
 
         flushSync(() => {
           const items = response.data ?? [];
           if (!items) return; // undefined일 경우 아무 작업도 하지 않음
 
           if (pageNumber === 1) {
-            console.log(items);
             setItemList(items);
           } else {
             setItemList((prevItems) => [...prevItems, ...items]);
@@ -110,6 +103,9 @@ export default function Mypage() {
 
   const prevRef = useRef<typeof getUserItems | null>(null);
 
+  // 함수 재선언 여부 확인용 useEffect
+  // getUserItems를 useCallback으로 선언해서 메모이제이션됨
+  // getUserItems를 다시 선언하지 않음
   useEffect(() => {
     if (prevRef.current !== getUserItems) {
       console.log('🆕 getUserItems 함수가 새로 만들어졌습니다.');
@@ -117,10 +113,10 @@ export default function Mypage() {
       console.log('✅ getUserItems 함수는 이전과 동일합니다.');
     }
     prevRef.current = getUserItems;
-  }, [getUserItems]);
+  }, [getUserItems, page]);
+
 
   const sortedItemList = useMemo(() => {
-    console.log('다시 가져옴');
     if (itemList && Array.isArray(itemList)) {
       // itemList를 가져와서 sorting
       // id는 number 타입이므로 연산을 통해 오름차순으로 정렬함.
@@ -133,55 +129,9 @@ export default function Mypage() {
   useEffect(() => {
     console.log('useEffect - getUserItems');
     if (user) {
-      console.log('user 있음');
-      setIsTest(true);
       getUserItems(page); // 컴포넌트가 마운트되면 데이터 요청 실행
     }
-  }, [user, page]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
-
-  const loadMoreItems = useCallback(() => {
-    console.log('loadMOreItems');
-    setPage((prevPage) => prevPage + 1);
-  }, []);
-
-  useEffect(() => {
-    console.log("????SDFASDF")
-    if (!hasMore) {
-      console.log('더 이상 로드할 데이터가 없어 옵저버 설정 건너뜜.'); 
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          console.log('📌 감지됨: 하단 요소 보임');
-          loadMoreItems(); // 스크롤로 인해 하단 요소가 보이면 다음 페이지 로드
-        }
-      },
-      {
-        root: itemGridScrollContainerRef.current, // <- 여기!
-        threshold: 1.0,
-      }
-    );
-
-    const currentRef = loadMoreRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-      console.log('옵저버 시작', currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, [loadMoreItems, hasMore]);
-
-  useEffect(() => {
-    console.log('user:', user);
-    console.log('page:', page);
-    console.log('hasMore:', hasMore);
-  }, [user, page, hasMore]);
+  }, [getUserItems, page]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
 
   const handleAddImage = () => {
     inputRef.current?.click();
@@ -197,10 +147,10 @@ export default function Mypage() {
         setHasImage(true);
       };
 
-    reader.readAsDataURL(file);
-    if (inputRef.current) {
-      inputRef.current.value = ''; // 이 줄이 중요!
-    }
+      reader.readAsDataURL(file);
+      if (inputRef.current) {
+        inputRef.current.value = ''; // 이 줄이 중요!
+      }
     }
   };
 
@@ -225,18 +175,18 @@ export default function Mypage() {
     formData.append('profile', croppedImageBlob, 'profile.png');
     try {
       const response = await userService.editUserProfile(formData);
-      console.log(response)
-      setIsOpen(false)
-    } catch(error) {
+      console.log(response);
+      setIsOpen(false);
+    } catch (error) {
       console.error(error);
     }
   };
 
-  const getUserImg = async() => {
-    if(!user) return;
+  const getUserImg = async () => {
+    if (!user) return;
     const param = {
-      userId: user?.userId
-    }
+      userId: user?.userId,
+    };
     try {
       const response = await userService.getUserProfileImg(param);
       // console.log(response.data)
@@ -244,43 +194,37 @@ export default function Mypage() {
         const newImg = response.data.profileImg;
         // 캐시 무효화를 위해 쿼리스트링 추가
         setUserImg(`${newImg}?t=${Date.now()}`);
-        console.log(userImg)
+        console.log(userImg);
       } else {
         setUserImg(null); // 기본 이미지 표시를 위해 null 처리
       }
-      
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
-    if(!isOpen) {
+    if (!isOpen) {
       getUserImg();
     }
-  }, [user, isOpen])
+  }, [user, isOpen]);
 
   // observer로 해결 못함
   // 스크롤 감지로 대체
   useEffect(() => {
     const onScroll = () => {
-      console.log('window.innerHeight: ' + window.innerHeight);
-      console.log('window.scrollY: ' + window.scrollY);
-      console.log('document.documentElement.scrollHeight: ' + document.documentElement.scrollHeight);
       if (
         window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - 50
+        document.documentElement.scrollHeight
       ) {
-        console.log('window scroll near bottom');
-        loadMoreItems();
-      } else {
-        console.log("그냥 스크롤")
+        console.log('window scroll near bottom: ' + page);
+        setPage(page + 1)
       }
     };
 
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
-  }, [loadMoreItems]);
+  }, [page]);
 
   return (
     user && (

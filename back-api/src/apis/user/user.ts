@@ -219,7 +219,7 @@ router.patch(
 
         // 이미지 변경
         await api.patch(`${dbUrl}/users/${id}`, {
-          profileImg: imagePath,
+          profileImg: '/' + imagePath,
         });
 
         const data = {
