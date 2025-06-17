@@ -6,6 +6,7 @@ module.exports = {
     return config;
   },
   images: {
-    domains: ['localhost'], // ← 여기 추가
+    // domains: ['localhost'], // ← 개발용
+    domains: ['fightest21.cafe24.com'], // ← 배포용
   },
 };
