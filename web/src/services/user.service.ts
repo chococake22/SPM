@@ -140,4 +140,26 @@ export const userService = {
       }
     }
   },
+  async findUserByUsername(username: string): Promise<any> {
+    try {
+      const response = await api.get(`/api/user/find-by-username/${username}`);
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || error.message;
+
+        console.log('status: ' + status);
+
+        if (status === 401) {
+          redirect('/expired');
+        } else {
+          console.error(`사용자 검색 실패: ${message}`);
+        }
+      } else {
+        console.error('Unexpected Error!');
+      }
+      return null;
+    }
+  },
 };

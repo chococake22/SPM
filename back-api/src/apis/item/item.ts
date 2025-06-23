@@ -60,18 +60,34 @@ router.get('/list', async (req: Request, res: Response) => {
 });
 
 router.get('/user-list', async (req: Request, res: Response) => {
-  const { username, offset, limit } = req.query as {
-    username: string;
+  const { id, offset, limit } = req.query as {
+    id: string;
     offset: string;
     limit: string;
   };
   try {
-    // 4개만 가져오도록
+    if (!id) {
+      res.status(400).json({ message: 'id is required' });
+      return;
+    }
+
+    // 먼저 users 테이블에서 해당 id의 사용자 정보를 가져옴
+    const userResponse = await api.get(`${dbUrl}/users/${id}`);
+    const user = userResponse.data;
+    
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+      return;
+    }
+
+    // 해당 사용자의 username으로 items를 필터링
     const response = await api.get(
-      `${dbUrl}/items?_start=${offset}&_limit=${limit}`, { params: { username }}
-    ); // /items로 요청 (baseURL 자동 적용)
+      `${dbUrl}/items?username=${user.username}&_start=${offset}&_limit=${limit}`
+    );
 
     const data = response.data;
+    console.log(`Fetched ${data.length} items for user id: ${id} (username: ${user.username})`);
+    
     res
       .status(200)
       .json({

@@ -5,6 +5,7 @@ export interface ItemListResponse {
 export interface Item {
   imageInfo: string;
   username: string;
+  userId?: string;
   profileImg: string;
   itemImg: string;
   heartCnt: string;

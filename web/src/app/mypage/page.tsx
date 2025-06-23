@@ -10,6 +10,8 @@ import { ItemListResponse, Item } from '@/types/item/type';
 import { useUserInfo } from '@/hook/UserContext';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '@/lib/cropImage'; // canvas 잘라주는 util 함수 필요
+import Link from 'next/link';
+import { getUserIdFromUsername } from '@/lib/userUtils';
 
 
 interface Tab {
@@ -254,6 +256,14 @@ export default function Mypage() {
             </div>
             <div>
               <span>{user?.username}</span>
+            </div>
+            <div className="mt-2">
+              <Link 
+                href={`/user/${getUserIdFromUsername(user?.username || '')}`}
+                className="text-sm text-blue-500 hover:text-blue-700 underline"
+              >
+                프로필 보기
+              </Link>
             </div>
           </div>
           <div className="flex border-2 w-[70%] justify-around items-center">

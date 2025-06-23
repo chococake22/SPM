@@ -292,4 +292,41 @@ router.get('/img', async (req: Request, res: Response): Promise<void> => {
   }
 });
 
+// username으로 사용자 id 찾기
+router.get('/find-by-username/:username', async (req: Request, res: Response) => {
+  const { username } = req.params;
+  
+  try {
+    const response = await api.get(`${dbUrl}/users?username=${username}`);
+    const users = response.data;
+    
+    if (users && users.length > 0) {
+      const user = users[0];
+      res.status(200).json({
+        message: '사용자를 찾았습니다.',
+        data: {
+          id: user.id,
+          username: user.username,
+          profileImg: user.profileImg
+        },
+        status: 200,
+        success: true,
+      });
+    } else {
+      res.status(404).json({ 
+        message: '사용자를 찾을 수 없습니다.',
+        status: 404,
+        success: false 
+      });
+    }
+  } catch (error) {
+    console.error('Error finding user by username:', error);
+    res.status(500).json({ 
+      message: '사용자 검색 중 오류가 발생했습니다.',
+      status: 500,
+      success: false 
+    });
+  }
+});
+
 export default router;

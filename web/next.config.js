@@ -18,8 +18,8 @@ module.exports = {
       {
         protocol: 'http', // HTTPS 안 씀
         hostname: domain,
-        port: '', // 필요 시 포트 명시 (예: '8080') 안 쓰면 생략
-        pathname: '**', // 경로 전체 허용 (옵션)
+        port: '3001',
+        pathname: '/storage/**',
       },
     ],
   },
