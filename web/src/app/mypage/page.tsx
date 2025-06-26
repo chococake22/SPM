@@ -43,6 +43,7 @@ export default function Mypage() {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   // 변경: 스크롤 컨테이너 Ref의 이름을 명확하게 변경했습니다.
   const itemGridScrollContainerRef = useRef<HTMLDivElement>(null);
+  const [userIdForLink, setUserIdForLink] = useState<string>('');
 
   const openModal = (img: string) => {
     setSelectedImage(img);
@@ -71,7 +72,7 @@ export default function Mypage() {
       try {
         const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
         const response = await itemService.getUserItems(
-          user.username,
+          user.id,
           offset,
           ITEMS_PER_PAGE
         );
@@ -228,6 +229,22 @@ export default function Mypage() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [page]);
 
+  // 사용자 ID를 가져오는 함수
+  const fetchUserId = async () => {
+    if (!user?.username) return;
+    try {
+      const actualUserId = await getUserIdFromUsername(user.username);
+      setUserIdForLink(actualUserId);
+    } catch (error) {
+      console.error('Error fetching user ID:', error);
+      setUserIdForLink(user.username); // fallback
+    }
+  };
+
+  useEffect(() => {
+    fetchUserId();
+  }, [user?.username]);
+
   return (
     user && (
       <div className="flex flex-col max-w-lg pt-10 pb-12">
@@ -259,7 +276,7 @@ export default function Mypage() {
             </div>
             <div className="mt-2">
               <Link 
-                href={`/user/${getUserIdFromUsername(user?.username || '')}`}
+                href={`/user/${userIdForLink || user?.username || ''}`}
                 className="text-sm text-blue-500 hover:text-blue-700 underline"
               >
                 프로필 보기

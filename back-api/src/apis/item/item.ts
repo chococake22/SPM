@@ -60,21 +60,28 @@ router.get('/list', async (req: Request, res: Response) => {
 });
 
 router.get('/user-list', async (req: Request, res: Response) => {
+
+
   const { id, offset, limit } = req.query as {
     id: string;
     offset: string;
     limit: string;
   };
+
+  console.log("GET '/user-list':", id);
+
   try {
     if (!id) {
       res.status(400).json({ message: 'id is required' });
       return;
     }
 
+    console.log("test")
+
     // 먼저 users 테이블에서 해당 id의 사용자 정보를 가져옴
     const userResponse = await api.get(`${dbUrl}/users/${id}`);
     const user = userResponse.data;
-    
+
     if (!user) {
       res.status(404).json({ message: 'User not found' });
       return;
@@ -98,7 +105,7 @@ router.get('/user-list', async (req: Request, res: Response) => {
       });
 
   } catch (error) {
-    console.error('Error fetching items:', error);
+    console.error('Error fetching items33:', error);
     res.status(500).json({ message: 'Error fetching items' });
   }
 });

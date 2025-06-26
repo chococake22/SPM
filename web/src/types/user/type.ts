@@ -27,6 +27,7 @@ export interface LoginResponse {
 }
 
 export type UserData = {
+  id: string | undefined;
   userId: string | undefined;
   status?: number | undefined;
   redirectUrl?: string | undefined;

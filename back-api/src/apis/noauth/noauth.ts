@@ -33,6 +33,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
           username: userDb.username,
           phone: userDb.phone,
           address: userDb.address,
+          id: userDb.id,
         };
         const accessToken = generateAccessToken(params);
         const refreshToken = generateRefreshToken(params);
@@ -55,14 +56,15 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
           status: 200,
           success: true,
           data: {
+            id: userDb.id,
             userId: userDb.userId,
             username: userDb.username,
             phone: userDb.phone,
             address: userDb.address,
             tokens: {
               accessToken: accessToken,
-              refreshToken: refreshToken
-            }
+              refreshToken: refreshToken,
+            },
           },
         });
         return;
