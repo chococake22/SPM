@@ -104,21 +104,6 @@ export default function Mypage() {
     [user]
   );
 
-  const prevRef = useRef<typeof getUserItems | null>(null);
-
-  // 함수 재선언 여부 확인용 useEffect
-  // getUserItems를 useCallback으로 선언해서 메모이제이션됨
-  // getUserItems를 다시 선언하지 않음
-  useEffect(() => {
-    if (prevRef.current !== getUserItems) {
-      console.log('🆕 getUserItems 함수가 새로 만들어졌습니다.');
-    } else {
-      console.log('✅ getUserItems 함수는 이전과 동일합니다.');
-    }
-    prevRef.current = getUserItems;
-  }, [getUserItems, page]);
-
-
   const sortedItemList = useMemo(() => {
     if (itemList && Array.isArray(itemList)) {
       // itemList를 가져와서 sorting
@@ -134,7 +119,7 @@ export default function Mypage() {
     if (user) {
       getUserItems(page); // 컴포넌트가 마운트되면 데이터 요청 실행
     }
-  }, [getUserItems, page]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
+  }, [getUserItems, page, user]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
 
   const handleAddImage = () => {
     inputRef.current?.click();
@@ -192,7 +177,7 @@ export default function Mypage() {
     };
     try {
       const response = await userService.getUserProfileImg(param);
-      // console.log(response.data)
+      console.log(response.data)
       if (response && response.data) {
         const newImg = response.data.profileImg;
         // 캐시 무효화를 위해 쿼리스트링 추가

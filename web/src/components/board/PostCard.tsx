@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 type PostCardProps = {
   title: string;
   username: string;
@@ -5,6 +7,13 @@ type PostCardProps = {
 };
 
 export function PostCard({ title, username, content }: PostCardProps) {
+  // 리렌더링 확인용 로그
+  console.log(`🔄 PostCard 렌더링 - ${title}`);
+
+  useEffect(() => {
+    console.log(`✅ PostCard 마운트 - ${title}`);
+  }, []);
+
   return (
     <div className="w-full h-[160px] p-3 border rounded-lg hover:shadow-md transition bg-white cursor-pointer">
       <h2 className="text-xl font-semibold whitespace-normal break-words">

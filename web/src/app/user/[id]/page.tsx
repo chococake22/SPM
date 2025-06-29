@@ -67,6 +67,7 @@ const UserProfilePage = () => {
         // 첫 번째 페이지에서 사용자 정보 설정
         if (pageNumber === 1 && response.data.length > 0) {
           const firstItem = response.data[0];
+          console.log(response.data)
           setUserProfile({
             id: userId,
             username: firstItem.username,
