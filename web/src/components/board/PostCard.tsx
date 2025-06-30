@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 type PostCardProps = {
   title: string;
@@ -6,7 +6,7 @@ type PostCardProps = {
   content: string;
 };
 
-export function PostCard({ title, username, content }: PostCardProps) {
+export const PostCard = React.memo(({ title, username, content }: PostCardProps) => {
   // 리렌더링 확인용 로그
   console.log(`🔄 PostCard 렌더링 - ${title}`);
 
@@ -23,4 +23,6 @@ export function PostCard({ title, username, content }: PostCardProps) {
       <p className="text-gray-600 line-clamp-2">{content}</p>
     </div>
   );
-}
+});
+
+PostCard.displayName = 'PostCard';

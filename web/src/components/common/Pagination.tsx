@@ -16,16 +16,7 @@ export const Pagination = React.memo(({
   onPageChange,
 }: PaginationProps) => {
 
-  console.log(
-    `🔄 Pagination 렌더링 - currentPage: ${currentPage}, totalCount: ${totalCount}`
-  );
-
-  useEffect(() => {
-    console.log(
-      `✅ Pagination 마운트 - currentPage: ${currentPage}, totalCount: ${totalCount}`
-    );
-  }, []);
-
+  // page에 대한 배열을 만드는 함수 ex) [1, 2, 3, 4, 5] 이렇게
   const pages = useMemo(() => {
     // 전체 길이를 totalCount로 설정
     // 언더스코어(_)의 의미: 사용하지 않는 변수를 처리한 것임(실제로 값은 사용하지 않고 인덱스만 사용을 하기 때문에)
