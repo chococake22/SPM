@@ -177,7 +177,6 @@ export default function Mypage() {
     };
     try {
       const response = await userService.getUserProfileImg(param);
-      console.log(response.data)
       if (response && response.data) {
         const newImg = response.data.profileImg;
         // 캐시 무효화를 위해 쿼리스트링 추가
