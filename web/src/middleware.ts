@@ -6,6 +6,9 @@ export async function middleware(request: NextRequest) {
   // 요청할 url
   const pathname = request.nextUrl.pathname;
 
+  // 인증이 필요없는 페이지 목록
+  const validPath = ['/login', '/signup', '/expired'];
+
   try {
     // accessToken이 쿠키에 있는지 확인
     const accessToken = request.cookies.get('accessToken')?.value;
@@ -13,15 +16,9 @@ export async function middleware(request: NextRequest) {
 
     // 액세스 토큰이 없는 경우 - 맨 처음 'localhost:3000으로 접근하는 경우
     if (!accessToken) {
-      // 로그인 페이지가 아닌 다른 페이지에서 인증이 안되었을 경우 리다이렉트
-      if (
-        pathname !== '/login' &&
-        pathname !== '/signup' &&
-        pathname !== '/expired'
-      ) {
-        const response = NextResponse.redirect(
-          new URL('/login', request.url)
-        );
+      // 특정 페이지가 아닌 다른 페이지에서 인증이 안되었을 경우 리다이렉트
+      if (!validPath.includes(pathname)) {
+        const response = NextResponse.redirect(new URL('/login', request.url));
 
         // 토큰 초기화
         response.cookies.set('accessToken', '', {
@@ -34,7 +31,7 @@ export async function middleware(request: NextRequest) {
         });
 
         console.log(
-          '1111 No Access Token!! 쿠키 삭제 후 로그인 페이지로 리다이렉트'
+          'No Access Token!! 쿠키 삭제 후 로그인 페이지로 리다이렉트'
         );
         return response;
       }
@@ -60,7 +57,7 @@ export async function middleware(request: NextRequest) {
           });
 
           console.log(
-            '2222 No Access Token!! 쿠키 삭제 후 로그인 페이지로 리다이렉트'
+            'Refresh Token is expired!! 쿠키 삭제 후 로그인 페이지로 리다이렉트'
           );
           return response;
         }
@@ -91,8 +88,6 @@ function expiredToken(token: string): boolean {
     return true; // 디코딩 실패 시 만료된 것으로 처리
   }
 }
-
-
 
 // 미들웨어가 적용되는 기준
 export const config = {

@@ -56,6 +56,33 @@ router.get('/list', async (req: Request, res: Response) => {
 //   }
 // });
 
+router.get('/detail/:id', async (req: Request, res: Response) => {
+  console.log(req.params);
+  const { id } = req.params;
+
+  console.log('id: ' + id);  
+
+  try {
+    // 4개만 가져오도록
+    const response = await api.get(
+      `${dbUrl}/boards/${id}`
+    ); // /items로 요청 (baseURL 자동 적용)
+
+    const data = response.data;
+    res
+      .status(200)
+      .json({
+        message: '데이터를 가져왔습니다.',
+        data: data,
+        status: 200,
+        success: true,
+      });
+  } catch (error) {
+    console.error('Error fetching items:', error);
+    res.status(500).json({ message: 'Error fetching items' });
+  }
+});
+
 router.post('/upload', async (req: Request, res: Response): Promise<void> => {
   const { title, content } = req.body;
 

@@ -25,3 +25,10 @@ export interface UploadBoardResponse {
   success:boolean;
   message:string;
 }
+
+export interface BoardDetailResponse {
+  data?: Board
+  status: number;
+  success: boolean;
+  message: string;
+}

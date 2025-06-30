@@ -12,6 +12,7 @@ import Cropper from 'react-easy-crop';
 import getCroppedImg from '@/lib/cropImage'; // canvas 잘라주는 util 함수 필요
 import Link from 'next/link';
 import { getUserIdFromUsername } from '@/lib/userUtils';
+import Image from 'next/image';
 
 
 interface Tab {
@@ -121,11 +122,11 @@ export default function Mypage() {
     }
   }, [getUserItems, page, user]); // 마운트가 된다는 것은 dom에 추가되어 렌더링이 된다는 것
 
-  const handleAddImage = () => {
+  const handleAddImage = useCallback(() => {
     inputRef.current?.click();
-  };
+  }, []);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -140,7 +141,7 @@ export default function Mypage() {
         inputRef.current.value = ''; // 이 줄이 중요!
       }
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (hasImage) {
@@ -170,7 +171,7 @@ export default function Mypage() {
     }
   };
 
-  const getUserImg = async () => {
+  const getUserImg = useCallback(async () => {
     if (!user) return;
     const param = {
       userId: user?.userId,
@@ -188,13 +189,13 @@ export default function Mypage() {
     } catch (error) {
       console.error(error);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     if (!isOpen) {
       getUserImg();
     }
-  }, [user, isOpen]);
+  }, [user, isOpen, getUserImg]);
 
   // observer로 해결 못함
   // 스크롤 감지로 대체
@@ -214,7 +215,7 @@ export default function Mypage() {
   }, [page]);
 
   // 사용자 ID를 가져오는 함수
-  const fetchUserId = async () => {
+  const fetchUserId = useCallback(async () => {
     if (!user?.username) return;
     try {
       const actualUserId = await getUserIdFromUsername(user.username);
@@ -223,11 +224,11 @@ export default function Mypage() {
       console.error('Error fetching user ID:', error);
       setUserIdForLink(user.username); // fallback
     }
-  };
+  }, [user?.username]);
 
   useEffect(() => {
     fetchUserId();
-  }, [user?.username]);
+  }, [fetchUserId]);
 
   return (
     user && (
@@ -239,13 +240,22 @@ export default function Mypage() {
               className="flex w-[60%] h-[60%] rounded-full overflow-hidden border-[2px] hover:border-blue-500 transition-colors duration-200 cursor-pointer"
             >
               {userImg ? (
-                <img
+                <Image
                   key={userImg}
                   src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/profileImg/${userImg}`}
-                  className="w-full h-full"
+                  alt={`Profile of ${user?.username}`}
+                  width={120}
+                  height={120}
+                  className="w-full h-full object-cover"
                 />
               ) : (
-                <img src="/defaultProfile.png" className="w-full h-full" />
+                <Image
+                  src="/defaultProfile.png"
+                  alt="Default profile"
+                  width={120}
+                  height={120}
+                  className="w-full h-full object-cover"
+                />
               )}
               <input
                 type="file"
@@ -259,7 +269,7 @@ export default function Mypage() {
               <span>{user?.username}</span>
             </div>
             <div className="mt-2">
-              <Link 
+              <Link
                 href={`/user/${userIdForLink || user?.username || ''}`}
                 className="text-sm text-blue-500 hover:text-blue-700 underline"
               >
@@ -320,9 +330,12 @@ export default function Mypage() {
                   className="w-full h-[200px] border-2 box-border hover:border-blue-500 transition-colors duration-200 cursor-pointer"
                   onClick={() => openModal(item.itemImg)}
                 >
-                  <img
+                  <Image
                     src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/itemImg/${item.itemImg}`}
-                    className="w-full h-full"
+                    alt={`Item ${item.id}`}
+                    width={200}
+                    height={200}
+                    className="w-full h-full object-cover"
                   />
                 </div>
               ))}

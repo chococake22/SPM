@@ -65,6 +65,7 @@ export default function BoardPage() {
               {boardList.map((post) => (
                 <Link key={post.id} href={`/board/${post.id}`}>
                   <PostCard
+                    id={post.id.toString()}
                     title={post.title}
                     username={post.username}
                     content={post.content}

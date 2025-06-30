@@ -1,18 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 type PostCardProps = {
+  id: string;
   title: string;
   username: string;
   content: string;
 };
 
-export const PostCard = React.memo(({ title, username, content }: PostCardProps) => {
-  // 리렌더링 확인용 로그
-  console.log(`🔄 PostCard 렌더링 - ${title}`);
-
-  useEffect(() => {
-    console.log(`✅ PostCard 마운트 - ${title}`);
-  }, []);
+export const PostCard = React.memo(({ id, title, username, content }: PostCardProps) => {
 
   return (
     <div className="w-full h-[160px] p-3 border rounded-lg hover:shadow-md transition bg-white cursor-pointer">

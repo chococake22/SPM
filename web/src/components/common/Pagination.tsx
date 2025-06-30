@@ -15,35 +15,45 @@ export const Pagination = React.memo(({
   totalCount,
   onPageChange,
 }: PaginationProps) => {
-
   // page에 대한 배열을 만드는 함수 ex) [1, 2, 3, 4, 5] 이렇게
   const pages = useMemo(() => {
     // 전체 길이를 totalCount로 설정
     // 언더스코어(_)의 의미: 사용하지 않는 변수를 처리한 것임(실제로 값은 사용하지 않고 인덱스만 사용을 하기 때문에)
     // 불필요한 계산을 다시 하지 않기 위해서 useMemo를 사용함
     return Array.from({ length: totalCount }, (_, i) => i + 1);
-  }, [totalCount])
-
+  }, [totalCount]);
 
   // 페이지 클릭용 핸들러 추가하기
-  // useCallback을 사용해서 최적화 시키기 
-  const handlePageClick = useCallback((page: number) => {
-    onPageChange?.(page);
-  }, [onPageChange]);
+  // useCallback을 사용해서 최적화 시키기
+  // onPageChange가 왜 의존성 배열에 걸려있는가?
+  // -> 컴포넌트가 렌더링이 될 때마다 함수가 새로 생성되는 것을 방지하기 위해서임.
+  const handlePageClick = useCallback(
+    (page: number) => {
+      onPageChange?.(page);
+    },
+    [onPageChange]
+  );
+
+  // const handlePageClick = (page: number) => {
+  //   onPageChange?.(page);
+  // };
+
+  useEffect(() => {
+    console.log('Pagination 렌더링');
+  }, [handlePageClick]);
 
   const handlePrevClick = useCallback(() => {
-    if(currentPage > 1) {
+    if (currentPage > 1) {
       onPageChange?.(currentPage - 1);
     }
   }, [currentPage, onPageChange]);
 
   const handleNextClick = useCallback(() => {
-    if(currentPage < totalCount) {
+    if (currentPage < totalCount) {
       onPageChange?.(currentPage + 1);
     }
   }, [currentPage, totalCount, onPageChange]);
 
-    
   return (
     <div className="flex justify-center">
       <nav
