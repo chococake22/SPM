@@ -5,18 +5,20 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import InputText from '@/components/InputText';
 import TestModal, { ModalRef } from '@/components/modal/TestModal';
-import { UserInfoResponse, UserInfoData } from '@/types/user/type';
+import { UserInfoResponse, UserInfoData, LogoutRequest } from '@/types/user/type';
 import Button from '../../components/common/Button';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
 import { noauthService } from '@/services/noauth.service';
 import { useUserInfo } from '@/hook/UserContext';
+import { set } from '../../../../back-api/node_modules/moment/src/lib/locale/set';
 
 export default function Settings() {
   const router = useRouter();
   const { user, setUser } = useUserInfo();
   const modalRef = useRef<ModalRef>(null);
   const [userInfo, setUserInfo] = useState<UserInfoData>();
+  const [param, setParam] = useState<LogoutRequest>();
   const [userData, setUserData] = useState({
     userId: user?.userId,
     username: user?.username,
@@ -24,9 +26,16 @@ export default function Settings() {
     address: user?.address,
   });
 
+  useEffect(() => {
+    setParam({
+      userId: user?.userId,
+    });
+  }, [user]);
+
   const handleLogout = async () => {
     try {
-      const response = await noauthService.logout();
+
+      const response = await noauthService.logout(param);
       if (response && response.success) {
         // alert(response.message);
         // 로컬 스토리지에서 사용자 정보 삭제

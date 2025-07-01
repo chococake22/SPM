@@ -69,7 +69,6 @@ function AddItemPage() {
   return (
     <div className="flex w-full max-w-lg h-screen">
       <div className="w-full h-full">
-        <div>sdssdfsdsdfsdfds</div>
         <form
           className="flex flex-col gap-5 justify-center w-full h-full"
           onSubmit={handleSubmit}

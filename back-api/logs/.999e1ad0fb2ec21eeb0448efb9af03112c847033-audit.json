@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/.999e1ad0fb2ec21eeb0448efb9af03112c847033-audit.json",
+    "files": [
+        {
+            "date": 1751356327185,
+            "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/error-2025-07-01.log",
+            "hash": "cd1fd4a8d0021f4eed0556ff435509a46f17797e895a618a3b4e3954fe1d9a52"
+        }
+    ],
+    "hashType": "sha256"
+}

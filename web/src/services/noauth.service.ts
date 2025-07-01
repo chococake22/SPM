@@ -24,12 +24,14 @@ export const noauthService = {
         const message = error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
         const status = error.response?.status ?? 500;
         return {
+          data: null,
           success: false,
           message: message,
           status: status 
         };
       } else {
         return {
+          data: null,
           success: false,
           message: '(오류 발생) 에러가 발생했습니다.',
           status: 500,
@@ -47,12 +49,14 @@ export const noauthService = {
           error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
         const status = error.response?.status ?? 500;
         return {
+          data: null,
           success: false,
           message: message,
           status: status,
         };
       } else {
         return {
+          data: null,
           success: false,
           message: '(오류 발생) 에러가 발생했습니다.',
           status: 500,
@@ -60,21 +64,23 @@ export const noauthService = {
       }
     }
   },
-  async logout(): Promise<LogoutResponse | undefined> {
+  async logout(data?: LogoutRequest): Promise<LogoutResponse | undefined> {
     try {
-      const response = await api.post<LogoutResponse>('/api/logout');
+      const response = await api.post<LogoutResponse>('/api/logout', data);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
         const message = error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
         const status = error.response?.status ?? 500;
         return {
+          data: null,
           success: false,
           message: message,
           status: status,
         };
       } else {
         return {
+          data: null,
           success: false,
           message: '(오류 발생) 에러가 발생했습니다.',
           status: 500,
@@ -93,12 +99,14 @@ export const noauthService = {
         const message = error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
         const status = error.response?.status ?? 500;
         return {
+          data: null,
           success: false,
           message: message,
           status: status,
         };
       } else {
         return {
+          data: null,
           success: false,
           message: '(오류 발생) 에러가 발생했습니다.',
           status: 500,

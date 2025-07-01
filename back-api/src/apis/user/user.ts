@@ -39,16 +39,20 @@ router.get('/info', async (req: Request, res: Response): Promise<void> => {
         success: true
       });
     } else {
-      res.status(400).json({
+      res.status(404).json({
+        data: null,
         message: '해당 사용자가 없습니다',
-        status: 400,
+        status: 404,
         success: false,
       });
     }
   } catch (error) {
+    console.error('Error fetching user info:', error); // 로깅 추가
+
     res.status(500).json({
+      data: null,
       message: '서버 에러가 발생했습니다.',
-      status: 200,
+      status: 500,
       success: true,
     });
     return;
@@ -78,6 +82,7 @@ router.patch(
 
       if (userList.length === 0) {
         res.status(404).json({
+          data: null,
           message: '해당 사용자가 없습니다.',
           status: 404,
           success: false,
@@ -109,6 +114,7 @@ router.patch(
     } catch (error) {
       console.error('Error fetching users:', error);
       res.status(500).json({
+        data: null,
         message: '서버 에러가 발생했습니다.',
         status: 500,
         success: false,

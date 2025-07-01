@@ -8,7 +8,7 @@ export interface SignupRequest {
 }
 
 export interface SignupResponse {
-  data?: UserData;
+  data?: UserData | null;
   success: boolean;
   message: string;
   status: number;
@@ -20,7 +20,7 @@ export interface LoginForm {
 }
 
 export interface LoginResponse {
-  data?: UserData;
+  data?: UserData | null;
   success: boolean;
   message: string;
   status: number;
@@ -38,21 +38,18 @@ export type UserData = {
 };
 
 export interface LogoutRequest {
-  userId: string;
-  userPw: string;
-  username: string;
-  phone: string;
+  userId?: string;
 }
 
 export interface LogoutResponse {
-  data?: UserData;
+  data?: UserData | null;
   success: boolean;
   message: string;
   status: number;
 }
 
 export interface LoginResponse {
-  data?: UserData;
+  data?: UserData | null;
   success: boolean;
   message: string;
   status: number;
@@ -80,14 +77,14 @@ export interface UserInfoData {
 }
 
 export interface UserInfoResponse {
-  data?: UserData;
+  data?: UserData | null;
   success: boolean;
   message: string;
   status: number;
 }
 
 export interface CheckUserIdResponse {
-  data?: UserData;
+  data?: UserData | null;
   success: boolean;
   message: string;
   status: number;
