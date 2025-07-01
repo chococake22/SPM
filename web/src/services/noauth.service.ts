@@ -6,12 +6,9 @@ import {
   SignupResponse,
   LogoutRequest,
   LogoutResponse,
-  UserInfoRequest,
-  UserInfoResponse,
   CheckUserIdResponse,
 } from '@/types/user/type';
 import { AxiosError } from 'axios';
-import { redirect } from 'next/navigation';
 
 // noauthService는 인증이 필요없는 api
 export const noauthService = {
@@ -45,8 +42,7 @@ export const noauthService = {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        const message =
-          error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const message = error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
         const status = error.response?.status ?? 500;
         return {
           data: null,

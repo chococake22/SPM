@@ -1,7 +1,6 @@
 import api from '@/lib/axios';
 import { ItemListResponse  } from '@/types/item/type';
 import { BoardDetailResponse, BoardListResponse, UploadBoardRequest, UploadBoardResponse } from '@/types/board/type';
-import { redirect } from 'next/navigation';
 import { AxiosError } from 'axios';
 
 const boardService = {
@@ -19,39 +18,48 @@ const boardService = {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        const status = error.response?.status;
-        const message = error.response?.data?.message || error.message;
-
-        console.log('status: ' + status);
-        if (status === 401) {
-          redirect('/expired');
-        } else {
-          alert(`요청 실패: ${message}`);
-        }
+        const message =
+          error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          data: null,
+          success: false,
+          message: message,
+          status: status,
+        };
       } else {
-        alert('Unexpected Error!');
+        return {
+          data: null,
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
     }
   },
 
   async getBoardDetail(id: string): Promise<BoardDetailResponse | undefined> {
-    console.log('id: ' + id);
     try {
       const response = await api.get<BoardDetailResponse>(`/api/board/detail/${id}`);
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        const status = error.response?.status;
-        const message = error.response?.data?.message || error.message;
-
-        console.log('status: ' + status);
-        if (status === 401) {
-          redirect('/expired');
-        } else {
-          alert(`요청 실패: ${message}`);
-        }
+        const message =
+          error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          data: null,
+          success: false,
+          message: message,
+          status: status,
+        };
       } else {
-        alert('Unexpected Error!');
+        return {
+          data: null,
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
     }
   },
@@ -73,18 +81,22 @@ const boardService = {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        const status = error.response?.status;
-        const message = error.response?.data?.message || error.message;
-
-        console.log('status: ' + status);
-
-        if (status === 401) {
-          redirect('/expired');
-        } else {
-          alert(`요청 실패: ${message}`);
-        }
+        const message =
+          error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          data: null,
+          success: false,
+          message: message,
+          status: status,
+        };
       } else {
-        alert('Unexpected Error!');
+        return {
+          data: null,
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
     }
   },
@@ -98,17 +110,21 @@ const boardService = {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        const message = error.response?.data.message;
-        console.log('status: ' + error.response?.status);
-        console.log('message: ' + message);
+        const message =
+          error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
         return {
+          data: null,
           success: false,
-          message,
+          message: message,
+          status: status,
         };
       } else {
         return {
+          data: null,
           success: false,
-          message: '(시스템 오류) 다시 시도해주세요',
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
         };
       }
     }

@@ -1,94 +1,21 @@
-2025-07-01 18:07:10 [ INFO ] ▶ API Request
+2025-07-01 22:15:30 [ INFO ] ▶ API Request
 {
   "method": "GET",
-  "path": "/api/check/user",
+  "path": "/api/item/user-list",
   "data": {
-    "userId": "apple12@test.com"
+    "id": "7bf7",
+    "offset": "12",
+    "limit": "12"
   }
 }
-2025-07-01 18:07:10 [ INFO ] ▶ API Response
-{
-  "method": "POST",
-  "path": "/api/check/user",
-  "status": 400,
-  "data": {
-    "userId": "apple12@test.com"
-  }
-}
-2025-07-01 18:07:40 [ INFO ] ▶ API Request
+2025-07-01 22:15:30 [ INFO ] ▶ API Response
 {
   "method": "GET",
-  "path": "/api/check/user",
-  "data": {
-    "userId": "apple124@test.com"
-  }
-}
-2025-07-01 18:07:40 [ INFO ] ▶ API Response
-{
-  "method": "POST",
-  "path": "/api/check/user",
+  "path": "/api/item/user-list",
   "status": 200,
   "data": {
-    "userId": "apple124@test.com"
-  }
-}
-2025-07-01 18:08:17 [ INFO ] ▶ API Request
-{
-  "method": "POST",
-  "path": "/api/signup",
-  "data": {
-    "userId": "apple124@test.com",
-    "userPw": "***",
-    "username": "애플124",
-    "phone": "01011241124",
-    "address": "서울시 주소 남부순환로 122-111"
-  }
-}
-2025-07-01 18:08:17 [ INFO ] ▶ API Response
-{
-  "method": "POST",
-  "path": "/api/signup",
-  "status": 201,
-  "data": {
-    "userId": "apple124@test.com",
-    "username": "애플124",
-    "phone": "01011241124",
-    "address": "서울시 주소 남부순환로 122-111"
-  }
-}
-2025-07-01 18:08:49 [ INFO ] ▶ API Request
-{
-  "method": "POST",
-  "path": "/api/login",
-  "data": {
-    "userId": "apple124@test.com",
-    "userPw": "***"
-  }
-}
-2025-07-01 18:08:49 [ INFO ] ▶ API Response
-{
-  "method": "POST",
-  "path": "/api/login",
-  "status": 200,
-  "data": {
-    "userId": "apple124@test.com",
-    "username": "애플124"
-  }
-}
-2025-07-01 18:10:41 [ INFO ] ▶ API Request
-{
-  "method": "POST",
-  "path": "/api/logout",
-  "data": {
-    "userId": "apple124@test.com"
-  }
-}
-2025-07-01 18:10:41 [ INFO ] ▶ API Response
-{
-  "method": "POST",
-  "path": "/api/logout",
-  "status": 200,
-  "data": {
-    "userId": "apple124@test.com"
+    "id": "7bf7",
+    "offset": "12",
+    "limit": "12"
   }
 }

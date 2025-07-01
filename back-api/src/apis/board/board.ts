@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import api from '../../lib/axios'; 
 import jwt from 'jsonwebtoken';
+import { logRequest, logResponse, logError } from '../../utils/logger';
 
 const dbUrl = process.env.DB_URL || 'http://localhost:3002';
 const JWT_SECRET = process.env.JWT_SECRET || 'secretKey';;
@@ -12,55 +13,29 @@ router.get('/list', async (req: Request, res: Response) => {
     offset: string;
     limit: string;
   };
-  try {
 
-    // 4개만 가져오도록
+  logRequest('GET', '/api/board/list', { offset, limit });
+  try {
+    // 정해진 개수만 가져오도록
     const response = await api.get(`${dbUrl}/boards?_start=${offset}&_limit=${limit}`); // /items로 요청 (baseURL 자동 적용)
     const total = await api.get(`${dbUrl}/boards`);
     const data = {
       list: response.data,
       totalCount: total.data.length,
     };
+
+    logResponse('GET', '/api/board/list', 200, { offset, limit });
     res.status(200).json({ message:'데이터를 가져왔습니다.', data: data, status: 200, success: true});
   } catch (error) {
-    console.error('Error fetching items:', error);
-    res.status(500).json({ message: 'Error fetching items' });
+    logError('GET', '/api/board/list', error, { offset, limit });
+    res.status(500).json({ message: '서버 에러가 발생했습니다.' });
   }
 });
 
-// router.get('/user-list', async (req: Request, res: Response) => {
-//   const { username, offset, limit } = req.query as {
-//     username: string;
-//     offset: string;
-//     limit: string;
-//   };
-//   try {
-//     // 4개만 가져오도록
-//     const response = await api.get(
-//       `${dbUrl}/items?_start=${offset}&_limit=${limit}`, { params: { username }}
-//     ); // /items로 요청 (baseURL 자동 적용)
-
-//     const data = response.data;
-//     res
-//       .status(200)
-//       .json({
-//         message: '데이터를 가져왔습니다.',
-//         data: data,
-//         status: 200,
-//         success: true,
-//       });
-
-//   } catch (error) {
-//     console.error('Error fetching items:', error);
-//     res.status(500).json({ message: 'Error fetching items' });
-//   }
-// });
-
 router.get('/detail/:id', async (req: Request, res: Response) => {
-  console.log(req.params);
   const { id } = req.params;
 
-  console.log('id: ' + id);  
+  logRequest('GET', '/api/board/detail', { id });
 
   try {
     // 4개만 가져오도록
@@ -69,6 +44,9 @@ router.get('/detail/:id', async (req: Request, res: Response) => {
     ); // /items로 요청 (baseURL 자동 적용)
 
     const data = response.data;
+
+    logResponse('GET', '/api/board/detail', 200, { id });
+
     res
       .status(200)
       .json({
@@ -78,17 +56,19 @@ router.get('/detail/:id', async (req: Request, res: Response) => {
         success: true,
       });
   } catch (error) {
-    console.error('Error fetching items:', error);
-    res.status(500).json({ message: 'Error fetching items' });
+    logError('GET', '/api/board/detail', error, { id });
+    res.status(500).json({ message: '서버 에러가 발생했습니다.' });
   }
 });
 
 router.post('/upload', async (req: Request, res: Response): Promise<void> => {
   const { title, content } = req.body;
 
+  logRequest('POST', '/api/board/upload', { title, content });
   try {
     const token = req.cookies.accessToken;
     if (!token) {
+      logResponse('POST', '/api/board/upload', 401, { title, content });
       res.status(401).json({ message: '인증 토큰이 없습니다.' });
     }
     let decoded = jwt.verify(token, JWT_SECRET) as {
@@ -102,16 +82,14 @@ router.post('/upload', async (req: Request, res: Response): Promise<void> => {
         username: string;
       };
     } catch (err) {
-      console.error('JWT 검증 실패:', err);
+      logResponse('POST', '/api/board/upload', 403, { title, content });
       res.status(403).json({ message: '유효하지 않은 토큰입니다.' });
     }
 
     const now = new Date();
     const formattedNow = formatDateToYMDHMS(now);
 
-    console.log(
-      "post, '/upload': " + decoded.username + ', ' + title + ', ' + content
-    );
+    logResponse('POST', '/api/board/upload', 200, { title, content });
 
     const response = await api.post(`${dbUrl}/boards`, {
       username: decoded.username,
@@ -131,8 +109,8 @@ router.post('/upload', async (req: Request, res: Response): Promise<void> => {
       success: true,
     });
   } catch (error) {
-    console.error('Error fetching items:', error);
-    res.status(500).json({ message: 'Error fetching items' });
+    logError('POST', '/api/board/upload', error, { title, content });
+    res.status(500).json({ message: '서버 에러가 발생했습니다.' });
   }
 });
 

@@ -88,7 +88,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     } else {
       logResponse('POST', '/api/login', 404, {
         userId,
-        error: 'User not found',
+        error: '존재하지 않는 아이디입니다.',
       });
 
       res.status(404).json({
@@ -191,7 +191,6 @@ router.get(
     logRequest('GET', '/api/check/user', {
       userId
     });
-
 
     try {
       // 데이터를 가져옴

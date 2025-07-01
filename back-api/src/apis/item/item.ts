@@ -1,6 +1,7 @@
 import express, { Router, Request, Response } from 'express';
 import api from '../../lib/axios'; 
 import upload from '../../utils/upload';
+import { logRequest, logResponse, logError } from '../../utils/logger';
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -16,6 +17,9 @@ router.get('/list', async (req: Request, res: Response) => {
     offset: string;
     limit: string;
   };
+
+  logRequest('GET', '/api/item/list', { offset, limit });
+
   try {
     const itemsRes = await api.get(
       `${dbUrl}/items?_start=${offset}&_limit=${limit}`
@@ -45,7 +49,8 @@ router.get('/list', async (req: Request, res: Response) => {
       ...item,
       profileImg: userMap.get(item.username)?.profileImg || null,
     }));
-    console.log(combined)
+    
+    logResponse('GET', '/api/item/list', 200, { offset, limit });
 
     res.status(200).json({
       message: '데이터를 가져왔습니다.',
@@ -54,21 +59,19 @@ router.get('/list', async (req: Request, res: Response) => {
       success: true,
     });
   } catch (error) {
-    console.error('Error fetching items with users:', error);
-    res.status(500).json({ message: 'Error fetching items' });
+    logError('GET', '/api/item/list', error, { offset, limit });
+    res.status(500).json({ message: '서버 에러가 발생했습니다.' });
   }
 });
 
 router.get('/user-list', async (req: Request, res: Response) => {
-
-
   const { id, offset, limit } = req.query as {
     id: string;
     offset: string;
     limit: string;
   };
 
-  console.log("GET '/user-list':", id);
+  logRequest('GET', '/api/item/user-list', { id, offset, limit });
 
   try {
     if (!id) {
@@ -76,13 +79,12 @@ router.get('/user-list', async (req: Request, res: Response) => {
       return;
     }
 
-    console.log("test")
-
     // 먼저 users 테이블에서 해당 id의 사용자 정보를 가져옴
     const userResponse = await api.get(`${dbUrl}/users/${id}`);
     const user = userResponse.data;
 
     if (!user) {
+      logResponse('GET', '/api/item/user-list', 404, { id, offset, limit });
       res.status(404).json({ message: 'User not found' });
       return;
     }
@@ -93,7 +95,8 @@ router.get('/user-list', async (req: Request, res: Response) => {
     );
 
     const data = response.data;
-    console.log(`Fetched ${data.length} items for user id: ${id} (username: ${user.username})`);
+    
+    logResponse('GET', '/api/item/user-list', 200, { id, offset, limit });
     
     res
       .status(200)
@@ -103,10 +106,9 @@ router.get('/user-list', async (req: Request, res: Response) => {
         status: 200,
         success: true,
       });
-
   } catch (error) {
-    console.error('Error fetching items33:', error);
-    res.status(500).json({ message: 'Error fetching items' });
+    logError('GET', '/api/item/user-list', error, { id, offset, limit });
+    res.status(500).json({ message: '서버 에러가 발생했습니다.' });
   }
 });
 
@@ -117,49 +119,39 @@ router.post(
     const { userId, username, itemName, description } = req.body;
     const file = (req as MulterRequest).file;
 
-    console.log('userId:', userId);
-    console.log('username:', username);
-    console.log('itemName:', itemName);
-    console.log('description:', description);
-    console.log('file:', file?.originalname, file?.mimetype);
+    logRequest('POST', '/api/item/upload', { userId, username, itemName, description, file });
 
     if (!file) {
       res.status(400).json({ message: '파일이 없습니다.', success: false });
       return;
     }
 
+    const imagePath = file.filename;
+
     try {
-      // 데이터를 가져옴
+      // 이미지 등록
+      await api.post(`${dbUrl}/items`, {
+        itemImg: '/' + imagePath,
+        username: username,
+        itemName: itemName,
+        description: description
+      });
 
-      // 해당 ID가 있는지 먼저 확인.
+      const data = {
+        userId: userId,
+      };
 
-      
+      logResponse('POST', '/api/item/upload', 200, { userId, username, itemName, description, file });
 
-        const imagePath = file.filename;
-        console.log(imagePath);
-        // 이미지 등록
-        await api.post(`${dbUrl}/items`, {
-          itemImg: '/' + imagePath,
-          username: username,
-          itemName: itemName,
-          description: description
-        });
-
-        const data = {
-          userId: userId,
-        };
-
-        res.status(200).json({
-          message: '아이템이 등록되었습니다.',
-          data: data,
-          status: 200,
-          success: true,
-        });
-        return;
-      
-      
+      res.status(200).json({
+        message: '아이템이 등록되었습니다.',
+        data: data,
+        status: 200,
+        success: true,
+      });
+      return;
     } catch (error) {
-      console.error('Error fetching items:', error);
+      logError('POST', '/api/item/upload', error, { userId, username, itemName, description, file });
       res
         .status(500)
         .json({ message: 'Error fetching items', status: 500, success: false });

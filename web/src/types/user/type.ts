@@ -103,8 +103,10 @@ export interface EditUserPwdRequest {
 }
 
 export interface EditUserPwdResponse {
+  data?: UserData | null;
   success: boolean;
   message: string;
+  status: number;
 }
 
 export interface EditUserImgRequest {
@@ -113,6 +115,8 @@ export interface EditUserImgRequest {
 }
 
 export interface EditUserImgResponse {
+  data?: UserData | null;
   success: boolean;
   message: string;
+  status: number;
 }

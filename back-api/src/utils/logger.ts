@@ -17,7 +17,11 @@ const maskSensitiveData = (data: any): any => {
       'token',
       'accessToken',
       'refreshToken',
-    ];
+      'nowPwd',
+      'newPwd',
+      'newPwdConfirm',
+      'file',
+    ];  
 
     sensitiveFields.forEach((field) => {
       if (masked[field]) {

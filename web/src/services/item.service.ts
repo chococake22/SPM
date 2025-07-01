@@ -1,6 +1,5 @@
 import api from '@/lib/axios';
 import { ItemListResponse, UploadItemResponse } from '@/types/item/type';
-import { redirect } from 'next/navigation';
 import { AxiosError } from 'axios';
 
 const itemService = {
@@ -19,17 +18,22 @@ const itemService = {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        const status = error.response?.status;
-        const message = error.response?.data?.message || error.message;
-
-        console.log('status: ' + status);
-        if (status === 401) {
-          redirect('/expired');
-        } else {
-          alert(`요청 실패: ${message}`);
-        }
+        const message =
+          error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          data: null,
+          success: false,
+          message: message,
+          status: status,
+        };
       } else {
-        alert('Unexpected Error!');
+        return {
+          data: null,
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
     }
   },
@@ -51,25 +55,30 @@ const itemService = {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        const status = error.response?.status;
-        const message = error.response?.data?.message || error.message;
-
-        console.log('status: ' + status);
-
-        if (status === 401) {
-          redirect('/expired');
-        } else {
-          alert(`요청 실패: ${message}`);
-        }
+        const message =
+          error.response?.data.message ??
+          '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          data: null,
+          success: false,
+          message: message,
+          status: status,
+        };
       } else {
-        alert('Unexpected Error!');
+        return {
+          data: null,
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
     }
   },
 
   async uploadItem(formData: FormData): Promise<UploadItemResponse> {
     try {
-      const response = await api.post<UploadItemResponse>(
+      await api.post<UploadItemResponse>(
         '/api/item/upload',
         formData,
         {
@@ -79,22 +88,28 @@ const itemService = {
         }
       );
       return {
+        data: null,
+        status: 200,
         success: true,
         message: '프로필 이미지가 변경되었습니다.',
       };
     } catch (error) {
       if (error instanceof AxiosError) {
-        const message = error.response?.data.message;
-        console.log('status: ' + error.response?.status);
-        console.log('message: ' + message);
+        const message =
+          error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
         return {
+          data: null,
           success: false,
-          message,
+          message: message,
+          status: status,
         };
       } else {
         return {
+          data: null,
           success: false,
-          message: '(시스템 오류) 다시 시도해주세요',
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
         };
       }
     }

@@ -1,5 +1,8 @@
 export interface ItemListResponse {
-  data: Item[] | undefined;
+  data?: Item[] | null;
+  success: boolean;
+  message: string;
+  status: number;
 }
 
 export interface Item {
@@ -22,6 +25,8 @@ export interface UploadItemRequest {
 }
 
 export interface UploadItemResponse {
+  data?: Item | null;
   success:boolean;
   message:string;
+  status: number;
 }

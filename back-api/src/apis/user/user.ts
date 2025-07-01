@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import api from '../../lib/axios'; 
 import bcrypt from 'bcrypt';
 import upload from '../../utils/upload';
+import { logRequest, logResponse, logError } from '../../utils/logger';
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -16,7 +17,7 @@ const router = Router();
 router.get('/info', async (req: Request, res: Response): Promise<void> => {
   const { userId } = req.query as { userId: string }; // ✅ query에서 추출
 
-  console.log("GET '/user':", userId);
+  logRequest('GET', '/api/user/info', { userId });
 
   try {
     // 데이터를 가져옴
@@ -32,6 +33,8 @@ router.get('/info', async (req: Request, res: Response): Promise<void> => {
         address: userDb.address
       }
 
+      logResponse('GET', '/api/user/info', 200, { userId });
+
       res.status(200).json({
         data: data,
         message: "사용자 정보를 가져왔습니다.",
@@ -39,6 +42,8 @@ router.get('/info', async (req: Request, res: Response): Promise<void> => {
         success: true
       });
     } else {
+      logResponse('GET', '/api/user/info', 404, { userId });
+
       res.status(404).json({
         data: null,
         message: '해당 사용자가 없습니다',
@@ -47,7 +52,7 @@ router.get('/info', async (req: Request, res: Response): Promise<void> => {
       });
     }
   } catch (error) {
-    console.error('Error fetching user info:', error); // 로깅 추가
+    logError('GET', '/api/user/info', error, { userId });
 
     res.status(500).json({
       data: null,
@@ -67,11 +72,7 @@ router.patch(
   async (req: Request, res: Response): Promise<void> => {
     const { userId, username, phone, address } = req.body;
 
-    console.log("method: 'PUT', url: '/user/edit'");
-    console.log("userId: " + userId);
-    console.log('username: ' + username);
-    console.log('phone: ' + phone);
-    console.log('address: ' + address);
+    logRequest('PATCH', '/api/user/edit', { userId, username, phone, address });
 
     try {
       const dbUser = await api.get(`${dbUrl}/users`, {
@@ -81,6 +82,8 @@ router.patch(
       const userList = dbUser.data;
 
       if (userList.length === 0) {
+        logResponse('PATCH', '/api/user/edit', 404, { userId });
+
         res.status(404).json({
           data: null,
           message: '해당 사용자가 없습니다.',
@@ -105,6 +108,8 @@ router.patch(
         address: updateRes.data.address
       };
 
+      logResponse('PATCH', '/api/user/edit', 200, { userId });
+
       res.status(200).json({
         data: data,
         message: '사용자 정보가 변경되었습니다.',
@@ -112,7 +117,7 @@ router.patch(
         success: true,
       });
     } catch (error) {
-      console.error('Error fetching users:', error);
+      logError('PATCH', '/api/user/edit', error, { userId, username, phone, address });
       res.status(500).json({
         data: null,
         message: '서버 에러가 발생했습니다.',
@@ -126,7 +131,7 @@ router.patch(
 router.patch('/edit/pwd', async (req: Request, res: Response): Promise<void> => {
   const { userId, nowPwd, newPwd, newPwdConfirm } = req.body;
 
-  console.log("patch, '/edit/pwd': " + nowPwd + ', ' + newPwd);
+  logRequest('PATCH', '/api/user/edit/pwd', { userId, nowPwd, newPwd, newPwdConfirm });
 
   try {
     // 데이터를 가져옴
@@ -141,6 +146,8 @@ router.patch('/edit/pwd', async (req: Request, res: Response): Promise<void> => 
       const comparePwd = await bcrypt.compare(nowPwd, userDb.userPw);
 
       if (!comparePwd) {
+        logResponse('PATCH', '/api/user/edit/pwd', 400, { userId });
+
         res.status(400).json({
           message: '현재 비밀번호가 틀렸습니다.',
           status: 400,
@@ -153,6 +160,8 @@ router.patch('/edit/pwd', async (req: Request, res: Response): Promise<void> => 
       const newHashedPw = await bcrypt.hash(newPwd, saltRounds);
 
       if (nowPwd === newPwd) {
+        logResponse('PATCH', '/api/user/edit/pwd', 400, { userId });
+
         res.status(400).json({
           message: '현재와 동일한 비밀번호를 사용할 수 없습니다.',
           status: 400,
@@ -162,13 +171,15 @@ router.patch('/edit/pwd', async (req: Request, res: Response): Promise<void> => 
       }
 
       // 비밀번호 변경
-      const updateRes = await api.patch(`${dbUrl}/users/${id}`, {
+      await api.patch(`${dbUrl}/users/${id}`, {
         userPw: newHashedPw,
       });
 
       const data = {
         userId: userId,
       };
+
+      logResponse('PATCH', '/api/user/edit/pwd', 200, { userId });
 
       res.status(200).json({
         message: '비밀번호가 변경되었습니다.',
@@ -178,6 +189,8 @@ router.patch('/edit/pwd', async (req: Request, res: Response): Promise<void> => 
       });
       return;
     } else {
+      logResponse('PATCH', '/api/user/edit/pwd', 404, { userId });
+
       res.status(404).json({
         message: '존재하지 않는 아이디입니다.',
         status: 404,
@@ -186,7 +199,8 @@ router.patch('/edit/pwd', async (req: Request, res: Response): Promise<void> => 
       return;
     }
   } catch (error) {
-    console.error('Error fetching items:', error);
+    logError('PATCH', '/api/user/edit/pwd', error, { userId, nowPwd, newPwd, newPwdConfirm });
+
     res
       .status(500)
       .json({ message: 'Error fetching items', status: 500, success: false });
@@ -202,10 +216,11 @@ router.patch(
     const { userId } = req.body;
     const file = (req as MulterRequest).file;
 
-    console.log('userId:', userId);
-    console.log('file:', file?.originalname, file?.mimetype);
+    logRequest('PATCH', '/api/user/edit/img', { userId, file });
 
     if (!file) {
+      logResponse('PATCH', '/api/user/edit/img', 400, { userId });
+
       res.status(400).json({ message: '파일이 없습니다.', success: false });
       return;
     }
@@ -232,6 +247,8 @@ router.patch(
           userId: userId,
         };
 
+        logResponse('PATCH', '/api/user/edit/img', 200, { userId });
+
         res.status(200).json({
           message: '프로필 이미지가 변경되었습니다.',
           data: data,
@@ -240,6 +257,7 @@ router.patch(
         });
         return;
       } else {
+        logResponse('PATCH', '/api/user/edit/img', 404, { userId });
         res.status(404).json({
           message: '존재하지 않는 아이디입니다.',
           status: 404,
@@ -248,7 +266,7 @@ router.patch(
         return;
       }
     } catch (error) {
-      console.error('Error fetching items:', error);
+      logError('PATCH', '/api/user/edit/img', error, { userId, file });
       res
         .status(500)
         .json({ message: 'Error fetching items', status: 500, success: false });

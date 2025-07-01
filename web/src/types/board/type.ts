@@ -1,5 +1,8 @@
 export interface BoardListResponse {
-  data: BoardData;
+  data?: BoardData | null;
+  success: boolean;
+  message: string;
+  status: number;
 }
 
 export interface BoardData {
@@ -22,12 +25,14 @@ export interface UploadBoardRequest {
 }
 
 export interface UploadBoardResponse {
-  success:boolean;
-  message:string;
+  data?: Board | null;
+  status: number;
+  success: boolean;
+  message: string;
 }
 
 export interface BoardDetailResponse {
-  data?: Board
+  data?: Board | null;
   status: number;
   success: boolean;
   message: string;

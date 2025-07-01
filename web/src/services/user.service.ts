@@ -1,20 +1,13 @@
 import api from '@/lib/axios';
+import { AxiosError } from 'axios';
 import {
-  LoginResponse,
-  SignupRequest,
-  SignupResponse,
-  LogoutRequest,
-  LogoutResponse,
   UserInfoRequest,
   UserInfoResponse,
-  CheckUserIdResponse,
-  LoginForm,
   EditUserPwdRequest,
   EditUserPwdResponse,
   EditUserImgResponse,
 } from '@/types/user/type';
-import { AxiosError } from 'axios';
-import { redirect } from 'next/navigation';
+
 
 export const userService = {
   async user(data: UserInfoRequest): Promise<UserInfoResponse | undefined> {
@@ -25,16 +18,21 @@ export const userService = {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        const status = error.response?.status;
-        const message = error.response?.data?.message || error.message;
-        console.log('status: ' + status);
-        if (status === 401) {
-          redirect('/expired');
-        } else {
-          alert(`요청 실패: ${message}`);
-        }
+        const message = error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          data: null,
+          success: false,
+          message: message,
+          status: status,
+        };
       } else {
-        alert('Unexpected Error!');
+        return {
+          data: null,
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
     }
   },
@@ -47,38 +45,55 @@ export const userService = {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log('status: ' + error.response?.status);
-        console.log('message: ' + error.response?.data.message);
-        return {} as UserInfoResponse;
+        const message = error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          data: null,
+          success: false,
+          message: message,
+          status: status,
+        };
       } else {
-        return {} as UserInfoResponse;
+        return {
+          data: null,
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
     }
   },
 
   async editUserPwd(data: EditUserPwdRequest): Promise<EditUserPwdResponse> {
     try {
-      const response = await api.patch<EditUserPwdResponse>(
+      await api.patch<EditUserPwdResponse>(
         '/api/user/edit/pwd',
         data
       );
       return {
+        data: null,
+        status: 200,
         success: true,
         message: '비밀번호가 변경되었습니다.',
       };
     } catch (error) {
       if (error instanceof AxiosError) {
-        const message = error.response?.data.message;
-        console.log('status: ' + error.response?.status);
-        console.log('message: ' + message);
+        const message =
+          error.response?.data.message ??
+          '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
         return {
+          data: null,
           success: false,
-          message,
+          message: message,
+          status: status,
         };
       } else {
         return {
+          data: null,
           success: false,
-          message: '(시스템 오류) 다시 시도해주세요',
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
         };
       }
     }
@@ -86,7 +101,7 @@ export const userService = {
 
   async editUserProfile(formData: FormData): Promise<EditUserImgResponse> {
     try {
-      const response = await api.patch<EditUserImgResponse>(
+      await api.patch<EditUserImgResponse>(
         '/api/user/edit/img',
         formData,
         {
@@ -96,22 +111,28 @@ export const userService = {
         }
       );
       return {
+        data: null,
+        status: 200,
         success: true,
         message: '프로필 이미지가 변경되었습니다.',
       };
     } catch (error) {
       if (error instanceof AxiosError) {
-        const message = error.response?.data.message;
-        console.log('status: ' + error.response?.status);
-        console.log('message: ' + message);
+        const message =
+          error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
         return {
+          data: null,
           success: false,
-          message,
+          message: message,
+          status: status,
         };
       } else {
         return {
+          data: null,
           success: false,
-          message: '(시스템 오류) 다시 시도해주세요',
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
         };
       }
     }
@@ -127,16 +148,22 @@ export const userService = {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        const status = error.response?.status;
-        const message = error.response?.data?.message || error.message;
-        console.log('status: ' + status);
-        if (status === 401) {
-          redirect('/expired');
-        } else {
-          alert(`요청 실패: ${message}`);
-        }
+        const message =
+          error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          data: null,
+          success: false,
+          message: message,
+          status: status,
+        };
       } else {
-        alert('Unexpected Error!');
+        return {
+          data: null,
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
     }
   },
@@ -146,20 +173,23 @@ export const userService = {
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        const status = error.response?.status;
-        const message = error.response?.data?.message || error.message;
-
-        console.log('status: ' + status);
-
-        if (status === 401) {
-          redirect('/expired');
-        } else {
-          console.error(`사용자 검색 실패: ${message}`);
-        }
+        const message =
+          error.response?.data.message ?? '(오류 발생) 에러가 발생했습니다.';
+        const status = error.response?.status ?? 500;
+        return {
+          data: null,
+          success: false,
+          message: message,
+          status: status,
+        };
       } else {
-        console.error('Unexpected Error!');
+        return {
+          data: null,
+          success: false,
+          message: '(오류 발생) 에러가 발생했습니다.',
+          status: 500,
+        };
       }
-      return null;
     }
   },
 };
