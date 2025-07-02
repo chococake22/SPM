@@ -35,7 +35,6 @@ export default function BoardDetail({ params }: Props) {
           isLoading: false,
           error: null,
         });
-        console.log(response.data);
       } else {
         setState({
           board: null,

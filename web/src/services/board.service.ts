@@ -40,7 +40,9 @@ const boardService = {
 
   async getBoardDetail(id: string): Promise<BoardDetailResponse | undefined> {
     try {
-      const response = await api.get<BoardDetailResponse>(`/api/board/detail/${id}`);
+      const response = await api.get<BoardDetailResponse>('/api/board/detail', {
+        params: { id },
+      });
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

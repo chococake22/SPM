@@ -35,6 +35,8 @@ router.get('/list', async (req: Request, res: Response) => {
 router.get('/detail', async (req: Request, res: Response) => {
   const { id } = req.query as { id: string };
 
+  console.log(id);
+
   logRequest('GET', '/api/board/detail', { id });
 
   try {
