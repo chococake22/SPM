@@ -1,0 +1,45 @@
+get:
+  tags:
+    - 게시글
+  summary: 게시글 상세정보 가져오기
+  security:
+    - Access Token: []  # 🔐 토큰 필요 설정
+  parameters:
+    - name: id
+      in: query
+      description: 해당 게시글 상세 정보 가져오기
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: 게시글 상세 정보 가져오기 성공
+      content:
+        application/json:
+          example:
+            data:
+              id: 1q2w
+              username: 애플1
+              title: sdfsdfsdf
+              content: sdfsdfsdf
+              regiDttm: 2025-06-13 15:49:43
+              finalModDttm: 2025-06-13 15:49:43
+            message: 게시글 상세 정보 가져오기 성공
+            status: 200
+            success: true
+    '400':
+      description: 잘못된 요청
+      content:
+        application/json:
+          example:
+            message: 잘못된 요청입니다.
+            status: 400
+            success: false
+    '500':
+      description: 서버 오류 발생
+      content:
+        application/json:
+          example:
+            message: 서버 오류가 발생했습니다.
+            status: 500
+            success: false

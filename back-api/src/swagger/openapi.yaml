@@ -41,5 +41,6 @@ paths:
     $ref: './paths/board/getBoardList.yaml'
   /api/board/upload:
     $ref: './paths/board/uploadBoard.yaml'
-
+  /api/board/detail:
+    $ref: './paths/board/getBoardDetail.yaml'
 
