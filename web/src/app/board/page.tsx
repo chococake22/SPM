@@ -35,10 +35,14 @@ export default function BoardPage() {
     try {
       const response = await boardService.getBoards(offsetNum, ITEMS_PER_PAGE);
 
-      const boards = response?.data?.list || [];
-      const count = response?.data.totalCount || 0;
-      setBoardList(boards);
-      setTotalCount(Math.ceil(count / ITEMS_PER_PAGE));
+      if (response && response.data) {
+        const boards = response.data.list || [];
+        const count = response.data.totalCount || 0;
+
+        setBoardList(boards);
+        setTotalCount(Math.ceil(count / ITEMS_PER_PAGE));setBoardList(response.data?.list);
+      }
+
     } catch (error) {
       console.error(error);
     }
