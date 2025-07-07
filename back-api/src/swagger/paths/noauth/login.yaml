@@ -29,12 +29,22 @@ post:
             message: 로그인에 성공했습니다.
             status: 200
             success: true
-    '404':
+    '400':
       description: 아이디나 비밀번호가 틀림
       content:
         application/json:
           example:
+            data: null
             message: 아이디나 비밀번호가 틀립니다.
+            status: 400
+            success: false
+    '404':
+      description: 존재하지 않는 아이디
+      content:
+        application/json:
+          example:
+            data: null
+            message: 존재하지 않는 아이디입니다.
             status: 404
             success: false
     '500':
@@ -42,6 +52,7 @@ post:
       content:
         application/json:
           example:
+            data: null
             message: 서버 오류가 발생했습니다.
             status: 500
             success: false

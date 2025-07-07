@@ -1,42 +1,35 @@
 get:
   tags:
     - 회원정보
-  summary: 회원 프로필 이미지 가져오기
+  summary: userId로 username 찾기
   security:
     - Access Token: []  # 🔐 토큰 필요 설정
   parameters:
-    - name: userId
+    - name: username
       in: query
-      description: 해당 회원 프로필 이미지 가져오기
+      description: username으로 userId 찾기
       required: true
       schema:
         type: string
   responses:
     '200':
-      description: 사용자 이미지 가져오기 성공
+      description: 사용자 정보 가져오기 성공
       content:
         application/json:
           example:
             data:
               userId: user12@test.com
+              username: 유저12
               profileImg: /test.png
-            message: 사용자 이미지 가져오기 성공
+            message: 사용자 정보 가져오기 성공
             status: 200
             success: true
-    '400':
-      description: 잘못된 요청
-      content:
-        application/json:
-          example:
-            message: 잘못된 요청입니다.
-            status: 400
-            success: false
     '404':
-      description: 존재하지 않는 아이디
+      description: 존재하지 않는 사용자
       content:
         application/json:
           example:
-            message: 존재하지 않는 아이디입니다.
+            message: 존재하지 않는 사용자입니다.
             status: 404
             success: false
     '500':

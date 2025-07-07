@@ -11,7 +11,7 @@ import path from 'path';
 import swaggerUi from 'swagger-ui-express'; //ui 설정할 수 있는 모듈 불러오기
 import fs from 'fs';
 import * as yaml from 'js-yaml';
-// const swaggerDocument = yaml.load('./swagger/openapi.yaml');
+
 
 const app = express();
 const env = process.env.NODE_ENV || 'development';
@@ -25,10 +25,14 @@ dotenv.config({
 });
 
 // swagger 설정
-const swaggerFile = path.resolve(__dirname, '../dist/swagger-bundled.yaml');
-const swaggerDocument = fs.readFileSync(swaggerFile, 'utf8');
-const swaggerObj = yaml.load(swaggerDocument);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerObj as object));
+// const swaggerFile = path.resolve(__dirname, '../dist/swagger-bundled.yaml');
+// const swaggerDocument = fs.readFileSync(swaggerFile, 'utf8');
+// const swaggerObj = yaml.load(swaggerDocument);
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerObj as object));
+
+const swaggerFile = path.resolve(__dirname, '../dist/swagger-bundled.json');
+const swaggerDocument = JSON.parse(fs.readFileSync(swaggerFile, 'utf8'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const allowedOrigins = process.env.WHITE_LIST;
 

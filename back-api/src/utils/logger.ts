@@ -105,7 +105,7 @@ export const logResponse = (method: string, path: string, status: number, data?:
   });
 };
 
-export const logError = (method: string, path: string, error: any, data?: any) => {
+export const logError = (method: string, path: string, error: any, message?: string, data?: any) => {
   logger.error('API Error', {
     method,
     path,

@@ -34,12 +34,20 @@ patch:
             message: 프로필 이미지 수정 성공
             status: 200
             success: true
-    '404':
-      description: 잘못된 요청
+    '400':
+      description: 파일이 없음
       content:
         application/json:
           example:
-            message: 잘못된 요청입니다.
+            message: 파일이 없습니다.
+            status: 400
+            success: false
+    '404':
+      description: 존재하지 않는 아이디
+      content:
+        application/json:
+          example:
+            message: 존재하지 않는 아이디입니다.
             status: 404
             success: false
     '500':

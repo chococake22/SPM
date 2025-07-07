@@ -29,15 +29,16 @@ patch:
           example:
             data:
               userId: user12@test.com
-            message: 사용자 정보 가져오기 성공
-            status: 200
+            message: 사용자 정보 수정 성공
+            status: 201
             success: true
     '400':
-      description: 잘못된 현재 비밀번호
+      description: 잘못된 현재 비밀번호 또는 동일한 비밀번호
       content:
         application/json:
           example:
-            message: 현재 비밀번호가 잘못되었습니다.
+            data: null
+            message: 현재 비밀번호가 잘못되었거나 동일한 비밀번호는 사용할 수 없습니다.
             status: 400
             success: false
     '404':
@@ -45,6 +46,7 @@ patch:
       content:
         application/json:
           example:
+            data: null
             message: 존재하지 않는 아이디입니다.
             status: 404
             success: false
@@ -53,6 +55,7 @@ patch:
       content:
         application/json:
           example:
+            data: null
             message: 서버 오류가 발생했습니다.
             status: 500
             success: false

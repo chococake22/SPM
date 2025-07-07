@@ -5,7 +5,6 @@ import { logRequest, logResponse, logError } from '../../utils/logger';
 
 const dbUrl = process.env.DB_URL || 'http://localhost:3002';
 const JWT_SECRET = process.env.JWT_SECRET || 'secretKey';;
-
 const router = Router();
 
 router.get('/list', async (req: Request, res: Response) => {
@@ -27,15 +26,19 @@ router.get('/list', async (req: Request, res: Response) => {
     logResponse('GET', '/api/board/list', 200, { offset, limit });
     res.status(200).json({ message:'데이터를 가져왔습니다.', data: data, status: 200, success: true});
   } catch (error) {
-    logError('GET', '/api/board/list', error, { offset, limit });
-    res.status(500).json({ message: '서버 에러가 발생했습니다.' });
+    logError('GET', '/api/board/list', error, '서버 오류가 발생했습니다.', { offset, limit });
+    
+    res.status(500).json({
+      data: null,
+      message: '서버 오류가 발생했습니다.',
+      status: 500,
+      success: false,
+    });
   }
 });
 
 router.get('/detail', async (req: Request, res: Response) => {
   const { id } = req.query as { id: string };
-
-  console.log(id);
 
   logRequest('GET', '/api/board/detail', { id });
 
@@ -58,8 +61,16 @@ router.get('/detail', async (req: Request, res: Response) => {
         success: true,
       });
   } catch (error) {
-    logError('GET', '/api/board/detail', error, { id });
-    res.status(500).json({ message: '서버 에러가 발생했습니다.' });
+    logError('GET', '/api/board/detail', error, '서버 오류가 발생했습니다.', {
+      id,
+    });
+    
+    res.status(500).json({
+      data: null,
+      message: '서버 오류가 발생했습니다.',
+      status: 500,
+      success: false,
+    });
   }
 });
 
@@ -111,8 +122,17 @@ router.post('/upload', async (req: Request, res: Response): Promise<void> => {
       success: true,
     });
   } catch (error) {
-    logError('POST', '/api/board/upload', error, { title, content });
-    res.status(500).json({ message: '서버 에러가 발생했습니다.' });
+    logError('POST', '/api/board/upload', error, '서버 오류가 발생했습니다.', {
+      title,
+      content,
+    });
+
+    res.status(500).json({
+      data: null,
+      message: '서버 오류가 발생했습니다.',
+      status: 500,
+      success: false,
+    });
   }
 });
 

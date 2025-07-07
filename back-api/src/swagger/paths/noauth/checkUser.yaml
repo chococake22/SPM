@@ -25,6 +25,7 @@ get:
       content:
         application/json:
           example:
+            data: null
             message: 이미 사용중인 아이디입니다.
             status: 400
             success: false
@@ -33,6 +34,7 @@ get:
       content:
         application/json:
           example:
+            data: null
             message: 서버 오류가 발생했습니다.
             status: 500
             success: false

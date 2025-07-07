@@ -8,8 +8,6 @@ interface MulterRequest extends Request {
 }
 
 const dbUrl = process.env.DB_URL || 'http://localhost:3002';
-
-
 const router = Router();
 
 router.get('/list', async (req: Request, res: Response) => {
@@ -59,8 +57,14 @@ router.get('/list', async (req: Request, res: Response) => {
       success: true,
     });
   } catch (error) {
-    logError('GET', '/api/item/list', error, { offset, limit });
-    res.status(500).json({ message: '서버 에러가 발생했습니다.' });
+    logError('GET', '/api/item/list', error, '서버 에러가 발생했습니다.', { offset, limit });
+
+    res.status(500).json({
+      data: null,
+      message: '서버 오류가 발생했습니다.',
+      status: 500,
+      success: false,
+    });
   }
 });
 
@@ -107,8 +111,14 @@ router.get('/user-list', async (req: Request, res: Response) => {
         success: true,
       });
   } catch (error) {
-    logError('GET', '/api/item/user-list', error, { id, offset, limit });
-    res.status(500).json({ message: '서버 에러가 발생했습니다.' });
+    logError('GET', '/api/item/user-list', error, '서버 에러가 발생했습니다.', { id, offset, limit });
+
+    res.status(500).json({
+      data: null,
+      message: '서버 오류가 발생했습니다.',
+      status: 500,
+      success: false,
+    });
   }
 });
 
@@ -151,11 +161,14 @@ router.post(
       });
       return;
     } catch (error) {
-      logError('POST', '/api/item/upload', error, { userId, username, itemName, description, file });
-      res
-        .status(500)
-        .json({ message: 'Error fetching items', status: 500, success: false });
-      return;
+      logError('POST', '/api/item/upload', error, '서버 에러가 발생했습니다.', { userId, username, itemName, description, file });
+
+      res.status(500).json({
+        data: null,
+        message: '서버 오류가 발생했습니다.',
+        status: 500,
+        success: false,
+      });
     }
   }
 );

@@ -169,7 +169,10 @@ export const userService = {
   },
   async findUserByUsername(username: string): Promise<any> {
     try {
-      const response = await api.get(`/api/user/find-by-username/${username}`);
+      const encodedUsername = encodeURIComponent(username);
+      const response = await api.get(
+        `/api/user/find-by-username/${encodedUsername}`
+      );
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {

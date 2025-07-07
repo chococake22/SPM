@@ -19,105 +19,96 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     // 데이터를 가져옴
     const response = await api.get(`${dbUrl}/users`, { params: { userId } }); // /items로 요청 (baseURL 자동 적용)
     
-    // 해당 ID가 있는지 먼저 확인.
-    if (response.data[0]) {
-      const userDb = response.data[0];
-
-      const isValid = await bcrypt.compare(userPw, userDb.userPw);
-
-      // bcrypt.compare는 비동기 함수이므로
-      // await를 사용하여 비교 결과를 기다려야 함.
-
-      if (isValid) {
-        const params = {
-          userId: userDb.userId,
-          username: userDb.username,
-          phone: userDb.phone,
-          address: userDb.address,
-          id: userDb.id,
-        };
-        const accessToken = generateAccessToken(params);
-        const refreshToken = generateRefreshToken(params);
-
-        // access token을 httpOnly로 쿠키에 담아서 저장.
-        res.cookie('accessToken', accessToken, {
-          httpOnly: true,
-          secure: false,
-          sameSite: 'lax',
-        });
-
-        res.cookie('refreshToken', refreshToken, {
-          httpOnly: true,
-          secure: false,
-          sameSite: 'lax',
-        });
-
-
-        logResponse('POST', '/api/login', 200, { userId: userDb.userId, username: userDb.username });
-
-        res.json({
-          message: '로그인에 성공했습니다.',
-          status: 200,
-          success: true,
-          data: {
-            id: userDb.id,
-            userId: userDb.userId,
-            username: userDb.username,
-            phone: userDb.phone,
-            address: userDb.address,
-            tokens: {
-              accessToken: accessToken,
-              refreshToken: refreshToken,
-            },
-          },
-        });
-        return;
-      } 
-
-      logResponse('POST', '/api/login', 400, { userId, error: 'Invalid password' });
-      
-      res
-        .status(400)
-        .json({
-          message: '비밀번호가 틀렸습니다.',
-          status: 400,
-          success: false,
-        });
-      return;
-      
-    } else {
+    if(!response.data?.[0]) {
       logResponse('POST', '/api/login', 404, {
         userId,
         error: '존재하지 않는 아이디입니다.',
       });
 
       res.status(404).json({
+        data: null,
         message: '존재하지 않는 아이디입니다.',
         status: 404,
         success: false,
       });
       return;
     }
-  } catch (error) {
-    logError('POST', '/api/login', error, { userId });
 
-    if (axios.isAxiosError(error)) {
-      const status = error.response?.status || 500;
-      res.status(status).json({
-        message: '서버 오류가 발생했습니다.',
-        status: 500,
+    // 해당 ID가 있는지 먼저 확인.
+    const userDb = response.data[0];
+    const isValid = await bcrypt.compare(userPw, userDb.userPw);
+
+    // bcrypt.compare는 비동기 함수이므로
+    // await를 사용하여 비교 결과를 기다려야 함.
+
+    if (isValid) {
+      const params = {
+        userId: userDb.userId,
+        username: userDb.username,
+        phone: userDb.phone,
+        address: userDb.address,
+        id: userDb.id,
+      };
+      const accessToken = generateAccessToken(params);
+      const refreshToken = generateRefreshToken(params);
+
+      // access token을 httpOnly로 쿠키에 담아서 저장.
+      res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+      });
+
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+      });
+
+
+      logResponse('POST', '/api/login', 200, { userId: userDb.userId, username: userDb.username });
+
+      res.json({
+        message: '로그인에 성공했습니다.',
+        status: 200,
+        success: true,
+        data: {
+          id: userDb.id,
+          userId: userDb.userId,
+          username: userDb.username,
+          phone: userDb.phone,
+          address: userDb.address,
+          tokens: {
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+          },
+        },
+      });
+      return;
+    }
+
+    logResponse('POST', '/api/login', 400, { userId, error: 'Invalid password' });
+    
+    res
+      .status(400)
+      .json({
+        data: null,
+        message: '아이디나 비밀번호가 틀렸습니다.',
+        status: 400,
         success: false,
       });
-    } else {
-      // axios 에러가 아닐 때
-      res
-        .status(500)
-        .json({
-          message: '서버 오류가 발생했습니다.',
-          status: 500,
-          success: false,
-        });
-    }
+    return;
+      
+     
+  } catch (error: any) {
+    logError('POST', '/api/login', error, '서버 에러가 발생했습니다.', { userId });
+
+    res.status(500).json({
+      data: null,
+      message: '서버 오류가 발생했습니다.',
+      status: 500,
+      success: false,
+    });
   }
 });
 
@@ -157,29 +148,18 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
         success: true,
       });
   } catch (error) {
-    logError('POST', '/api/signup', error, {
+    logError('POST', '/api/signup', error, '서버 에러가 발생했습니다.', {
       userId,
       username,
       phone,
       address,
     });
-    if (axios.isAxiosError(error)) {
-      const status = error.response?.status || 500;
-      res.status(status).json({
-        data: null,
-        message: '서버 오류가 발생했습니다.',
-        status: 500,
-        success: false,
-      });
-    } else {
-      // axios 에러가 아닐 때
-      res.status(500).json({
-        data: null,
-        message: '서버 오류가 발생했습니다.',
-        status: 500,
-        success: false,
-      });
-    }
+    res.status(500).json({
+      data: null,
+      message: '서버 오류가 발생했습니다.',
+      status: 500,
+      success: false,
+    });
   }
 });
 
@@ -224,25 +204,16 @@ router.get(
       }
 
     } catch (error) {
-      logError('POST', '/api/check/user', error, {
+      logError('POST', '/api/check/user', error, '서버 에러가 발생했습니다.', {
         userId
       });
 
-      if (axios.isAxiosError(error)) {
-        const status = error.response?.status || 500;
-        res.status(status).json({
-          message: '서버 오류가 발생했습니다.',
-          status: 500,
-          success: false,
-        });
-      } else {
-        // axios 에러가 아닐 때
-        res.status(500).json({
-          message: '서버 오류가 발생했습니다.',
-          status: 500,
-          success: false,
-        });
-      }
+      res.status(500).json({
+        data: null,
+        message: '서버 오류가 발생했습니다.',
+        status: 500,
+        success: false,
+      });
     }
   }
 );
@@ -261,24 +232,13 @@ router.post('/logout', async (req: Request, res: Response): Promise<void> => {
 
     res.status(200).json({ data: {userId}, message: '로그아웃이 되었습니다.', status: 200, success:true });
   } catch (error) {
-    logError('POST', '/api/logout', error, {userId});
-    if (axios.isAxiosError(error)) {
-      const status = error.response?.status || 500;
-      res.status(status).json({
-        data: null,
-        message: '서버 오류가 발생했습니다.',
-        status: 500,
-        success: false,
-      });
-    } else {
-      // axios 에러가 아닐 때
-      res.status(500).json({
-        data: null,
-        message: '서버 오류가 발생했습니다.',
-        status: 500,
-        success: false,
-      });
-    }
+    logError('POST', '/api/logout', error, '서버 에러가 발생했습니다.', {userId});
+    res.status(500).json({
+      data: null,
+      message: '서버 오류가 발생했습니다.',
+      status: 500,
+      success: false,
+    });
   }
 });
 

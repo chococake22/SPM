@@ -9,6 +9,10 @@ post:
       application/json:
         schema:
           type: object
+          properties:
+            userId: { type: string }
+          required:
+            - userId
   responses:
     '200':
       description: 회원가입 성공
@@ -16,20 +20,16 @@ post:
         application/json:
           example:
             data:
-              id: "1234"
               userId: user12@test.com
-              userPw: password
-              username: 사용자12
-              phone: "01012341234"
-              address: 서울시 테스트구 테스트동
-            message: 가입이 완료되었습니다.
-            status: 201
+            message: 로그아웃이 되었습니다.
+            status: 200
             success: true
     '400':
       description: 잘못된 요청
       content:
         application/json:
           example:
+            data: null
             message: 잘못된 요청입니다.
             status: 400
             success: false
@@ -38,6 +38,7 @@ post:
       content:
         application/json:
           example:
+            data: null
             message: 서버 오류가 발생했습니다.
             status: 500
             success: false

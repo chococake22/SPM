@@ -28,7 +28,7 @@
     "yamljs": "^0.3.0"
   },
   "scripts": {
-    "build:swagger": "swagger-cli bundle src/swagger/openapi.yaml -o dist/swagger-bundled.yaml --type yaml",
+    "build:swagger": "swagger-cli bundle src/swagger/openapi.yaml -o dist/swagger-bundled.json --type json",
     "start": "NODE_ENV=production ts-node src/index.ts",
     "dev": "NODE_ENV=development nodemon --watch \"src/**/*.ts\" --exec \"ts-node\" src/index.ts"
   },

@@ -29,6 +29,8 @@ paths:
     $ref: './paths/user/editUserImg.yaml'
   /api/user/img:
     $ref: './paths/user/getUserImg.yaml'
+  /api/user/find-by-username:
+    $ref: './paths/user/getUserIdByUsername.yaml'
 # item
   /api/item/list:
     $ref: './paths/item/getItemList.yaml'
