@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://mac@localhost:5432/prisma_db"
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  userId       String    @unique @map("user_id") @db.VarChar(30)
+  userPw       String    @map("user_pw") @db.VarChar(100)
+  username     String    @db.VarChar(20)
+  phone        String?   @db.VarChar(15)
+  address      String?   @db.VarChar(100)
+  regiId       String?   @map("regi_id") @db.VarChar(50)
+  regiDttm     DateTime? @map("regi_dttm")
+  finalModId   String?   @map("final_mod_id")
+  finalModDttm DateTime? @map("final_mod_dttm")
+  boards       Board[]
+  items        Item[]
+  userImg      UserImg?
+
+  @@map("tb_user")
+}
+
+model UserImg {
+  id           Int       @id @default(autoincrement())
+  profileImg   String?   @map("profile_Img") @db.VarChar(100)
+  userId       String?   @db.VarChar(50)
+  regiId       String?   @map("regi_id") @db.VarChar(50)
+  regiDttm     DateTime? @map("regi_dttm")
+  finalModId   String?   @map("final_mod_id") @db.VarChar(50)
+  finalModDttm DateTime? @map("final_mod_dttm")
+  user         User      @relation(fields: [id], references: [id])
+
+  @@map("tb_user_img")
+}
+
+model Board {
+  id           Int       @id @default(autoincrement())
+  title        String    @db.VarChar(200)
+  content      String?
+  regiId       String?   @map("regi_id") @db.VarChar(50)
+  regiDttm     DateTime? @map("regi_dttm")
+  finalModId   String?   @map("final_mod_id") @db.VarChar(50)
+  finalModDttm DateTime? @map("final_mod_dttm")
+  userId       String    @map("user_id")
+  user         User      @relation(fields: [userId], references: [userId])
+
+  @@map("tb_board")
+}
+
+model Item {
+  id           Int       @id @default(autoincrement())
+  imageInfo    String?   @map("image_info")
+  itemImg      Int?      @map("item_img")
+  heartCnt     Int?      @map("heart_cnt")
+  commentCnt   Int?      @map("comment_cnt")
+  title        String    @db.VarChar(100)
+  description  String?
+  regiId       String?   @map("regi_id") @db.VarChar(50)
+  regiDttm     DateTime? @map("regi_dttm")
+  finalModId   String?   @map("final_mod_id") @db.VarChar(50)
+  finalModDttm DateTime? @map("final_mod_dttm")
+  userId       String?   @map("user_id")
+  user         User?     @relation(fields: [userId], references: [userId])
+
+  @@map("tb_item")
+}

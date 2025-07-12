@@ -15,8 +15,14 @@ export interface Board {
   username: string;
   title: string;
   content: string;
+  regiId: string;
   regiDttm: string;
+  finalModId: string;
   finalModDttm: string;
+  user: {
+    userId: string;
+    username: string;
+  };
 }
 
 export interface UploadBoardRequest {
