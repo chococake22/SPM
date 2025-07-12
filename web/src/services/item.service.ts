@@ -39,7 +39,7 @@ const itemService = {
   },
 
   async getUserItems(
-    id: string | undefined,
+    userId: string | undefined,
     offset: number,
     limit: number
   ): Promise<ItemListResponse | undefined> {
@@ -47,7 +47,7 @@ const itemService = {
       const response = await api.get<ItemListResponse>('/api/item/user-list', {
         params: {
           // get 메소드의 경우 param으로 쿼리스트링을 담아야 함.
-          id,
+          userId: userId ? encodeURIComponent(userId) : undefined,
           offset,
           limit,
         },

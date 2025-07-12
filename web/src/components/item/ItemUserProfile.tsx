@@ -2,33 +2,50 @@ import UserPhoto from '../user/UserPhoto';
 import Link from 'next/link';
 import { getUserIdFromUsername } from '@/lib/userUtils';
 import { useState, useEffect } from 'react';
+import itemService from '@/services/item.service';
 
 interface ItemUserProfileProps {
   profileImg: string;
-  userId: string;
+  id: string;
+  username: string;
 }
 
-const ItemUserProfile: React.FC<ItemUserProfileProps> = ({ profileImg, userId }) => {
-  const [userIdForUrl, setUserIdForUrl] = useState<string>(userId);
+  // 페이지당 사진 개수
+  const ITEMS_PER_PAGE = 3;
+
+const ItemUserProfile: React.FC<ItemUserProfileProps> = ({ profileImg, id, username }) => {
+  const [userIdForUrl, setUserIdForUrl] = useState<string>(id);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   
+
+  console.log('username', username);
+  console.log('profileImg', profileImg);
+
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const actualUserId = await getUserIdFromUsername(userId);
-        setUserIdForUrl(actualUserId);
+        
+        const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
+        const response = await itemService.getUserItems(
+          id,
+          offset,
+          ITEMS_PER_PAGE
+        );
+        console.log('response', response);
+        // setUserIdForUrl(actualUserId);
       } catch (error) {
         console.error('Error fetching user ID:', error);
-        setUserIdForUrl(userId); // fallback to original userId
+        // setUserIdForUrl(userId); // fallback to original userId
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchUserId();
-  }, [userId]);
+    // fetchUserId(number);
+  }, [id]);
+
   
-  if (isLoading) {
+  if (!isLoading) {
     return (
       <div className="flex items-center w-full h-[5vh]">
         <div className="w-[12%] h-full">
@@ -55,7 +72,7 @@ const ItemUserProfile: React.FC<ItemUserProfileProps> = ({ profileImg, userId })
           href={`/user/${userIdForUrl}`}
           className="ml-2 text-xl hover:text-blue-500 transition-colors cursor-pointer"
         >
-          {userId}
+          {username}
         </Link>
       </div>
     </div>

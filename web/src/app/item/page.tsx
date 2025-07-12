@@ -136,7 +136,7 @@ function AddItemPage() {
   };
 
   return (
-    <div className="flex w-full max-w-lg h-screen px-4">
+    <div className="flex w-full max-w-lg px-4">
       <div className='w-full h-full'>
         <form className='flex flex-col gap-5 justify-center w-full h-full' onSubmit={handleSubmit} encType="multipart/form-data" >
           <div

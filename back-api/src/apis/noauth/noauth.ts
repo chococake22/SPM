@@ -4,22 +4,38 @@ import { generateAccessToken, generateRefreshToken } from '../../utils/jwt';
 import bcrypt from 'bcrypt';
 import axios, { AxiosError } from 'axios';
 import { logRequest, logResponse, logError } from '../../utils/logger';
+import prisma from '../../lib/prisma';
+
 
 const dbUrl = process.env.DB_URL || 'http://localhost:3002';
 
 const router = Router();
 
 // auth.ts는 인증이 필요없는 api
+// ... existing code ...
 router.post('/login', async (req: Request, res: Response): Promise<void> => {
   const { userId, userPw } = req.body;
 
   logRequest('POST', '/api/login', { userId, userPw });
 
   try {
-    // 데이터를 가져옴
-    const response = await api.get(`${dbUrl}/users`, { params: { userId } }); // /items로 요청 (baseURL 자동 적용)
+    // Prisma로 사용자 정보 가져오기
+    const user = await prisma.user.findUnique({
+      where: {
+        userId: userId,
+      },
+      select: {
+        id: true,
+        userId: true,
+        userPw: true,
+        username: true,
+        phone: true,
+        address: true,
+        profileImg: true,
+      },
+    });
     
-    if(!response.data?.[0]) {
+    if (!user) {
       logResponse('POST', '/api/login', 404, {
         userId,
         error: '존재하지 않는 아이디입니다.',
@@ -34,20 +50,16 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // 해당 ID가 있는지 먼저 확인.
-    const userDb = response.data[0];
-    const isValid = await bcrypt.compare(userPw, userDb.userPw);
-
-    // bcrypt.compare는 비동기 함수이므로
-    // await를 사용하여 비교 결과를 기다려야 함.
+    // 비밀번호 확인
+    const isValid = await bcrypt.compare(userPw, user.userPw);
 
     if (isValid) {
       const params = {
-        userId: userDb.userId,
-        username: userDb.username,
-        phone: userDb.phone,
-        address: userDb.address,
-        id: userDb.id,
+        userId: user.userId,
+        username: user.username,
+        phone: user.phone,
+        address: user.address,
+        id: user.id,
       };
       const accessToken = generateAccessToken(params);
       const refreshToken = generateRefreshToken(params);
@@ -65,19 +77,19 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
         sameSite: 'lax',
       });
 
-
-      logResponse('POST', '/api/login', 200, { userId: userDb.userId, username: userDb.username });
+      logResponse('POST', '/api/login', 200, { userId: user.userId, username: user.username });
 
       res.json({
         message: '로그인에 성공했습니다.',
         status: 200,
         success: true,
         data: {
-          id: userDb.id,
-          userId: userDb.userId,
-          username: userDb.username,
-          phone: userDb.phone,
-          address: userDb.address,
+          id: user.id,
+          userId: user.userId,
+          username: user.username,
+          phone: user.phone,
+          address: user.address,
+          profileImg: user.profileImg,
           tokens: {
             accessToken: accessToken,
             refreshToken: refreshToken,
@@ -99,7 +111,6 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
       });
     return;
       
-     
   } catch (error: any) {
     logError('POST', '/api/login', error, '서버 에러가 발생했습니다.', { userId });
 
@@ -111,6 +122,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     });
   }
 });
+// ... existing code ...
 
 router.post('/signup', async (req: Request, res: Response): Promise<void> => {  
   const { userId, userPw, username, phone, address } = req.body; 
@@ -121,16 +133,28 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
     const saltRounds = 10;
     const hashedPw = await bcrypt.hash(userPw, saltRounds);
 
-    const response = await api.post(`${dbUrl}/users`, {
-      userId: userId,
-      userPw: hashedPw,
-      username: username,
-      phone: phone,
-      address: address
+    // Prisma로 사용자 생성
+    const newUser = await prisma.user.create({
+      data: {
+        userId: userId,
+        userPw: hashedPw,
+        username: username,
+        phone: phone,
+        address: address,
+        regiId: userId,
+        regiDttm: new Date(),
+        finalModId: userId,
+        finalModDttm: new Date(),
+      },
+      select: {
+        id: true,
+        userId: true,
+        username: true,
+        phone: true,
+        address: true,
+        profileImg: true,
+      },
     });
-
-    const data = response.data;
-    const status = response.status;
 
     logResponse('POST', '/api/signup', 201, {
       userId,
@@ -139,14 +163,12 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
       address,
     });
 
-    res
-      .status(201)
-      .json({
-        data: data,
-        message: '가입이 완료되었습니다.',
-        status: status,
-        success: true,
-      });
+    res.status(201).json({
+      data: newUser,
+      message: '가입이 완료되었습니다.',
+      status: 201,
+      success: true,
+    });
   } catch (error) {
     logError('POST', '/api/signup', error, '서버 에러가 발생했습니다.', {
       userId,
@@ -163,21 +185,29 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
   }
 });
 
+// ... existing code ...
 router.get(
   '/check/user',
   async (req: Request, res: Response): Promise<void> => {
-    const { userId } = req.query as { userId: string }; // ✅ query에서 추출
+    const { userId } = req.query as { userId: string };
 
     logRequest('GET', '/api/check/user', {
       userId
     });
 
     try {
-      // 데이터를 가져옴
-      const response = await api.get(`${dbUrl}/users`, { params: { userId } }); // /items로 요청 (baseURL 자동 적용)
-      if (!response.data[0]) {
+      // Prisma로 사용자 존재 여부 확인
+      const user = await prisma.user.findUnique({
+        where: {
+          userId: userId,
+        },
+        select: {
+          userId: true,
+        },
+      });
 
-        logResponse('POST', '/api/check/user', 200, {
+      if (!user) {
+        logResponse('GET', '/api/check/user', 200, {
           userId
         });
 
@@ -190,8 +220,7 @@ router.get(
           success: true,
         }); 
       } else {
-
-        logResponse('POST', '/api/check/user', 400, {
+        logResponse('GET', '/api/check/user', 400, {
           userId
         });
 
@@ -204,7 +233,7 @@ router.get(
       }
 
     } catch (error) {
-      logError('POST', '/api/check/user', error, '서버 에러가 발생했습니다.', {
+      logError('GET', '/api/check/user', error, '서버 에러가 발생했습니다.', {
         userId
       });
 
@@ -217,6 +246,7 @@ router.get(
     }
   }
 );
+// ... existing code ...
 
 router.post('/logout', async (req: Request, res: Response): Promise<void> => {
   const { userId } = req.body;

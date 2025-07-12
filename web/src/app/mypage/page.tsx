@@ -73,7 +73,7 @@ export default function Mypage() {
       try {
         const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
         const response = await itemService.getUserItems(
-          user.id,
+          user.userId,
           offset,
           ITEMS_PER_PAGE
         );
@@ -82,14 +82,14 @@ export default function Mypage() {
           return <div>없습니다</div>;
         }
 
-        if (response.data.length < ITEMS_PER_PAGE) {
+        if (response.data.list.length < ITEMS_PER_PAGE) {
           // 전체 개수 < 해당 페이지 수
           // 페이지가 더 없음.
           setHasMore(false);
         }
 
         flushSync(() => {
-          const items = response.data ?? [];
+          const items = response.data.list ?? [];
           if (!items) return; // undefined일 경우 아무 작업도 하지 않음
 
           if (pageNumber === 1) {
@@ -108,9 +108,10 @@ export default function Mypage() {
   const sortedItemList = useMemo(() => {
     if (itemList && Array.isArray(itemList)) {
       // itemList를 가져와서 sorting
-      // id는 number 타입이므로 연산을 통해 오름차순으로 정렬함.
-      return [...itemList].sort((a, b) => a.id - b.id);
+      // id는 string 타입이므로 parseInt로 숫자로 변환 후 정렬
+      return [...itemList].sort((a, b) => parseInt(a.id) - parseInt(b.id));
     }
+    return []; // 빈 배열 반환 추가
   }, [itemList]);
 
   // 데이터 요청
@@ -232,7 +233,7 @@ export default function Mypage() {
 
   return (
     user && (
-      <div className="flex flex-col max-w-lg pt-6 pb-12 px-4">
+      <div className="flex flex-col w-full max-w-lg pb-12 px-4">
         <div className="flex w-full h-[20%]">
           <div className="flex flex-col gap-2 border-2 w-[32%] justify-center items-center">
             <div
@@ -267,14 +268,6 @@ export default function Mypage() {
             </div>
             <div>
               <span>{user?.username}</span>
-            </div>
-            <div className="mt-2">
-              <Link
-                href={`/user/${userIdForLink || user?.username || ''}`}
-                className="text-sm text-blue-500 hover:text-blue-700 underline"
-              >
-                프로필 보기
-              </Link>
             </div>
           </div>
           <div className="flex border-2 w-[70%] justify-around items-center">

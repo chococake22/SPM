@@ -38,12 +38,11 @@ const UserProfilePage = () => {
 
   const getUserItems = useCallback(
     async (pageNumber: number) => {
+      console.log('userId', userId);
       try {
         const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
         const response = await itemService.getUserItems(userId, offset, ITEMS_PER_PAGE);
-        
-        console.log('API Response:', response);
-        
+                
         if (!response?.data) {
           return;
         }

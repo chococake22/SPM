@@ -116,7 +116,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="flex w-full max-w-lg pb-12 pt-10 items-center px-4">
+    <div className="flex w-full max-w-lg  items-center px-4">
       {/* Section 1: 계정 */}
       <div className='w-full'>
         <div>

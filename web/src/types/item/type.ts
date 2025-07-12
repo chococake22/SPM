@@ -1,8 +1,13 @@
 export interface ItemListResponse {
-  data?: Item[] | null;
+  data: result;
   success: boolean;
   message: string;
   status: number;
+}
+
+export interface result {
+  list: Item[];
+  totalCount: number;
 }
 
 export interface Item {
@@ -15,7 +20,7 @@ export interface Item {
   commentCnt: string;
   itemName: string;
   description: string;
-  id: number;
+  id: string;
 }
 
 export interface UploadItemRequest {

@@ -34,6 +34,7 @@ export default function BoardPage() {
 
     try {
       const response = await boardService.getBoards(offsetNum, ITEMS_PER_PAGE);
+      console.log(response);
       if (response && response.data) {
         const boards = response.data.list || [];
         const count = response.data.totalCount || 0;
@@ -69,7 +70,7 @@ export default function BoardPage() {
                   <PostCard
                     id={post.id.toString()}
                     title={post.title}
-                    username={post.username}
+                    username={post.user.username}
                     content={post.content}
                   />
                 </Link>

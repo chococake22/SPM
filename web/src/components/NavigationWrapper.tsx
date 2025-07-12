@@ -28,7 +28,7 @@ export default function NavigationWrapper({ children }: NavigationWrapperProps) 
       <header className="fixed h-9 w-full flex-shrink-0 z-50">
         <TopNav />
       </header>
-      <main className="flex-1 flex items-center justify-center pt-9 pb-12">
+      <main className="flex-1 flex justify-center pt-12 pb-12">
         {children}
       </main>
       <footer className="fixed h-14 w-full bottom-0 bg-white z-50">

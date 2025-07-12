@@ -18,24 +18,11 @@ model User {
   regiDttm     DateTime? @map("regi_dttm")
   finalModId   String?   @map("final_mod_id")
   finalModDttm DateTime? @map("final_mod_dttm")
+  profileImg   String?   @map("profile_img") @db.VarChar(100)
   boards       Board[]
   items        Item[]
-  userImg      UserImg?
 
   @@map("tb_user")
-}
-
-model UserImg {
-  id           Int       @id @default(autoincrement())
-  profileImg   String?   @map("profile_Img") @db.VarChar(100)
-  userId       String?   @db.VarChar(50)
-  regiId       String?   @map("regi_id") @db.VarChar(50)
-  regiDttm     DateTime? @map("regi_dttm")
-  finalModId   String?   @map("final_mod_id") @db.VarChar(50)
-  finalModDttm DateTime? @map("final_mod_dttm")
-  user         User      @relation(fields: [id], references: [id])
-
-  @@map("tb_user_img")
 }
 
 model Board {
@@ -55,7 +42,7 @@ model Board {
 model Item {
   id           Int       @id @default(autoincrement())
   imageInfo    String?   @map("image_info")
-  itemImg      Int?      @map("item_img")
+  itemImg      String?   @map("item_img")
   heartCnt     Int?      @map("heart_cnt")
   commentCnt   Int?      @map("comment_cnt")
   title        String    @db.VarChar(100)

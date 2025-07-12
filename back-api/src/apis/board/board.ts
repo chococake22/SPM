@@ -17,11 +17,27 @@ router.get('/list', async (req: Request, res: Response) => {
   logRequest('GET', '/api/board/list', { offset, limit });
   try {
     // 정해진 개수만 가져오도록
-    const response = await api.get(`${dbUrl}/boards?_start=${offset}&_limit=${limit}`); // /items로 요청 (baseURL 자동 적용)
-    const total = await api.get(`${dbUrl}/boards`);
+    const totalCount = await prisma.board.count();
+    const boards = await prisma.board.findMany({
+      skip: offset ? parseInt(offset) : 0,
+      take: limit ? parseInt(limit) : 10,
+      orderBy: {
+        regiDttm: 'desc',
+      },
+      include: {
+        user: {
+          select: {
+            userId: true,
+            username: true,
+            profileImg: true,
+          },
+        },
+      },
+    });
+
     const data = {
-      list: response.data,
-      totalCount: total.data.length,
+      list: boards,
+      totalCount: totalCount,
     };
 
     logResponse('GET', '/api/board/list', 200, { offset, limit });
@@ -98,22 +114,40 @@ router.get('/detail', async (req: Request, res: Response) => {
 
   try {
     // 4개만 가져오도록
-    const response = await api.get(
-      `${dbUrl}/boards/${id}`
-    ); // /items로 요청 (baseURL 자동 적용)
+    const board = await prisma.board.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+      include: {
+        user: {
+          select: {
+            userId: true,
+            username: true,
+            profileImg: true,
+          },
+        },
+      },
+    });
 
-    const data = response.data;
-
-    logResponse('GET', '/api/board/detail', 200, { id });
-
-    res
-      .status(200)
-      .json({
-        message: '데이터를 가져왔습니다.',
-        data: data,
-        status: 200,
-        success: true,
+    if (!board) {
+      logResponse('GET', `/api/board/detail/${id}`, 404, { id });
+      res.status(404).json({
+        data: null,
+        message: '게시글을 찾을 수 없습니다.',
+        status: 404,
+        success: false,
       });
+      return;
+    }
+
+    logResponse('GET', `/api/board/detail/${id}`, 200, { id });
+
+    res.status(200).json({
+      message: '데이터를 가져왔습니다.',
+      data: board,
+      status: 200,
+      success: true,
+    });
   } catch (error) {
     logError('GET', '/api/board/detail', error, '서버 오류가 발생했습니다.', {
       id,
@@ -156,23 +190,29 @@ router.post('/upload', async (req: Request, res: Response): Promise<void> => {
     const now = new Date();
     const formattedNow = formatDateToYMDHMS(now);
 
-    logResponse('POST', '/api/board/upload', 200, { title, content });
-
-    const response = await api.post(`${dbUrl}/boards`, {
-      username: decoded.username,
-      title: title,
-      content: content,
-      regiDttm: formattedNow,
-      finalModDttm: formattedNow,
+    const newBoard = await prisma.board.create({
+      data: {
+        title: title,
+        content: content,
+        userId: decoded.userId,
+        regiId: decoded.userId,
+        regiDttm: new Date(),
+        finalModId: decoded.userId,
+        finalModDttm: new Date(),
+      },
     });
 
-    const data = response.data;
-    const status = response.status;
+    const data = {
+      id: newBoard.id,
+      userId: decoded.userId,
+    };
+
+    logResponse('POST', '/api/board/upload', 200, { title, content });
 
     res.status(200).json({
       data: data,
       message: '등록이 완료되었습니다.',
-      status: status,
+      status: 200,
       success: true,
     });
   } catch (error) {

@@ -31,20 +31,25 @@ const Home = () => {
     try {
       const offset = (pageNumber - 1) * ITEMS_PER_PAGE;
       const response = await itemService.getItems(offset, ITEMS_PER_PAGE);
-      console.log(response)
+      console.log(response);
       // 전체 개수 < 해당 페이지 수
       // 페이지가 더 없음.
 
-      if(!response?.data) {
-        return <div>데이터가 없습니다.</div>
+      if (!response?.data) {
+        return <div>데이터가 없습니다.</div>;
       }
+
+      // response.data.data.list로 실제 아이템 배열에 접근
+      const items = response.data ?? [];
+      if (!items) return;
 
       if (response.data.length < ITEMS_PER_PAGE) {
         setHasMore(false);
       }
 
       flushSync(() => {
-        const items = response.data ?? [];
+        const items = response.data.list ?? [];
+        console.log(items);
         if (!items) return; // undefined일 경우 아무 작업도 하지 않음
 
         if (pageNumber === 1) {
@@ -119,8 +124,11 @@ const Home = () => {
   return (
     itemList && (
       <div className="flex flex-col w-full max-w-lg pb-6 pt-4 gap-4 px-4">
-        {sortedItemList.map((entry, index) => (
-          <ItemBox key={index} entry={entry} />
+        {sortedItemList.map((entry) => (
+          <ItemBox
+            key={entry.id}
+            entry={{ ...entry, id: entry.id.toString() }}
+          />
         ))}
         {hasMore && <div ref={loadMoreRef} className="h-10" />}
       </div>

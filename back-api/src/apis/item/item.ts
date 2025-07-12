@@ -2,6 +2,7 @@ import express, { Router, Request, Response } from 'express';
 import api from '../../lib/axios'; 
 import upload from '../../utils/upload';
 import { logRequest, logResponse, logError } from '../../utils/logger';
+import prisma from '../../lib/prisma';
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -19,40 +20,35 @@ router.get('/list', async (req: Request, res: Response) => {
   logRequest('GET', '/api/item/list', { offset, limit });
 
   try {
-    const itemsRes = await api.get(
-      `${dbUrl}/items?_start=${offset}&_limit=${limit}`
-    );
-    const items = itemsRes.data;
-
-    // 중복 제거된 username 리스트
-    const usernames = [...new Set(items.map((item: any) => item.username))];
-
-    // 각 사용자 정보 가져오기
-    const userResponses = await Promise.all(
-      usernames.map((username) =>
-        api.get(`${dbUrl}/users?username=${username}`)
-      )
-    );
-
-    const userMap = new Map();
-    userResponses.forEach((res) => {
-      const user = res.data[0]; // ?username=xxx 는 배열로 응답
-      if (user) {
-        userMap.set(user.username, user);
-      }
+    const totalCount = await prisma.item.count();
+    const items = await prisma.item.findMany({
+      skip: offset ? parseInt(offset) : 0,
+      take: limit ? parseInt(limit) : 10,
+      orderBy: {
+        regiDttm: 'desc',
+      },
+      include: {
+        // board 테이블의 userId와 user 테이블의 userId를 조인함
+        user: {
+            select: {
+              userId: true,
+              username: true,
+              profileImg: true,
+            },
+        },
+      },
     });
 
-    // item에 user 정보 병합
-    const combined = items.map((item: any) => ({
-      ...item,
-      profileImg: userMap.get(item.username)?.profileImg || null,
-    }));
-    
+    const data = {
+      list: items,
+      totalCount: totalCount,
+    };
+
     logResponse('GET', '/api/item/list', 200, { offset, limit });
 
     res.status(200).json({
       message: '데이터를 가져왔습니다.',
-      data: combined,
+      data: data,
       status: 200,
       success: true,
     });
@@ -68,50 +64,121 @@ router.get('/list', async (req: Request, res: Response) => {
   }
 });
 
+// router.get('/user-list', async (req: Request, res: Response) => {
+//   const { id, offset, limit } = req.query as {
+//     id: string;
+//     offset: string;
+//     limit: string;
+//   };
+
+//   logRequest('GET', '/api/item/user-list', { id, offset, limit });
+
+//   try {
+//     if (!id) {
+//       res.status(400).json({ message: 'id is required' });
+//       return;
+//     }
+
+//     // 먼저 users 테이블에서 해당 id의 사용자 정보를 가져옴
+//     const userResponse = await api.get(`${dbUrl}/users/${id}`);
+//     const user = userResponse.data;
+
+//     if (!user) {
+//       logResponse('GET', '/api/item/user-list', 404, { id, offset, limit });
+//       res.status(404).json({ message: 'User not found' });
+//       return;
+//     }
+
+//     // 해당 사용자의 username으로 items를 필터링
+//     const response = await api.get(
+//       `${dbUrl}/items?username=${user.username}&_start=${offset}&_limit=${limit}`
+//     );
+
+//     const data = response.data;
+    
+//     logResponse('GET', '/api/item/user-list', 200, { id, offset, limit });
+    
+//     res
+//       .status(200)
+//       .json({
+//         message: '데이터를 가져왔습니다.',
+//         data: data,
+//         status: 200,
+//         success: true,
+//       });
+//   } catch (error) {
+//     logError('GET', '/api/item/user-list', error, '서버 에러가 발생했습니다.', { id, offset, limit });
+
+//     res.status(500).json({
+//       data: null,
+//       message: '서버 오류가 발생했습니다.',
+//       status: 500,
+//       success: false,
+//     });
+//   }
+// });
+
+
 router.get('/user-list', async (req: Request, res: Response) => {
-  const { id, offset, limit } = req.query as {
-    id: string;
+  const { userId, offset, limit } = req.query as {
+    userId: string;
     offset: string;
     limit: string;
   };
 
-  logRequest('GET', '/api/item/user-list', { id, offset, limit });
+  logRequest('GET', '/api/item/user-list', { userId, offset, limit });
 
+  console.log(userId, offset, limit);
   try {
-    if (!id) {
-      res.status(400).json({ message: 'id is required' });
-      return;
-    }
 
-    // 먼저 users 테이블에서 해당 id의 사용자 정보를 가져옴
-    const userResponse = await api.get(`${dbUrl}/users/${id}`);
-    const user = userResponse.data;
+    const decodedId = userId ? decodeURIComponent(userId) : '';
+    const totalCount = await prisma.item.count({
+      where: {
+        userId: decodedId,
+      },
+    });
+    const items = await prisma.item.findMany({
+      skip: offset ? parseInt(offset) : 0,
+      take: limit ? parseInt(limit) : 10,
+      where: {
+        userId: decodedId,
+      },
+      include: {
+        user: {
+          select: {
+            userId: true,
+            username: true, // userImg도 함께 조인
+          },
+        },
+      },
+    });
 
-    if (!user) {
-      logResponse('GET', '/api/item/user-list', 404, { id, offset, limit });
-      res.status(404).json({ message: 'User not found' });
-      return;
-    }
+    console.log(totalCount);
+    console.log(items);
 
-    // 해당 사용자의 username으로 items를 필터링
-    const response = await api.get(
-      `${dbUrl}/items?username=${user.username}&_start=${offset}&_limit=${limit}`
-    );
+    const data = {
+      list: items,
+      totalCount: totalCount,
+    };
 
-    const data = response.data;
-    
-    logResponse('GET', '/api/item/user-list', 200, { id, offset, limit });
-    
-    res
-      .status(200)
-      .json({
-        message: '데이터를 가져왔습니다.',
-        data: data,
-        status: 200,
-        success: true,
-      });
+    logResponse('GET', '/api/item/user-list', 200, {
+      decodedId,
+      offset,
+      limit,
+    });
+
+    res.status(200).json({
+      message: '데이터를 가져왔습니다.',
+      data: data,
+      status: 200,
+      success: true,
+    });
   } catch (error) {
-    logError('GET', '/api/item/user-list', error, '서버 에러가 발생했습니다.', { id, offset, limit });
+    logError('GET', '/api/item/user-list', error, '서버 에러가 발생했습니다.', {
+      userId,
+      offset,
+      limit,
+    });
 
     res.status(500).json({
       data: null,
@@ -139,15 +206,20 @@ router.post(
     const imagePath = file.filename;
 
     try {
-      // 이미지 등록
-      await api.post(`${dbUrl}/items`, {
-        itemImg: '/' + imagePath,
-        username: username,
-        itemName: itemName,
-        description: description
+      const newItem = await prisma.item.create({
+        data: {
+          itemImg: '/' + imagePath,
+          title: itemName, // itemName을 title로 매핑
+          description: description,
+          userId: userId,
+          regiDttm: new Date(),
+          finalModId: userId,
+          finalModDttm: new Date(),
+        },
       });
 
       const data = {
+        id: newItem.id,
         userId: userId,
       };
 
