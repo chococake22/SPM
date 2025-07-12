@@ -232,7 +232,7 @@ export default function Mypage() {
 
   return (
     user && (
-      <div className="flex flex-col max-w-lg pt-10 pb-12">
+      <div className="flex flex-col max-w-lg pt-6 pb-12 px-4">
         <div className="flex w-full h-[20%]">
           <div className="flex flex-col gap-2 border-2 w-[32%] justify-center items-center">
             <div

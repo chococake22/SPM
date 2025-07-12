@@ -9,13 +9,13 @@ const LinkButton: React.FC<LinkButtonProps> = ({ menu }) => {
 
   const divClassName =
     menu === '/'
-      ? 'w-[55%]'
+      ? 'w-[55%] flex items-center justify-center'
       : menu === 'mypage'
         ? 'inline-block align-middle'
         : '';
 
   const spanClassName =
-    menu === '/' ? 'text-3xl font-bold text-yellow-600' : '';
+    menu === '/' ? 'text-2xl font-light text-black-400' : '';
 
   const menuName = menu === '/' ? 'SPM' : menu;
 

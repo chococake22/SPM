@@ -44,7 +44,7 @@ const ItemUserProfile: React.FC<ItemUserProfileProps> = ({ profileImg, userId })
   }
   
   return (
-    <div className="flex items-center w-full h-[5vh]">
+    <div className="flex items-center w-full h-[7vh]">
       <div className="w-[12%] h-full">
         <div className="w-full h-full flex items-center justify-center">
           <UserPhoto imageInfo={profileImg} />

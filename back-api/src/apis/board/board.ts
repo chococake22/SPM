@@ -8,36 +8,6 @@ const dbUrl = process.env.DB_URL || 'http://localhost:3002';
 const JWT_SECRET = process.env.JWT_SECRET || 'secretKey';;
 const router = Router();
 
-// router.get('/list', async (req: Request, res: Response) => {
-//   const { offset, limit } = req.query as {
-//     offset: string;
-//     limit: string;
-//   };
-
-//   logRequest('GET', '/api/board/list', { offset, limit });
-//   try {
-//     // 정해진 개수만 가져오도록
-//     const response = await api.get(`${dbUrl}/boards?_start=${offset}&_limit=${limit}`); // /items로 요청 (baseURL 자동 적용)
-//     const total = await api.get(`${dbUrl}/boards`);
-//     const data = {
-//       list: response.data,
-//       totalCount: total.data.length,
-//     };
-
-//     logResponse('GET', '/api/board/list', 200, { offset, limit });
-//     res.status(200).json({ message:'데이터를 가져왔습니다.', data: data, status: 200, success: true});
-//   } catch (error) {
-//     logError('GET', '/api/board/list', error, '서버 오류가 발생했습니다.', { offset, limit });
-    
-//     res.status(500).json({
-//       data: null,
-//       message: '서버 오류가 발생했습니다.',
-//       status: 500,
-//       success: false,
-//     });
-//   }
-// });
-
 router.get('/list', async (req: Request, res: Response) => {
   const { offset, limit } = req.query as {
     offset: string;
@@ -45,43 +15,20 @@ router.get('/list', async (req: Request, res: Response) => {
   };
 
   logRequest('GET', '/api/board/list', { offset, limit });
-
   try {
-    const totalCount = await prisma.board.count();
-    const boards = await prisma.board.findMany({
-      skip: offset ? parseInt(offset) : 0,
-      take: limit ? parseInt(limit) : 10,
-      orderBy: {
-        regiDttm: 'desc'
-      },
-      include: {
-        user: {
-          select: {
-            userId: true,
-            username: true
-          }
-        }
-      }
-    });
-
+    // 정해진 개수만 가져오도록
+    const response = await api.get(`${dbUrl}/boards?_start=${offset}&_limit=${limit}`); // /items로 요청 (baseURL 자동 적용)
+    const total = await api.get(`${dbUrl}/boards`);
     const data = {
-      list: boards,
-      totalCount: totalCount,
+      list: response.data,
+      totalCount: total.data.length,
     };
 
     logResponse('GET', '/api/board/list', 200, { offset, limit });
-    res.status(200).json({
-      message: '데이터를 가져왔습니다.',
-      data: data,
-      status: 200,
-      success: true,
-    });
+    res.status(200).json({ message:'데이터를 가져왔습니다.', data: data, status: 200, success: true});
   } catch (error) {
-    logError('GET', '/api/board/list', error, '서버 오류가 발생했습니다.', {
-      offset,
-      limit,
-    });
-
+    logError('GET', '/api/board/list', error, '서버 오류가 발생했습니다.', { offset, limit });
+    
     res.status(500).json({
       data: null,
       message: '서버 오류가 발생했습니다.',
@@ -90,6 +37,59 @@ router.get('/list', async (req: Request, res: Response) => {
     });
   }
 });
+
+// router.get('/list', async (req: Request, res: Response) => {
+//   const { offset, limit } = req.query as {
+//     offset: string;
+//     limit: string;
+//   };
+
+//   logRequest('GET', '/api/board/list', { offset, limit });
+
+//   try {
+//     const totalCount = await prisma.board.count();
+//     const boards = await prisma.board.findMany({
+//       skip: offset ? parseInt(offset) : 0,
+//       take: limit ? parseInt(limit) : 10,
+//       orderBy: {
+//         regiDttm: 'desc'
+//       },
+//       include: {  // board 테이블의 userId와 user 테이블의 userId를 조인함
+//         user: {
+//           select: {
+//             userId: true,
+//             username: true
+//           }
+//         }
+//       }
+//     });
+
+//     const data = {
+//       list: boards,
+//       totalCount: totalCount,
+//     };
+
+//     logResponse('GET', '/api/board/list', 200, { offset, limit });
+//     res.status(200).json({
+//       message: '데이터를 가져왔습니다.',
+//       data: data,
+//       status: 200,
+//       success: true,
+//     });
+//   } catch (error) {
+//     logError('GET', '/api/board/list', error, '서버 오류가 발생했습니다.', {
+//       offset,
+//       limit,
+//     });
+
+//     res.status(500).json({
+//       data: null,
+//       message: '서버 오류가 발생했습니다.',
+//       status: 500,
+//       success: false,
+//     });
+//   }
+// });
 
 router.get('/detail', async (req: Request, res: Response) => {
   const { id } = req.query as { id: string };

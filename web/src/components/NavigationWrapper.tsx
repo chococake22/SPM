@@ -31,7 +31,7 @@ export default function NavigationWrapper({ children }: NavigationWrapperProps) 
       <main className="flex-1 flex items-center justify-center pt-9 pb-12">
         {children}
       </main>
-      <footer className="fixed h-12 w-full bottom-0 bg-white z-50">
+      <footer className="fixed h-14 w-full bottom-0 bg-white z-50">
         <BottomNav />
       </footer>
     </>

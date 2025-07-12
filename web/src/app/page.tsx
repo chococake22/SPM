@@ -118,7 +118,7 @@ const Home = () => {
 
   return (
     itemList && (
-      <div className="flex flex-col w-full max-w-lg pb-12 pt-9">
+      <div className="flex flex-col w-full max-w-lg pb-6 pt-4 gap-4 px-4">
         {sortedItemList.map((entry, index) => (
           <ItemBox key={index} entry={entry} />
         ))}

@@ -34,17 +34,13 @@ export default function BoardPage() {
 
     try {
       const response = await boardService.getBoards(offsetNum, ITEMS_PER_PAGE);
-
-      console.log('response', response);
       if (response && response.data) {
         const boards = response.data.list || [];
         const count = response.data.totalCount || 0;
 
-        
         setBoardList(boards);
         setTotalCount(Math.ceil(count / ITEMS_PER_PAGE));setBoardList(response.data?.list);
       }
-
     } catch (error) {
       console.error(error);
     }
@@ -63,8 +59,8 @@ export default function BoardPage() {
   );
 
   return (
-    <div className="flex justify-center items-center w-full h-screen mt-6 mb-10">
-      <div className="flex flex-col w-full max-w-lg gap-y-4">
+    <div className="flex justify-center items-center w-full mt-6 mb-10 px-4">
+      <div className="flex flex-col w-full max-w-lg">
         {boardList && boardList.length > 0 ? (
           <div className="flex-grow flex flex-col gap-y-5">
             <div className="grid grid-cols-2 gap-x-3 gap-y-3 ">

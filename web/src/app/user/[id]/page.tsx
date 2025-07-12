@@ -137,98 +137,95 @@ const UserProfilePage = () => {
   }
 
   return (
-    <div className="flex flex-col max-w-lg pt-10 pb-12">
-      {/* 사용자 프로필 헤더 */}
-      <div className="flex w-full h-[20%]">
-        <div className="flex flex-col gap-2 border-2 w-[32%] justify-center items-center">
-          <div className="flex w-[60%] h-[60%] rounded-full overflow-hidden border-[2px]">
-            <UserPhoto 
-              imageInfo={userProfile.profileImg} 
-              size="large"
-            />
-          </div>
-          <div>
-            <span>{userProfile.username}</span>
-          </div>
-          {user?.id === userId && (
-            <div className="mt-2">
-              <button className="text-sm text-blue-500 hover:text-blue-700 underline">
-                프로필 편집
-              </button>
+      <div className="flex flex-col max-w-lg pt-10 pb-12"> 
+        {/* 사용자 프로필 헤더 */}
+        <div className="flex w-full h-[20%]">
+          <div className="flex flex-col gap-2 border-2 w-[32%] justify-center items-center">
+            <div className="flex w-[60%] h-[60%] rounded-full overflow-hidden border-[2px]">
+              <UserPhoto imageInfo={userProfile.profileImg} size="large" />
             </div>
-          )}
-        </div>
-        <div className="flex border-2 w-[70%] justify-around items-center">
-          <div className="border-2">
-            <div>게시물</div>
-            <div className="flex items-center justify-center">
-              <span>{userProfile.itemCount}</span>
+            <div>
+              <span>{userProfile.username}</span>
             </div>
+            {user?.id === userId && (
+              <div className="mt-2">
+                <button className="text-sm text-blue-500 hover:text-blue-700 underline">
+                  프로필 편집
+                </button>
+              </div>
+            )}
           </div>
-          <div className="border-2">
-            <div>팔로잉</div>
-            <div className="flex items-center justify-center">
-              <span>0</span>
+          <div className="flex border-2 w-[70%] justify-around items-center">
+            <div className="border-2">
+              <div>게시물</div>
+              <div className="flex items-center justify-center">
+                <span>{userProfile.itemCount}</span>
+              </div>
             </div>
-          </div>
-          <div className="border-2">
-            <div>팔로워</div>
-            <div className="flex items-center justify-center">
-              <span>0</span>
+            <div className="border-2">
+              <div>팔로잉</div>
+              <div className="flex items-center justify-center">
+                <span>0</span>
+              </div>
+            </div>
+            <div className="border-2">
+              <div>팔로워</div>
+              <div className="flex items-center justify-center">
+                <span>0</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* 탭 네비게이션 */}
-      <div className="w-full h-full">
-        <div className="border-b border-gray-200">
-          <nav className="-mb-px flex justify-around" aria-label="Tabs">
-            {tabs.map((tab, index) => (
-              <button
-                key={index}
-                className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm 
+        {/* 탭 네비게이션 */}
+        <div className="w-full h-full">
+          <div className="border-b border-gray-200">
+            <nav className="-mb-px flex justify-around" aria-label="Tabs">
+              {tabs.map((tab, index) => (
+                <button
+                  key={index}
+                  className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm 
                   ${
                     activeTab === index
                       ? 'border-indigo-500 text-indigo-600'
                       : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   }
                   focus:outline-none`}
-                onClick={() => setActiveTab(index)}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </nav>
-        </div>
-
-        {/* 아이템 그리드 */}
-        <div
-          className="flex flex-col w-full overflow-y-auto"
-          ref={itemGridScrollContainerRef}
-        >
-          <div className="grid grid-cols-3">
-            {sortedItemList?.map((item, index) => (
-              <div
-                key={index}
-                className="w-full h-[200px] border-2 box-border hover:border-blue-500 transition-colors duration-200 cursor-pointer"
-              >
-                <img
-                  src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/itemImg/${item.itemImg}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
+                  onClick={() => setActiveTab(index)}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
           </div>
-          {/* 로딩 상태 표시 */}
-          {hasMore && (
-            <div className="h-20 flex items-center justify-center">
-              <div className="text-gray-500">로딩 중...</div>
+
+          {/* 아이템 그리드 */}
+          <div
+            className="flex flex-col w-full overflow-y-auto"
+            ref={itemGridScrollContainerRef}
+          >
+            <div className="grid grid-cols-3">
+              {sortedItemList?.map((item, index) => (
+                <div
+                  key={index}
+                  className="w-full h-[200px] border-2 box-border hover:border-blue-500 transition-colors duration-200 cursor-pointer"
+                >
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}/storage/itemImg/${item.itemImg}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
             </div>
-          )}
+            {/* 로딩 상태 표시 */}
+            {hasMore && (
+              <div className="h-20 flex items-center justify-center">
+                <div className="text-gray-500">로딩 중...</div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 
