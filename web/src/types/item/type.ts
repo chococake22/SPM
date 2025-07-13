@@ -18,7 +18,7 @@ export interface Item {
   itemImg: string;
   heartCnt: string;
   commentCnt: string;
-  itemName: string;
+  title: string;
   description: string;
   id: string;
 }

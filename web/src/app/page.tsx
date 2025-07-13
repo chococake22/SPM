@@ -125,9 +125,10 @@ const sortedItemList = useMemo(() => {
     itemList && (
       <div className="flex flex-col w-full max-w-lg pb-6 pt-4 gap-4 px-4">
         {sortedItemList.map((entry) => (
+          console.log(entry),
           <ItemBox
             key={entry.id}
-            entry={{ ...entry, id: entry.id.toString() }}
+            entry={entry}
           />
         ))}
         {hasMore && <div ref={loadMoreRef} className="h-10" />}
