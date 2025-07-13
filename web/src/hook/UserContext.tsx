@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import { LoginResponse, UserData } from '@/types/user/type';
+import { UserData } from '@/types/user/type';
 
 interface UserContextType {
   user: UserData | null;
@@ -28,7 +28,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
-        console.log(parsedUser)
         setUserState(parsedUser);
       }
       setIsFirstLoad(false);
@@ -37,9 +36,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (user) {
-      console.log(user)
-      const userJson = JSON.stringify(user); // ✅ user 전체 저장
-      localStorage.setItem('user', userJson);
+      const userJson = JSON.stringify(user); // ✅ user 전체 저장, 
+      localStorage.setItem('user', userJson); // user가 변경이 되면 localStorage에 저장된 user 정보도 변경됨.
     }
   }, [user]);
 

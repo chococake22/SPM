@@ -24,12 +24,6 @@ dotenv.config({
   ),
 });
 
-// swagger 설정
-// const swaggerFile = path.resolve(__dirname, '../dist/swagger-bundled.yaml');
-// const swaggerDocument = fs.readFileSync(swaggerFile, 'utf8');
-// const swaggerObj = yaml.load(swaggerDocument);
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerObj as object));
-
 const swaggerFile = path.resolve(__dirname, '../dist/swagger-bundled.json');
 const swaggerDocument = JSON.parse(fs.readFileSync(swaggerFile, 'utf8'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

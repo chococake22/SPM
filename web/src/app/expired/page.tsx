@@ -13,8 +13,7 @@ const ExpiredPage = () => {
   };
 
   useEffect(() => {
-    localStorage.removeItem('user-zustand');
-    localStorage.removeItem('userInfo');
+    localStorage.removeItem('user');
 
     if (!isInitialized.current) {
       // 세션 만료 페이지의 히스토리를 현재 위치로 덮음 (뒤로가기 시 현재 페이지 유지)
