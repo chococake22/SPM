@@ -167,6 +167,8 @@ router.post('/upload', async (req: Request, res: Response): Promise<void> => {
 
   logRequest('POST', '/api/board/upload', { title, content });
 
+  // JWT_SECRET 환경변수 확인
+  // 전역에서 불러오면 안되는데 함수 안에서 불러오면 됨.
   const JWT_SECRET = process.env.JWT_SECRET;
   if (!JWT_SECRET) {
     res.status(500).json({ message: 'JWT_SECRET is not set' });
@@ -174,43 +176,17 @@ router.post('/upload', async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-
-
+    // 액세스 토큰 확인
     const token = req.cookies.accessToken;
-
-    console.log("0",token);
-
 
     if (!token) {
       logResponse('POST', '/api/board/upload', 401, { title, content });
-      res.status(401).json({ message: '인증 토큰이 없습니다.' });
+      res.status(401).json({ message: '액세스 토큰이 없습니다.' });
     }
-
-    console.log('JWT_SECRET:', JWT_SECRET);
 
     let decoded = jwt.verify(token, JWT_SECRET) as {
       userId: string;
-      [key: string]: any;
     };
-
-    console.log("1",decoded);
-
-    try {
-      decoded = jwt.verify(token, JWT_SECRET) as {
-        userId: string;
-      };
-
-      console.log("2",decoded);
-      console.log('3', decoded.userId);
-
-    } catch (err) {
-      logResponse('POST', '/api/board/upload', 403, { title, content });
-      res.status(403).json({ message: '유효하지 않은 토큰입니다.' });
-    }
-
-
-    const now = new Date();
-    const formattedNow = formatDateToYMDHMS(now);
 
     const newBoard = await prisma.board.create({
       data: {
