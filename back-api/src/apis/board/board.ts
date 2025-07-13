@@ -5,7 +5,7 @@ import { logRequest, logResponse, logError } from '../../utils/logger';
 import prisma from '../../lib/prisma';
 
 const dbUrl = process.env.DB_URL || 'http://localhost:3002';
-const JWT_SECRET = process.env.JWT_SECRET || 'secretKey';;
+// const JWT_SECRET = process.env.JWT_SECRET || 'No key';
 const router = Router();
 
 router.get('/list', async (req: Request, res: Response) => {
@@ -167,6 +167,10 @@ router.post('/upload', async (req: Request, res: Response): Promise<void> => {
 
   logRequest('POST', '/api/board/upload', { title, content });
 
+  const JWT_SECRET = process.env.JWT_SECRET;
+  if (!JWT_SECRET) {
+    return res.status(500).json({ message: 'JWT_SECRET is not set' });
+  }
 
   try {
 
