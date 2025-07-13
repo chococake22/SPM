@@ -166,26 +166,42 @@ router.post('/upload', async (req: Request, res: Response): Promise<void> => {
   const { title, content } = req.body;
 
   logRequest('POST', '/api/board/upload', { title, content });
+
+
   try {
+
+
     const token = req.cookies.accessToken;
+
+    console.log("0",token);
+
+
     if (!token) {
       logResponse('POST', '/api/board/upload', 401, { title, content });
       res.status(401).json({ message: '인증 토큰이 없습니다.' });
     }
+
+
     let decoded = jwt.verify(token, JWT_SECRET) as {
       userId: string;
       [key: string]: any;
     };
 
+    console.log("1",decoded);
+
     try {
       decoded = jwt.verify(token, JWT_SECRET) as {
         userId: string;
-        username: string;
       };
+
+      console.log("2",decoded);
+      console.log('3', decoded.userId);
+
     } catch (err) {
       logResponse('POST', '/api/board/upload', 403, { title, content });
       res.status(403).json({ message: '유효하지 않은 토큰입니다.' });
     }
+
 
     const now = new Date();
     const formattedNow = formatDateToYMDHMS(now);
