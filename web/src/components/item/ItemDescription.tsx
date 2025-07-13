@@ -3,12 +3,12 @@
 import { useState } from "react";
 
 interface ItemDescriptionProps {
-  itemName: string;
+  title: string;
   description: string;
 }
 
 const ItemDescription: React.FC<ItemDescriptionProps> = ({
-  itemName,
+  title,
   description,
 }) => {
   const [showFullText, setShowFullText] = useState(false);
@@ -20,7 +20,7 @@ const ItemDescription: React.FC<ItemDescriptionProps> = ({
   
   return (
     <div className="w-full max-h-[200px]">
-      <span className="ml-2">{itemName}</span>
+      <span className="ml-2">{title}</span>
       <div className="ml-2 line-clamp-7">
         <p
           className={`whitespace-normal break-words text-sm font-light ${showFullText ? '' : 'line-clamp-1'}`}

@@ -153,9 +153,6 @@ router.get('/user-list', async (req: Request, res: Response) => {
       },
     });
 
-    console.log(totalCount);
-    console.log(items);
-
     const data = {
       list: items,
       totalCount: totalCount,

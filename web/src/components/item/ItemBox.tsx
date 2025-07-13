@@ -10,7 +10,7 @@ interface Entry {
   profileImg: string;
   heartCnt: string;
   commentCnt: string;
-  itemName: string;
+  title: string;
   description: string;
   itemImg: string;
   user?: {
@@ -51,7 +51,7 @@ const itemBox: React.FC<ItemBoxProps> = ({ entry }) => {
           </div>
           <div className="h-[10%]">
             <ItemDescription
-              itemName={entry.itemName}
+              title={entry.title}
               description={entry.description}
             />
           </div>
