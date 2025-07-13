@@ -25,7 +25,7 @@ router.get('/list', async (req: Request, res: Response) => {
       skip: offset ? parseInt(offset) : 0,
       take: limit ? parseInt(limit) : 10,
       orderBy: {
-        regiDttm: 'desc',
+        id: 'asc',
       },
       include: {
         // board 테이블의 userId와 user 테이블의 userId를 조인함

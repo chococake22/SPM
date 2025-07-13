@@ -16,10 +16,6 @@ interface ItemUserProfileProps {
 const ItemUserProfile: React.FC<ItemUserProfileProps> = ({ profileImg, id, username }) => {
   const [userIdForUrl, setUserIdForUrl] = useState<string>(id);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  
-
-  console.log('username', username);
-  console.log('profileImg', profileImg);
 
   useEffect(() => {
     const fetchUserId = async (pageNumber: number) => {
@@ -31,7 +27,6 @@ const ItemUserProfile: React.FC<ItemUserProfileProps> = ({ profileImg, id, usern
           offset,
           ITEMS_PER_PAGE
         );
-        console.log('response', response);
         // setUserIdForUrl(actualUserId);
       } catch (error) {
         console.error('Error fetching user ID:', error);

@@ -20,8 +20,6 @@ const UserPhoto: React.FC<UserImageProps> = ({ imageInfo, size = 'small' }) => {
 
     const { width, height } = sizeMap[size];
 
-    console.log(imageInfo);
-
   return <Image src={fullSrc} alt="User Profile" width={width} height={height} className="rounded-full" />;
 };
 
