@@ -181,6 +181,7 @@ router.post('/upload', async (req: Request, res: Response): Promise<void> => {
       res.status(401).json({ message: '인증 토큰이 없습니다.' });
     }
 
+    console.log('JWT_SECRET:', JWT_SECRET);
 
     let decoded = jwt.verify(token, JWT_SECRET) as {
       userId: string;
