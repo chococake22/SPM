@@ -89,7 +89,7 @@ export default function Mypage() {
         }
 
         flushSync(() => {
-          const items = response.data.list ?? [];
+          const items = response.data?.list ?? [];
           if (!items) return; // undefined일 경우 아무 작업도 하지 않음
 
           if (pageNumber === 1) {

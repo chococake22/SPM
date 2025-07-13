@@ -1,5 +1,5 @@
 export interface ItemListResponse {
-  data: result;
+  data: result | null;
   success: boolean;
   message: string;
   status: number;

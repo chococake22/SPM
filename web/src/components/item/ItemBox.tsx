@@ -13,7 +13,7 @@ interface Entry {
   itemName: string;
   description: string;
   itemImg: string;
-  user: {
+  user?: {
     username: string;
     profileImg: string;
     userId:string;
@@ -27,16 +27,16 @@ interface ItemBoxProps {
 
 
 const itemBox: React.FC<ItemBoxProps> = ({ entry }) => {
-  console.log("entry", entry.user.username);
+  console.log("entry", entry.user?.username);
   return (
     <div className="flex items-center justify-center w-full h-full">
       <div className="flex justify-center items-center w-full h-full">
         <div className="w-full h-full border-[1px]">
           <div className="h-[15%]">
             <ItemUserProfile
-              username={entry.user.username}
+              username={entry.user?.username}
               id={entry.id}
-              profileImg={entry.user.profileImg}
+              profileImg={entry.user?.profileImg}
             />
           </div>
           <div className="h-[55%]">

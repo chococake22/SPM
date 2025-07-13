@@ -3,7 +3,7 @@
 import Image from 'next/image';
 
 interface UserImageProps {
-  imageInfo: string;
+  imageInfo?: string;
   size?: 'small' | 'medium' | 'large';
 }
 

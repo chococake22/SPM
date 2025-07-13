@@ -5,9 +5,9 @@ import { useState, useEffect } from 'react';
 import itemService from '@/services/item.service';
 
 interface ItemUserProfileProps {
-  profileImg: string;
+  profileImg?: string;
   id: string;
-  username: string;
+  username?: string;
 }
 
   // 페이지당 사진 개수
@@ -22,7 +22,7 @@ const ItemUserProfile: React.FC<ItemUserProfileProps> = ({ profileImg, id, usern
   console.log('profileImg', profileImg);
 
   useEffect(() => {
-    const fetchUserId = async () => {
+    const fetchUserId = async (pageNumber: number) => {
       try {
         
         const offset = (pageNumber - 1) * ITEMS_PER_PAGE;

@@ -43,12 +43,12 @@ const Home = () => {
       const items = response.data ?? [];
       if (!items) return;
 
-      if (response.data.length < ITEMS_PER_PAGE) {
+      if (response.data.list.length < ITEMS_PER_PAGE) {
         setHasMore(false);
       }
 
       flushSync(() => {
-        const items = response.data.list ?? [];
+        const items = response.data?.list ?? [];
         console.log(items);
         if (!items) return; // undefined일 경우 아무 작업도 하지 않음
 
@@ -74,13 +74,13 @@ const Home = () => {
   }, []);
 
   // 데이터를 가져와서 정렬하기.
-  const sortedItemList = useMemo(() => {
-    if (!Array.isArray(itemList)) return [];
+const sortedItemList = useMemo(() => {
+  if (!Array.isArray(itemList)) return [];
 
-    // itemList를 가져와서 sorting
-    // id는 number 타입이므로 연산을 통해 오름차순으로 정렬함.
-    return [...itemList].sort((a, b) => a.id - b.id);
-  }, [itemList]);
+  // itemList를 가져와서 sorting
+  // id는 string 타입이므로 parseInt로 숫자로 변환 후 정렬
+  return [...itemList].sort((a, b) => parseInt(a.id) - parseInt(b.id));
+}, [itemList]);
 
   // 데이터 요청
   // 처음 렌더링되면 page가 useState로 초기화되니까 바로 된다.

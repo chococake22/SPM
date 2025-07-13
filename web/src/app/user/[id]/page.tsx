@@ -48,12 +48,12 @@ const UserProfilePage = () => {
         }
 
         // 더 이상 데이터가 없으면 hasMore를 false로 설정
-        if (response.data.length < ITEMS_PER_PAGE) {
+        if (response.data.list.length < ITEMS_PER_PAGE) {
           setHasMore(false);
         }
 
         flushSync(() => {
-          const items = response.data ?? [];
+          const items = response.data?.list ?? [];
           if (!items) return;
 
           if (pageNumber === 1) {
@@ -64,14 +64,14 @@ const UserProfilePage = () => {
         });
 
         // 첫 번째 페이지에서 사용자 정보 설정
-        if (pageNumber === 1 && response.data.length > 0) {
-          const firstItem = response.data[0];
+        if (pageNumber === 1 && response.data.list.length > 0) {
+          const firstItem = response.data.list[0];
           console.log(response.data)
           setUserProfile({
             id: userId,
             username: firstItem.username,
             profileImg: firstItem.profileImg,
-            itemCount: response.data.length,
+            itemCount: response.data.list.length,
           });
         }
       } catch (error) {
@@ -92,7 +92,7 @@ const UserProfilePage = () => {
 
   const sortedItemList = useMemo(() => {
     if (!Array.isArray(userItems)) return [];
-    return [...userItems].sort((a, b) => a.id - b.id);
+    return [...userItems].sort((a, b) => parseInt(a.id) - parseInt(b.id));
   }, [userItems]);
 
   // 데이터 요청
