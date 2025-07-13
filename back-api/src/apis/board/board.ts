@@ -169,7 +169,8 @@ router.post('/upload', async (req: Request, res: Response): Promise<void> => {
 
   const JWT_SECRET = process.env.JWT_SECRET;
   if (!JWT_SECRET) {
-    return res.status(500).json({ message: 'JWT_SECRET is not set' });
+    res.status(500).json({ message: 'JWT_SECRET is not set' });
+    return;
   }
 
   try {
