@@ -6,7 +6,7 @@
 # 기술 스택
 - React.js 18, Next.js 14, Tailwind CSS
 - Node.js, Express.js
-- Prisma, json-db
+- Prisma, Postgresql
 - Swagger
 - Cursor AI
 
