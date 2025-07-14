@@ -19,8 +19,6 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
   logRequest('POST', '/api/login', { userId, userPw });
 
-
-
   try {
 
     const message = {
@@ -30,9 +28,10 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     };
 
     await producer.send({
-      topic: 'test-topic',
+      topic: 'noauth-topic',
       messages: [
         {
+          key: '/api/login',
           value: JSON.stringify(message),
         },
       ],
@@ -149,6 +148,26 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
   logRequest('POST', '/api/signup', { userId, userPw, username, phone, address });
 
   try {
+
+    const message = {
+      userId: userId,
+      username: username,
+      phone: phone,
+      address: address,
+      api: '/api/signup',
+      date: new Date(),
+    };
+
+    await producer.send({
+      topic: 'noauth-topic',
+      messages: [
+        {
+          key: '/api/signup',
+          value: JSON.stringify(message),
+        },
+      ],
+    });
+
     const saltRounds = 10;
     const hashedPw = await bcrypt.hash(userPw, saltRounds);
 
@@ -215,6 +234,22 @@ router.get(
     });
 
     try {
+      const message = {
+        userId: userId,
+        api: '/api/check/user',
+        date: new Date(),
+      };
+
+      await producer.send({
+        topic: 'noauth-topic',
+        messages: [
+          {
+            key: '/api/check/user',
+            value: JSON.stringify(message),
+          },
+        ],
+      });
+
       // Prisma로 사용자 존재 여부 확인
       const user = await prisma.user.findUnique({
         where: {
@@ -273,6 +308,22 @@ router.post('/logout', async (req: Request, res: Response): Promise<void> => {
   logRequest('POST', '/api/logout', {userId});
 
   try {
+    const message = {
+      userId: userId,
+      api: '/api/logout',
+      date: new Date(),
+    };
+
+    await producer.send({
+      topic: 'noauth-topic',
+      messages: [
+        {
+          key: '/api/logout',
+          value: JSON.stringify(message),
+        },
+      ],
+    });
+
     // 토큰 삭제
     res.clearCookie('accessToken');
     res.clearCookie('refreshToken');

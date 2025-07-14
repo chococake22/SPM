@@ -3,6 +3,7 @@ import api from '../../lib/axios';
 import jwt from 'jsonwebtoken';
 import { logRequest, logResponse, logError } from '../../utils/logger';
 import prisma from '../../lib/prisma';
+import { producer } from '../../lib/kafka';
 
 const dbUrl = process.env.DB_URL || 'http://localhost:3002';
 // const JWT_SECRET = process.env.JWT_SECRET || 'No key';
@@ -16,6 +17,25 @@ router.get('/list', async (req: Request, res: Response) => {
 
   logRequest('GET', '/api/board/list', { offset, limit });
   try {
+
+    const message = {
+      offset: offset,
+      limit: limit,
+      api: '/api/board/list',
+      date: new Date(),
+    };
+
+    await producer.send({
+
+      topic: 'board-topic',
+      messages: [
+        {
+          key: '/api/board/list',
+          value: JSON.stringify(message),
+        },
+      ],
+    });
+
     // 정해진 개수만 가져오도록
     const totalCount = await prisma.board.count();
     const boards = await prisma.board.findMany({
@@ -113,6 +133,23 @@ router.get('/detail', async (req: Request, res: Response) => {
   logRequest('GET', '/api/board/detail', { id });
 
   try {
+
+    const message = {
+      id: id,
+      api: '/api/board/detail',
+      date: new Date(),
+    };
+
+    await producer.send({     
+      topic: 'board-topic',
+      messages: [
+        {
+          key: '/api/board/detail',
+          value: JSON.stringify(message),
+        },
+      ],
+    });
+
     // 4개만 가져오도록
     const board = await prisma.board.findUnique({
       where: {
@@ -176,6 +213,24 @@ router.post('/upload', async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
+
+    const message = {
+      title: title,
+      content: content,
+      api: '/api/board/upload',
+      date: new Date(),
+    };
+
+    await producer.send({
+      topic: 'board-topic',
+      messages: [
+        {
+          key: '/api/board/upload',
+          value: JSON.stringify(message),
+        },
+      ],
+    });
+
     // 액세스 토큰 확인
     const token = req.cookies.accessToken;
 

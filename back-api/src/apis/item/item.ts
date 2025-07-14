@@ -3,6 +3,7 @@ import api from '../../lib/axios';
 import upload from '../../utils/upload';
 import { logRequest, logResponse, logError } from '../../utils/logger';
 import prisma from '../../lib/prisma';
+import { producer } from '../../lib/kafka';
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -20,6 +21,24 @@ router.get('/list', async (req: Request, res: Response) => {
   logRequest('GET', '/api/item/list', { offset, limit });
 
   try {
+
+    const message = {
+      offset: offset,
+      limit: limit,
+      api: '/api/item/list',
+      date: new Date(),
+    };
+
+    await producer.send({
+      topic: 'item-topic',
+      messages: [
+        {
+          key: '/api/item/list',
+          value: JSON.stringify(message),
+        },
+      ],
+    });
+
     const totalCount = await prisma.item.count();
     const items = await prisma.item.findMany({
       skip: offset ? parseInt(offset) : 0,
@@ -128,8 +147,26 @@ router.get('/user-list', async (req: Request, res: Response) => {
 
   logRequest('GET', '/api/item/user-list', { userId, offset, limit });
 
-  console.log(userId, offset, limit);
   try {
+
+    const message = {
+      userId: userId,
+      offset: offset,
+      limit: limit,
+      api: '/api/item/user-list',
+      date: new Date(),
+    };
+
+    await producer.send({
+
+      topic: 'item-topic',
+      messages: [
+        {
+          key: '/api/item/user-list',
+          value: JSON.stringify(message),
+        },
+      ],
+    });
 
     const decodedId = userId ? decodeURIComponent(userId) : '';
     const totalCount = await prisma.item.count({
@@ -203,6 +240,25 @@ router.post(
     const imagePath = file.filename;
 
     try {
+      const message = {
+        userId: userId,
+        username: username,
+        itemName: itemName,
+        description: description,
+        api: '/api/item/upload',
+        date: new Date(),
+      };
+
+      await producer.send({
+        topic: 'item-topic',
+        messages: [
+          {
+            key: '/api/item/upload',
+            value: JSON.stringify(message),
+          },
+        ],
+      });
+
       const newItem = await prisma.item.create({
         data: {
           itemImg: '/' + imagePath,

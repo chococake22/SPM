@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt';
 import upload from '../../utils/upload';
 import { logRequest, logResponse, logError } from '../../utils/logger';
 import prisma from '../../lib/prisma';
+import { producer } from '../../lib/kafka';
+
 
 interface MulterRequest extends Request {
   file: Express.Multer.File;
@@ -21,6 +23,24 @@ router.get('/info', async (req: Request, res: Response): Promise<void> => {
   logRequest('GET', '/api/user/info', { userId });
 
   try {
+
+    const message = {
+      userId: userId,
+      api: '/api/user/info',
+      date: new Date(),
+    };
+
+    await producer.send({
+
+      topic: 'user-topic',
+      messages: [
+        {
+          key: '/api/user/info',
+          value: JSON.stringify(message),
+        },
+      ],
+    });
+
     // Prisma로 사용자 정보 가져오기
     const user = await prisma.user.findUnique({
       where: {
@@ -86,6 +106,26 @@ router.patch(
     logRequest('PATCH', '/api/user/edit', { userId, username, phone, address });
 
     try {
+
+      const message = {
+        userId: userId,
+        username: username,
+        phone: phone,
+        address: address,
+        api: '/api/user/edit',
+        date: new Date(),
+      };
+
+      await producer.send({
+        topic: 'user-topic',
+        messages: [
+          {
+            key: '/api/user/edit',
+            value: JSON.stringify(message),
+          },
+        ],
+      });
+
       // Prisma로 사용자 정보 업데이트
       const updatedUser = await prisma.user.update({
         where: {
@@ -142,6 +182,26 @@ router.patch('/edit/pwd', async (req: Request, res: Response): Promise<void> => 
   logRequest('PATCH', '/api/user/edit/pwd', { userId, nowPwd, newPwd, newPwdConfirm });
 
   try {
+
+    const message = {
+      userId: userId,
+      nowPwd: nowPwd,
+      newPwd: newPwd,
+      newPwdConfirm: newPwdConfirm,
+      api: '/api/user/edit/pwd',
+      date: new Date(),
+    };
+
+    await producer.send({
+      topic: 'user-topic',
+      messages: [
+        {
+          key: '/api/user/edit/pwd',
+          value: JSON.stringify(message),
+        },
+      ],
+    });
+
     // Prisma로 사용자 정보 가져오기
     const user = await prisma.user.findUnique({
       where: {
@@ -256,6 +316,23 @@ router.patch(
     }
 
     try {
+      const message = {
+        userId: userId,
+        api: '/api/user/edit/img',
+        date: new Date(),
+      };
+
+      await producer.send({
+
+        topic: 'user-topic',
+        messages: [
+          {
+            key: '/api/user/edit/img',
+            value: JSON.stringify(message),
+          },
+        ],
+      });
+
       // Prisma로 사용자 존재 여부 확인
       const user = await prisma.user.findUnique({
         where: {
@@ -322,6 +399,24 @@ router.get('/img', async (req: Request, res: Response): Promise<void> => {
   logRequest('GET', '/api/user/img', { userId });
 
   try {
+
+    const message = {
+      userId: userId,
+      api: '/api/user/img',
+      date: new Date(),
+    };
+
+    await producer.send({
+
+      topic: 'user-topic',
+      messages: [
+        {
+          key: '/api/user/img',
+          value: JSON.stringify(message),
+        },
+      ],
+    });
+
     // Prisma로 사용자 프로필 이미지 정보 가져오기
     const user = await prisma.user.findUnique({
       where: {
