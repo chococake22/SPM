@@ -39,6 +39,11 @@
             "date": 1752378816565,
             "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/combined-2025-07-13.log",
             "hash": "ad6cca9e29bc91ee5372d5cd53aefdf1f2d04c1b78e70315af3cce0cfeb3d8d0"
+        },
+        {
+            "date": 1752479018959,
+            "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/combined-2025-07-14.log",
+            "hash": "a5262fd33cf6fc305a7285c57589da9df7e14c794a3242871f0ad3d325451d48"
         }
     ],
     "hashType": "sha256"

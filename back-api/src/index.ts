@@ -10,7 +10,7 @@ import { verifyAccessToken } from './apis/common/authRouter';
 import path from 'path';
 import swaggerUi from 'swagger-ui-express'; //ui 설정할 수 있는 모듈 불러오기
 import fs from 'fs';
-import * as yaml from 'js-yaml';
+import { connectKafka, disconnectKafka } from './lib/kafka';
 
 
 const app = express();
@@ -70,6 +70,15 @@ app.use('/api/board', verifyAccessToken, board);
 // port 번호
 const port: number = 3001;
 
-app.listen(port, () =>
+app.listen(port, async () => {
   console.log(`Server On!!! ENV: ${env},  Port: ${port} `)
-);
+// 서버 시작 시 한 번만 Kafka 연결
+  try {
+    await connectKafka();
+    console.log('Kafka connected on startup');
+  } catch (error) {
+    console.error('Failed to connect to Kafka on startup:', error);
+  }
+  // 서버 종료 시 Kafka 연결 해제
+});
+

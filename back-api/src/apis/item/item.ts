@@ -209,6 +209,7 @@ router.post(
           title: itemName, // itemName을 title로 매핑
           description: description,
           userId: userId,
+          regiId: userId,
           regiDttm: new Date(),
           finalModId: userId,
           finalModDttm: new Date(),

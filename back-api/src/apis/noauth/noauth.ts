@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import axios, { AxiosError } from 'axios';
 import { logRequest, logResponse, logError } from '../../utils/logger';
 import prisma from '../../lib/prisma';
+import { connectKafka, consumeMessages, producer } from '../../lib/kafka';
 
 
 const dbUrl = process.env.DB_URL || 'http://localhost:3002';
@@ -18,7 +19,25 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 
   logRequest('POST', '/api/login', { userId, userPw });
 
+
+
   try {
+
+    const message = {
+      userId: userId,
+      api: 'login',
+      date: new Date(),
+    };
+
+    await producer.send({
+      topic: 'test-topic',
+      messages: [
+        {
+          value: JSON.stringify(message),
+        },
+      ],
+    });
+
     // Prisma로 사용자 정보 가져오기
     const user = await prisma.user.findUnique({
       where: {
@@ -266,6 +285,133 @@ router.post('/logout', async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({
       data: null,
       message: '서버 오류가 발생했습니다.',
+      status: 500,
+      success: false,
+    });
+  }
+});
+
+
+// Kafka 메시지 소비 API (인증 불필요)
+router.get('/kafka/consume', async (req: Request, res: Response) => {
+  const { topic = 'test-topic' } = req.query as { topic: string };
+  
+  logRequest('GET', '/api/kafka/consume', { topic });
+
+  try {
+    // Kafka 연결
+    await connectKafka();
+    
+    // 메시지 소비 시작
+    await consumeMessages(topic, async (message) => {
+      console.log('Processing message:', message);
+      
+      try {
+        // 메시지를 JSON으로 파싱 (메시지가 JSON 형식이라고 가정)
+        const messageData = JSON.parse(message);
+        
+        // 메시지 데이터를 데이터베이스에 저장하거나 처리
+        if (messageData.type === 'user_activity') {
+          // 사용자 활동 메시지 처리
+          console.log('User activity message received:', messageData);
+          
+          // 여기서 필요한 비즈니스 로직 처리
+          // 예: 로그 저장, 알림 발송 등
+        } else if (messageData.type === 'system_notification') {
+          // 시스템 알림 메시지 처리
+          console.log('System notification received:', messageData);
+        }
+        
+      } catch (parseError) {
+        console.error('Failed to parse message:', parseError);
+      }
+    });
+
+    logResponse('GET', '/api/kafka/consume', 200, { topic });
+    
+    res.status(200).json({
+      message: `Kafka consumer started for topic: ${topic}`,
+      data: { topic },
+      status: 200,
+      success: true,
+    });
+    
+  } catch (error) {
+    logError('GET', '/api/kafka/consume', error, 'Kafka consumer failed', { topic });
+    
+    res.status(500).json({
+      data: null,
+      message: 'Kafka consumer failed',
+      status: 500,
+      success: false,
+    });
+  }
+});
+
+// Kafka 메시지 발행 API (테스트용, 인증 불필요)
+router.post('/kafka/publish', async (req: Request, res: Response) => {
+  const { topic = 'test-topic', message } = req.body;
+  
+  logRequest('POST', '/api/kafka/publish', { topic, message });
+
+  try {
+    await producer.send({
+      topic,
+      messages: [
+        { 
+          value: JSON.stringify(message) 
+        },
+      ],
+    });
+
+    logResponse('POST', '/api/kafka/publish', 200, { topic, message });
+    
+    res.status(200).json({
+      message: 'Message published successfully',
+      data: { topic, message },
+      status: 200,
+      success: true,
+    });
+    
+  } catch (error) {
+    logError('POST', '/api/kafka/publish', error, 'Failed to publish message', { topic, message });
+    
+    res.status(500).json({
+      data: null,
+      message: 'Failed to publish message',
+      status: 500,
+      success: false,
+    });
+  }
+});
+
+// Kafka 연결 상태 확인 API
+router.get('/kafka/status', async (req: Request, res: Response) => {
+  logRequest('GET', '/api/kafka/status', {});
+
+  try {
+    // Kafka 연결 테스트
+    await connectKafka();
+    
+    logResponse('GET', '/api/kafka/status', 200, {});
+    
+    res.status(200).json({
+      message: 'Kafka connection successful',
+      data: { 
+        connected: true,
+        brokers: ['localhost:9092'],
+        clientId: 'spm-consumer'
+      },
+      status: 200,
+      success: true,
+    });
+    
+  } catch (error) {
+    logError('GET', '/api/kafka/status', error, 'Kafka connection failed', {});
+    
+    res.status(500).json({
+      data: null,
+      message: 'Kafka connection failed',
       status: 500,
       success: false,
     });
