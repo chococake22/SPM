@@ -20,7 +20,6 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
   logRequest('POST', '/api/login', { userId, userPw });
 
   try {
-
     const message = {
       userId: userId,
       api: 'login',
@@ -148,7 +147,6 @@ router.post('/signup', async (req: Request, res: Response): Promise<void> => {
   logRequest('POST', '/api/signup', { userId, userPw, username, phone, address });
 
   try {
-
     const message = {
       userId: userId,
       username: username,

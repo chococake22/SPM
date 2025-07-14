@@ -21,7 +21,6 @@ router.get('/list', async (req: Request, res: Response) => {
   logRequest('GET', '/api/item/list', { offset, limit });
 
   try {
-
     const message = {
       offset: offset,
       limit: limit,
@@ -148,7 +147,6 @@ router.get('/user-list', async (req: Request, res: Response) => {
   logRequest('GET', '/api/item/user-list', { userId, offset, limit });
 
   try {
-
     const message = {
       userId: userId,
       offset: offset,
@@ -158,7 +156,6 @@ router.get('/user-list', async (req: Request, res: Response) => {
     };
 
     await producer.send({
-
       topic: 'item-topic',
       messages: [
         {

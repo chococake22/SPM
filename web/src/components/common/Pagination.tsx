@@ -15,6 +15,8 @@ export const Pagination = React.memo(({
   totalCount,
   onPageChange,
 }: PaginationProps) => {
+
+
   // page에 대한 배열을 만드는 함수 ex) [1, 2, 3, 4, 5] 이렇게
   const pages = useMemo(() => {
     // 전체 길이를 totalCount로 설정
@@ -29,18 +31,11 @@ export const Pagination = React.memo(({
   // -> 컴포넌트가 렌더링이 될 때마다 함수가 새로 생성되는 것을 방지하기 위해서임.
   const handlePageClick = useCallback(
     (page: number) => {
+      // props로 받은 함수 실행
       onPageChange?.(page);
     },
     [onPageChange]
   );
-
-  // const handlePageClick = (page: number) => {
-  //   onPageChange?.(page);
-  // };
-
-  useEffect(() => {
-    console.log('Pagination 렌더링');
-  }, [handlePageClick]);
 
   const handlePrevClick = useCallback(() => {
     if (currentPage > 1) {

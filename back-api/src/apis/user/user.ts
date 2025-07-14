@@ -23,7 +23,6 @@ router.get('/info', async (req: Request, res: Response): Promise<void> => {
   logRequest('GET', '/api/user/info', { userId });
 
   try {
-
     const message = {
       userId: userId,
       api: '/api/user/info',
@@ -31,7 +30,6 @@ router.get('/info', async (req: Request, res: Response): Promise<void> => {
     };
 
     await producer.send({
-
       topic: 'user-topic',
       messages: [
         {
@@ -106,7 +104,6 @@ router.patch(
     logRequest('PATCH', '/api/user/edit', { userId, username, phone, address });
 
     try {
-
       const message = {
         userId: userId,
         username: username,
@@ -323,7 +320,6 @@ router.patch(
       };
 
       await producer.send({
-
         topic: 'user-topic',
         messages: [
           {
@@ -399,7 +395,6 @@ router.get('/img', async (req: Request, res: Response): Promise<void> => {
   logRequest('GET', '/api/user/img', { userId });
 
   try {
-
     const message = {
       userId: userId,
       api: '/api/user/img',
@@ -407,7 +402,6 @@ router.get('/img', async (req: Request, res: Response): Promise<void> => {
     };
 
     await producer.send({
-
       topic: 'user-topic',
       messages: [
         {

@@ -16,8 +16,8 @@ router.get('/list', async (req: Request, res: Response) => {
   };
 
   logRequest('GET', '/api/board/list', { offset, limit });
-  try {
 
+  try {
     const message = {
       offset: offset,
       limit: limit,
@@ -26,7 +26,6 @@ router.get('/list', async (req: Request, res: Response) => {
     };
 
     await producer.send({
-
       topic: 'board-topic',
       messages: [
         {
@@ -133,7 +132,6 @@ router.get('/detail', async (req: Request, res: Response) => {
   logRequest('GET', '/api/board/detail', { id });
 
   try {
-
     const message = {
       id: id,
       api: '/api/board/detail',
@@ -213,7 +211,6 @@ router.post('/upload', async (req: Request, res: Response): Promise<void> => {
   }
 
   try {
-
     const message = {
       title: title,
       content: content,
