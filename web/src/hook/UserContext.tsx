@@ -2,10 +2,12 @@
 
 import { createContext, useContext, useState, useEffect } from 'react';
 import { UserData } from '@/types/user/type';
+import { jwtUtils } from '@/lib/auth';
 
 interface UserContextType {
   user: UserData | null;
   setUser: (user: UserData | null) => void;
+  isLoading: boolean; // 로딩 상태 추가
 }
 
 /**
@@ -21,32 +23,51 @@ export const UserContext = createContext<UserContextType | undefined>(undefined)
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUserState] = useState<UserData | null>(null);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // 초기 로딩 상태
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    console.log(accessToken);
+  }, []);
 
   // 앱 시작할 때 localStorage에서 유저 불러오기
   useEffect(() => {
     if (isFirstLoad) {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        setUserState(parsedUser);
+      const accessToken = localStorage.getItem('accessToken');
+      console.log(accessToken);
+
+      if (accessToken) {
+        const isValid = jwtUtils.isTokenValid(accessToken);
+        console.log(isValid);
+        if (isValid) {
+          const user = jwtUtils.getUserFromToken(accessToken);
+          console.log(user);
+          if (user) {
+            setUserState(user as UserData);
+          }
+        }
       }
+
       setIsFirstLoad(false);
     }
   }, [isFirstLoad]);
-
-  useEffect(() => {
-    if (user) {
-      const userJson = JSON.stringify(user); // ✅ user 전체 저장, 
-      localStorage.setItem('user', userJson); // user가 변경이 되면 localStorage에 저장된 user 정보도 변경됨.
-    }
-  }, [user]);
 
   const setUser = (user: UserData | null) => {
     setUserState(user);
   };
 
+  // 로딩 중일 때는 기본 UI 표시
+  if (isLoading) {
+    return (
+      <UserContext.Provider value={{ user: null, setUser, isLoading: true }}>
+        {children}
+      </UserContext.Provider>
+    );
+  }
+
+  // return이 JSX 형태라서 이렇게 .tsx 파일로 작성함.
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, isLoading: false }}>
       {children}
     </UserContext.Provider>
   );

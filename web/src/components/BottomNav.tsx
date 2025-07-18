@@ -33,7 +33,7 @@ const BottomNav = () => {
             width={4}
             height={4}
           />
-          <span className="text-blakc">Board</span>
+          <span className="text-black">Board</span>
         </Link>
       </nav>
     </div>

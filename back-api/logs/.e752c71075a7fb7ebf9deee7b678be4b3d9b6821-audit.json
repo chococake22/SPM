@@ -6,16 +6,6 @@
     "auditLog": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/.e752c71075a7fb7ebf9deee7b678be4b3d9b6821-audit.json",
     "files": [
         {
-            "date": 1751356327186,
-            "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/combined-2025-07-01.log",
-            "hash": "e4f2f3c172b7928cf2102aa39aaa5bd0f52bce71b15d9a90fb49e5a663dc5ea2"
-        },
-        {
-            "date": 1751432795900,
-            "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/combined-2025-07-02.log",
-            "hash": "07bf3bdf74e03a0db0d622355fbcacbb546e1b3ba5c45f2b3345c4006d7788f5"
-        },
-        {
             "date": 1751884902544,
             "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/combined-2025-07-07.log",
             "hash": "24d52aa6267782c300bcfd3e345aabbcd08b524871c5048d25279776f7096256"
@@ -44,6 +34,16 @@
             "date": 1752479018959,
             "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/combined-2025-07-14.log",
             "hash": "a5262fd33cf6fc305a7285c57589da9df7e14c794a3242871f0ad3d325451d48"
+        },
+        {
+            "date": 1752823528748,
+            "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/combined-2025-07-18.log",
+            "hash": "1e6c46ff52a927779e81e27b2bcbb82566e52464991bac34d56a9e2f81f4fff9"
+        },
+        {
+            "date": 1752851377619,
+            "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/combined-2025-07-19.log",
+            "hash": "f012a0a2227590be2dbd99e39ac1abf14f49cbe4c20a123a15312166079757fd"
         }
     ],
     "hashType": "sha256"

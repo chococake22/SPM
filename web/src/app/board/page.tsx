@@ -7,6 +7,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useCallback, useState } from 'react';
 import boardService from '@/services/board.service';
 import { Board } from '@/types/board/type';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from "@/lib/store/store";
+
 
 const ITEMS_PER_PAGE = 6;
 
@@ -26,6 +29,13 @@ export default function BoardPage() {
   const [boardList, setBoardList] = useState<Board[] | undefined>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
+
+
+
+  const dispatch = useDispatch();
+
+  const value = useSelector((state: RootState) => state.counter.value);
+
 
   const getItems = useCallback(async (offsetNum: number, limitNum: number) => {
     setLoading(true);
@@ -134,6 +144,9 @@ export default function BoardPage() {
             </button>
           </div>
         )}
+        <div>
+          {value}
+        </div>
       </div>
     </div>
   );

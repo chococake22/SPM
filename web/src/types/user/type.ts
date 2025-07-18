@@ -35,6 +35,10 @@ export type UserData = {
   phone?: string | undefined;
   address?: string | undefined;
   profileImg?: string | undefined;
+  tokens: {
+    accessToken: string | null;
+    refreshToken: string | null;
+  };
 };
 
 export interface LogoutRequest {

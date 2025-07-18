@@ -6,16 +6,6 @@
     "auditLog": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/.999e1ad0fb2ec21eeb0448efb9af03112c847033-audit.json",
     "files": [
         {
-            "date": 1751356327185,
-            "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/error-2025-07-01.log",
-            "hash": "cd1fd4a8d0021f4eed0556ff435509a46f17797e895a618a3b4e3954fe1d9a52"
-        },
-        {
-            "date": 1751433170733,
-            "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/error-2025-07-02.log",
-            "hash": "c34226b6e0a174113dd3434289ee7f3d6a21f25cfc6e7228d896c23bedf009b0"
-        },
-        {
             "date": 1751884902542,
             "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/error-2025-07-07.log",
             "hash": "1f6e800b1353750d1c78255ebb305242b23a4e206393991c55ea84645b563cab"
@@ -39,6 +29,11 @@
             "date": 1752479018957,
             "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/error-2025-07-14.log",
             "hash": "bd3bd8905d165b01c969acf22cba833bfcc1af1e8477d38816c3372916814541"
+        },
+        {
+            "date": 1752823528746,
+            "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/error-2025-07-18.log",
+            "hash": "f2703a30d99f028491f9813edbbf77d0df463b1bfc654bd8b8be25afa3676b5e"
         }
     ],
     "hashType": "sha256"

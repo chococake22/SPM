@@ -1,6 +1,7 @@
 import "./global.css";
-import { UserProvider } from "@/hook/UserContext";
 import NavigationWrapper from "@/components/NavigationWrapper";
+import Providers from "@/components/Providers";
+
 
 export default function RootLayout({
   children,
@@ -10,11 +11,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="flex flex-col min-h-screen">
-        <UserProvider>
-          <NavigationWrapper>
-            {children}
-          </NavigationWrapper>
-        </UserProvider>
+        <Providers>
+          <NavigationWrapper>{children}</NavigationWrapper>
+        </Providers>
       </body>
     </html>
   );

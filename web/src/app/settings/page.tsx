@@ -30,12 +30,12 @@ export default function Settings() {
 
   const handleLogout = async () => {
     try {
-
       const response = await noauthService.logout(param);
       if (response && response.success) {
         // alert(response.message);
         // 로컬 스토리지에서 사용자 정보 삭제
-        localStorage.removeItem('user');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         // 로그아웃을 하고 나면 뒤로 갈 수 없어야 해서 replace 사용
         router.replace('/login');
       } else {
