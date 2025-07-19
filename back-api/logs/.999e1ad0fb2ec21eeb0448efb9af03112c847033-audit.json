@@ -34,6 +34,11 @@
             "date": 1752823528746,
             "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/error-2025-07-18.log",
             "hash": "f2703a30d99f028491f9813edbbf77d0df463b1bfc654bd8b8be25afa3676b5e"
+        },
+        {
+            "date": 1752928242584,
+            "name": "/Users/mac/Desktop/Typescript/SPM/back-api/logs/error-2025-07-19.log",
+            "hash": "28246cceadc8794c29b24fa696e8373c95485bcd2c7446a181de2abbc330c3d9"
         }
     ],
     "hashType": "sha256"

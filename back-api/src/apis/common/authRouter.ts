@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 /**
- * 토큰 검증에 대한 공통 로직
+ * 토큰 검증에 대한 공통 로직(미들웨어)
  * 로그인, 회원가입 제외하고 모든 로직에 적용
  */
 export function verifyAccessToken(

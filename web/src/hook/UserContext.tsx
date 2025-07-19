@@ -49,6 +49,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       setIsFirstLoad(false);
+      setIsLoading(false);
     }
   }, [isFirstLoad]);
 

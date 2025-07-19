@@ -12,7 +12,7 @@ import swaggerUi from 'swagger-ui-express'; //ui 설정할 수 있는 모듈 불
 import fs from 'fs';
 import { connectKafka, disconnectKafka } from './lib/kafka';
 
-
+// express 애플리케이션 생성
 const app = express();
 const env = process.env.NODE_ENV || 'development';
 
@@ -54,18 +54,22 @@ app.use(
   express.static(path.resolve(__dirname, '../../storage/itemImg'))
 );
 
-
 app.options('*', cors());
-app.use(express.json());
-app.use(cookieParser());
+app.use(express.json());  // json 파싱  미들웨어
+app.use(cookieParser());  // 쿠키 파싱 미들웨어
 
 // 인증이 필요 없는 라우터 먼저 설정
 app.use('/api', noauth); // /api/login, /api/signup 등
 
-// 인증이 필요한 라우터는 미들웨어로 감싸기
+// 인증이 필요한 라우터는 미들웨어(verifyAccessToken) 적용시키기
 app.use('/api/item', verifyAccessToken, item);
 app.use('/api/user', verifyAccessToken, user);
 app.use('/api/board', verifyAccessToken, board);
+
+app.use((req, res, next) => {
+  console.log(`[LOG] ${req.method} ${req.url}`);
+  next();
+});
 
 // port 번호
 const port: number = 3001;

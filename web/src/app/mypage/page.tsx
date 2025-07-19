@@ -172,6 +172,10 @@ export default function Mypage() {
     }
   };
 
+  useEffect(() => {
+    console.log(user)
+  }, [])
+
   const getUserImg = useCallback(async () => {
     if (!user) return;
     const param = {
