@@ -460,33 +460,30 @@ router.get('/img', async (req: Request, res: Response): Promise<void> => {
   }
 });
 
-// username으로 사용자 id 찾기
-router.get('/find-by-username', async (req: Request, res: Response) => {
-  const { username } = req.query as { username: string };
+// id로 userId 찾기
+router.get('/find-by-id', async (req: Request, res: Response) => {
+  const { id } = req.query as { id: string };
 
-  logRequest('GET', '/api/user/find-by-username/:username', { username });
+  console.log('api id', id);
+
+  logRequest('GET', '/api/user/find-by-id/:id', { id });
 
   try {
-    // URL 인코딩된 username 처리
-    const decodedUsername = decodeURIComponent(username);
 
-    // Prisma로 username으로 사용자 찾기
+    // Prisma로 id으로 사용자 찾기
     const user = await prisma.user.findFirst({
       where: {
-        username: decodedUsername,
-      },
-      select: {
-        id: true,
-        username: true,
-        profileImg: true,
-      },
+        id:  Number(id),
+      }
     });
 
-    console.log('user', user);
+    console.log('=================');
+    console.log(user);
+    console.log('=================');
 
     if (user) {
-      logResponse('GET', '/api/user/find-by-username', 200, {
-        username,
+      logResponse('GET', '/api/user/find-by-id', 200, {
+        id,
       });
 
       res.status(200).json({
@@ -495,13 +492,14 @@ router.get('/find-by-username', async (req: Request, res: Response) => {
           id: user.id,
           username: user.username,
           profileImg: user.profileImg,
+          userId: user.userId,
         },
         status: 200,
         success: true,
       });
     } else {
-      logResponse('GET', '/api/user/find-by-username', 404, {
-        username,
+      logResponse('GET', '/api/user/find-by-id', 404, {
+        id,
       });
 
       res.status(404).json({
@@ -514,10 +512,10 @@ router.get('/find-by-username', async (req: Request, res: Response) => {
   } catch (error) {
     logError(
       'GET',
-      '/api/user/find-by-username',
+      '/api/user/find-by-id',
       error,
       '서버 에러가 발생했습니다.',
-      { username }
+      { id }
     );
 
     res.status(500).json({

@@ -52,6 +52,7 @@ router.get('/list', async (req: Request, res: Response) => {
               userId: true,
               username: true,
               profileImg: true,
+              id: true,
             },
         },
       },

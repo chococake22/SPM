@@ -10,8 +10,8 @@ interface ItemUserProfileProps {
   username?: string;
 }
 
-  // 페이지당 사진 개수
-  const ITEMS_PER_PAGE = 3;
+// 페이지당 사진 개수
+const ITEMS_PER_PAGE = 3;
 
 const ItemUserProfile: React.FC<ItemUserProfileProps> = ({ profileImg, id, username }) => {
   const [userIdForUrl, setUserIdForUrl] = useState<string>(id as string);
