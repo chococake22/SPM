@@ -167,11 +167,11 @@ export const userService = {
       }
     }
   },
-  async findUserByUsername(username: string): Promise<any> {
+  async findUserById(id: string): Promise<any> {
     try {
-      const encodedUsername = encodeURIComponent(username);
+      console.log('id', id);
       const response = await api.get(
-        `/api/user/find-by-username/${encodedUsername}`
+        `/api/user/find-by-id?id=${id}`
       );
       return response.data;
     } catch (error) {

@@ -5,10 +5,12 @@ import InputText from "@/components/InputText";
 import { noauthService } from '@/services/noauth.service';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/common/Button';
+import { useUserInfo } from '@/hook/UserContext';
 
 
 const LoginPage = () => {
   const router = useRouter();
+  const { updateUserFromToken } = useUserInfo();
 
   const handleSignup = () => {
     router.push('/signup');
@@ -36,10 +38,12 @@ const LoginPage = () => {
 
     try {
       const response = await noauthService.login(params);
+      console.log(response);
       if (response.success && response.data) {
         if(response.data.tokens.accessToken && response.data.tokens.refreshToken) {
           localStorage.setItem('accessToken', response.data.tokens.accessToken);
           localStorage.setItem('refreshToken', response.data.tokens.refreshToken);
+          updateUserFromToken();
           router.push('/');
         }
       } else {

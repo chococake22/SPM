@@ -28,4 +28,4 @@ if (typeof window === 'undefined') {
 }
 
 export default store!;
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof store.getState>;  // => () => RootState

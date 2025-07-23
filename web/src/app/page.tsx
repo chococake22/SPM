@@ -3,28 +3,17 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import ItemBox from '@/components/item/ItemBox';
 import itemService from '@/services/item.service';
-import { ItemListResponse, Item } from '@/types/item/type';
+import { Item } from '@/types/item/type';
 import { flushSync } from 'react-dom';
 import { useRef } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/pagination';
 
-import { Mousewheel } from 'swiper/modules';
-import { useUserInfo } from '@/hook/UserContext';
-
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 4;
 
 const Home = () => {
   const [itemList, setItemList] = useState<Item[]>([]);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const { user, setUser } = useUserInfo();
-  const [ webUrl, setWebUrl] = useState<string | null>(null);
-  const [ apiUrl, setApiUrl] = useState<string | null>(null);
-  const [ profileImgUrl, setProfileImgUrl] = useState<string | null>(null);
-  const [itemImgUrl, setItemImgUrl] = useState<string | null>(null);
 
   // 맨 처음 렌더링이 될 때에는 함수가 실행되지는 않고 정의만 된다.
   const getItems = useCallback(async (pageNumber: number) => {
@@ -73,13 +62,13 @@ const Home = () => {
   }, []);
 
   // 데이터를 가져와서 정렬하기.
-const sortedItemList = useMemo(() => {
-  if (!Array.isArray(itemList)) return [];
+  const sortedItemList = useMemo(() => {
+    if (!Array.isArray(itemList)) return [];
 
-  // itemList를 가져와서 sorting
-  // id는 string 타입이므로 parseInt로 숫자로 변환 후 정렬
-  return [...itemList].sort((a, b) => parseInt(a.id) - parseInt(b.id));
-}, [itemList]);
+    // itemList를 가져와서 sorting
+    // id는 string 타입이므로 parseInt로 숫자로 변환 후 정렬
+    return [...itemList].sort((a, b) => parseInt(a.id) - parseInt(b.id));
+  }, [itemList]);
 
   // 데이터 요청
   // 처음 렌더링되면 page가 useState로 초기화되니까 바로 된다.

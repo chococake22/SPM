@@ -21,26 +21,26 @@ const userIdCache = new Map<string, string>();
  * username으로 사용자 ID를 가져오는 함수
  * 캐싱을 통해 성능을 최적화합니다.
  */
-export const getUserIdFromUsername = async (username: string): Promise<string> => {
+export const getUserIdFromId = async (id: string): Promise<string> => {
+  console.log(userIdCache.has(id));
   // 캐시에서 먼저 확인
-  if (userIdCache.has(username)) {
-    return userIdCache.get(username)!;
+  if (userIdCache.has(id)) {
+    return userIdCache.get(id)!;
   }
 
   try {
-    const response = await userService.findUserByUsername(username);
+    const response = await userService.findUserById(id);
     if (response?.data?.id) {
-      const userId = response.data.id;
       // 캐시에 저장
-      userIdCache.set(username, userId);
-      return userId;
+      userIdCache.set(id, response.data);
+      return response.data;
     }
   } catch (error) {
     console.error('Error getting user ID from username:', error);
   }
 
   // 실패 시 username을 그대로 반환 (fallback)
-  return username;
+  return id;
 };
 
 /**

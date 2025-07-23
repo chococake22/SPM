@@ -33,6 +33,11 @@ export const counterSlice = createSlice({
     },
     test: (state, action) => {
       console.log(action)
+      state.value = action.payload
+      console.log(action)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('test', JSON.stringify(state));
+      }
     },
     // localStorage에서 복원하는 액션
     restoreFromStorage: (state) => {

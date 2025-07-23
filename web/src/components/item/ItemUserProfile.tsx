@@ -1,12 +1,12 @@
 import UserPhoto from '../user/UserPhoto';
 import Link from 'next/link';
-import { getUserIdFromUsername } from '@/lib/userUtils';
+import { getUserIdFromId } from '@/lib/userUtils';
 import { useState, useEffect } from 'react';
 import itemService from '@/services/item.service';
 
 interface ItemUserProfileProps {
   profileImg?: string;
-  id: string;
+  id?: string;
   username?: string;
 }
 
@@ -14,10 +14,14 @@ interface ItemUserProfileProps {
   const ITEMS_PER_PAGE = 3;
 
 const ItemUserProfile: React.FC<ItemUserProfileProps> = ({ profileImg, id, username }) => {
-  const [userIdForUrl, setUserIdForUrl] = useState<string>(id);
+  const [userIdForUrl, setUserIdForUrl] = useState<string>(id as string);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
+
+
+    console.log('profile id', id);
+
     const fetchUserId = async (pageNumber: number) => {
       try {
         
